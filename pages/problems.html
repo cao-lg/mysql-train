@@ -161,7 +161,7 @@
                     <tr>
                         <td>${problem.id}</td>
                         <td>${problem.title}</td>
-                        <td>${problem.chapter || '第1章'}</td>
+                        <td>${problem.chapterName || '第1章'}</td>
                         <td>${problem.difficulty === 'easy' ? '简单' : problem.difficulty === 'medium' ? '中等' : '困难'}</td>
                         <td>未完成</td>
                         <td><a href="detail.html?id=${problem.id}" class="btn primary">查看</a></td>

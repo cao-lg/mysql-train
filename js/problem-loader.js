@@ -30,7 +30,15 @@ class ProblemLoader {
             }
             
             const data = await response.json();
-            this.problems.push(...data.problems);
+            // 为每个题目添加章节信息
+            const chapterName = data.chapter;
+            const chapterId = chapter.split('-')[0]; // 提取 chapter1, chapter2 等
+            const problemsWithChapter = data.problems.map(problem => ({
+                ...problem,
+                chapter: chapterId, // 用于筛选
+                chapterName: chapterName // 用于显示
+            }));
+            this.problems.push(...problemsWithChapter);
             this.loadedChapters.add(chapter);
             console.log(`章节 ${chapter} 加载成功，共 ${data.problems.length} 道题目`);
         } catch (error) {
