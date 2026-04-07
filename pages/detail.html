@@ -27,59 +27,75 @@
     <main>
         <section class="problem-detail">
             <div class="container">
-                <div class="problem-header">
-                    <h2 id="problem-title">题目名称</h2>
-                    <div class="problem-meta">
-                        <span class="chapter">章节：<span id="problem-chapter">第1章</span></span>
-                        <span class="difficulty">难度：<span id="problem-difficulty">简单</span></span>
-                    </div>
-                </div>
-                
-                <div class="problem-content">
-                    <div class="section">
-                        <h3>题目描述</h3>
-                        <div id="problem-description">题目描述将显示在这里</div>
-                    </div>
-                    
-                    <div class="section">
-                        <h3>表结构</h3>
-                        <div id="problem-tables">表结构将显示在这里</div>
-                    </div>
-                    
-                    <div class="section">
-                        <h3>初始数据</h3>
-                        <div id="problem-data">初始数据将显示在这里</div>
-                    </div>
-                    
-                    <div class="section">
-                        <h3>SQL 要求</h3>
-                        <div id="problem-requirement">SQL 要求将显示在这里</div>
-                    </div>
-                </div>
-                
-                <div class="sql-editor">
-                    <div class="editor-header">
-                        <h3>SQL 编辑器</h3>
-                        <div class="editor-buttons">
-                            <button id="run-btn">运行</button>
-                            <button id="submit-btn">提交判题</button>
-                            <button id="clear-btn">清空</button>
-                            <button id="format-btn">格式化</button>
+                <div class="detail-layout">
+                    <div class="problem-sidebar" id="problem-sidebar">
+                        <div class="sidebar-header">
+                            <button class="collapse-btn" id="collapse-btn">
+                                <span class="collapse-icon">←</span>
+                            </button>
+                        </div>
+                        <div class="problem-header">
+                            <h2 id="problem-title">题目名称</h2>
+                            <div class="problem-meta">
+                                <span class="chapter"><span id="problem-chapter">第1章</span></span>
+                                <span class="difficulty" id="difficulty-badge">简单</span>
+                            </div>
+                        </div>
+                        
+                        <div class="problem-info-sections">
+                            <div class="info-section">
+                                <div class="section-title">描述</div>
+                                <div id="problem-description">题目描述将显示在这里</div>
+                            </div>
+                            
+                            <div class="info-section">
+                                <div class="section-title">要求</div>
+                                <div id="problem-requirement">SQL 要求将显示在这里</div>
+                            </div>
+                            
+                            <div class="info-section collapsible" id="tables-section">
+                                <div class="section-title toggleable">
+                                    表结构
+                                    <span class="toggle-icon">▼</span>
+                                </div>
+                                <div class="section-content" id="problem-tables">表结构将显示在这里</div>
+                            </div>
+                            
+                            <div class="info-section collapsible" id="data-section">
+                                <div class="section-title toggleable">
+                                    初始数据
+                                    <span class="toggle-icon">▼</span>
+                                </div>
+                                <div class="section-content" id="problem-data">初始数据将显示在这里</div>
+                            </div>
                         </div>
                     </div>
-                    <div class="editor-body">
-                        <textarea id="sql-input" placeholder="请输入 SQL 语句..."></textarea>
-                    </div>
-                    <div class="editor-footer">
-                        <div id="execution-time">执行时间：--</div>
-                        <div id="judge-result"></div>
-                    </div>
-                </div>
-                
-                <div class="result-section">
-                    <h3>执行结果</h3>
-                    <div id="result-container">
-                        <!-- 执行结果将显示在这里 -->
+                    
+                    <div class="editor-workspace">
+                        <div class="sql-editor">
+                            <div class="editor-header">
+                                <div class="editor-buttons">
+                                    <button id="run-btn" class="primary">▶ 运行</button>
+                                    <button id="submit-btn" class="success">✓ 提交</button>
+                                    <button id="clear-btn">清空</button>
+                                    <button id="format-btn">格式化</button>
+                                </div>
+                            </div>
+                            <div class="editor-body">
+                                <textarea id="sql-input" placeholder="请输入 SQL 语句..."></textarea>
+                            </div>
+                            <div class="editor-footer">
+                                <div id="execution-time">执行时间：--</div>
+                                <div id="judge-result"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="result-section">
+                            <div class="section-title">执行结果</div>
+                            <div id="result-container">
+                                <!-- 执行结果将显示在这里 -->
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -103,7 +119,6 @@
         document.addEventListener('DOMContentLoaded', async () => {
             const problemTitle = document.getElementById('problem-title');
             const problemChapter = document.getElementById('problem-chapter');
-            const problemDifficulty = document.getElementById('problem-difficulty');
             const problemDescription = document.getElementById('problem-description');
             const problemTables = document.getElementById('problem-tables');
             const problemData = document.getElementById('problem-data');
@@ -150,8 +165,11 @@
 
                     // 填充题目信息
                     problemTitle.textContent = problem.title;
-                    problemChapter.textContent = problem.chapter || '第1章';
-                    problemDifficulty.textContent = problem.difficulty === 'easy' ? '简单' : problem.difficulty === 'medium' ? '中等' : '困难';
+                    problemChapter.textContent = problem.chapterName || problem.chapter || '第1章';
+                    const difficultyText = problem.difficulty === 'easy' ? '简单' : problem.difficulty === 'medium' ? '中等' : '困难';
+                    const difficultyBadge = document.getElementById('difficulty-badge');
+                    difficultyBadge.textContent = difficultyText;
+                    difficultyBadge.className = 'difficulty ' + problem.difficulty;
                     problemDescription.textContent = problem.description;
                     problemRequirement.textContent = problem.requirement;
 
@@ -288,6 +306,68 @@
             submitBtn.addEventListener('click', submitSQL);
             clearBtn.addEventListener('click', clearSQL);
             formatBtn.addEventListener('click', formatSQL);
+
+            // 可折叠区域切换
+            document.querySelectorAll('.collapsible .toggleable').forEach(title => {
+                title.addEventListener('click', () => {
+                    const section = title.closest('.collapsible');
+                    const content = section.querySelector('.section-content');
+                    const icon = title.querySelector('.toggle-icon');
+                    
+                    section.classList.toggle('collapsed');
+                    icon.textContent = section.classList.contains('collapsed') ? '▶' : '▼';
+                });
+            });
+
+            // 侧边栏折叠功能
+            const collapseBtn = document.getElementById('collapse-btn');
+            const problemSidebar = document.getElementById('problem-sidebar');
+            const detailLayout = document.querySelector('.detail-layout');
+            
+            collapseBtn.addEventListener('click', () => {
+                problemSidebar.classList.toggle('collapsed');
+                detailLayout.classList.toggle('sidebar-collapsed');
+                
+                const icon = collapseBtn.querySelector('.collapse-icon');
+                icon.textContent = problemSidebar.classList.contains('collapsed') ? '→' : '←';
+            });
+
+            // 左右滑动调整宽度功能
+            const resizeHandle = document.createElement('div');
+            resizeHandle.className = 'resize-handle';
+            problemSidebar.appendChild(resizeHandle);
+            
+            let isResizing = false;
+            let startX = 0;
+            let startWidth = 0;
+            
+            resizeHandle.addEventListener('mousedown', (e) => {
+                if (problemSidebar.classList.contains('collapsed')) return;
+                
+                isResizing = true;
+                startX = e.clientX;
+                startWidth = problemSidebar.offsetWidth;
+                
+                document.body.style.cursor = 'col-resize';
+                document.body.style.userSelect = 'none';
+            });
+            
+            document.addEventListener('mousemove', (e) => {
+                if (!isResizing) return;
+                
+                const deltaX = e.clientX - startX;
+                const newWidth = Math.max(200, Math.min(500, startWidth + deltaX));
+                
+                detailLayout.style.gridTemplateColumns = `${newWidth}px 1fr`;
+            });
+            
+            document.addEventListener('mouseup', () => {
+                if (isResizing) {
+                    isResizing = false;
+                    document.body.style.cursor = '';
+                    document.body.style.userSelect = '';
+                }
+            });
 
             // 初始化加载
             await loadProblemDetail();
