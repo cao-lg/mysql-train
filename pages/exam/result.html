@@ -107,6 +107,7 @@
             gap: 1rem;
             justify-content: center;
             margin-top: 2rem;
+            flex-wrap: wrap;
         }
         
         .btn {
@@ -115,6 +116,8 @@
             border-radius: 4px;
             font-weight: 500;
             cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
         }
         
         .btn.primary {
@@ -134,6 +137,108 @@
             border-color: #555;
         }
         
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .section-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        body.dark-mode .section-card {
+            background-color: #2d2d2d;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #4CAF50;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .chapter-analysis {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .chapter-item {
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        body.dark-mode .chapter-item {
+            background-color: #3d3d3d;
+        }
+
+        .chapter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+        }
+
+        .chapter-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .chapter-stats {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        body.dark-mode .chapter-stats {
+            color: #aaa;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        body.dark-mode .progress-bar {
+            background-color: #555;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .progress-fill.high {
+            background-color: #4CAF50;
+        }
+
+        .progress-fill.medium {
+            background-color: #FF9800;
+        }
+
+        .progress-fill.low {
+            background-color: #F44336;
+        }
+
+        .chapter-detail {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: #888;
+        }
+
         .question-results {
             background-color: white;
             border-radius: 8px;
@@ -150,6 +255,8 @@
             font-size: 1.2rem;
             font-weight: 600;
             margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #4CAF50;
         }
         
         .question-result-item {
@@ -170,10 +277,48 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
         }
         
         .question-result-title {
             font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .question-meta {
+            display: flex;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .question-tag {
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            background-color: #e0e0e0;
+            color: #666;
+        }
+
+        body.dark-mode .question-tag {
+            background-color: #555;
+            color: #ccc;
+        }
+
+        .question-tag.difficulty-easy {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .question-tag.difficulty-medium {
+            background-color: #fff3e0;
+            color: #ef6c00;
+        }
+
+        .question-tag.difficulty-hard {
+            background-color: #ffebee;
+            color: #c62828;
         }
         
         .question-result-status {
@@ -216,6 +361,18 @@
         .question-result-content {
             line-height: 1.6;
         }
+
+        .question-description {
+            background-color: #f5f5f5;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        body.dark-mode .question-description {
+            background-color: #3d3d3d;
+        }
         
         .answer-section {
             margin-top: 1rem;
@@ -224,6 +381,17 @@
         .answer-label {
             font-weight: 600;
             margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .answer-label.correct {
+            color: #4CAF50;
+        }
+
+        .answer-label.incorrect {
+            color: #F44336;
         }
         
         .answer-content {
@@ -233,10 +401,433 @@
             font-family: 'Courier New', Courier, monospace;
             font-size: 0.9rem;
             white-space: pre-wrap;
+            overflow-x: auto;
         }
         
         body.dark-mode .answer-content {
             background-color: #3d3d3d;
+        }
+
+        .explanation-section {
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: #e3f2fd;
+            border-radius: 4px;
+            border-left: 4px solid #2196F3;
+        }
+
+        body.dark-mode .explanation-section {
+            background-color: #1a3a4a;
+            border-left-color: #64b5f6;
+        }
+
+        .explanation-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #1976D2;
+        }
+
+        body.dark-mode .explanation-title {
+            color: #64b5f6;
+        }
+
+        .explanation-content {
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .score-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .score-badge.earned {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .score-badge.missed {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 0.5rem;
+        }
+
+        body.dark-mode .tabs {
+            border-bottom-color: #555;
+        }
+
+        .tab-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+            color: #666;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        body.dark-mode .tab-btn {
+            color: #aaa;
+        }
+
+        .tab-btn:hover {
+            color: #4CAF50;
+        }
+
+        .tab-btn.active {
+            color: #4CAF50;
+            border-bottom-color: #4CAF50;
+            font-weight: 600;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+
+        body.dark-mode .loading {
+            color: #aaa;
+        }
+
+        .error-message {
+            text-align: center;
+            padding: 2rem;
+            color: #F44336;
+        }
+
+        .stats-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+            background-color: #f5f5f5;
+            border-radius: 8px;
+        }
+
+        body.dark-mode .stat-item {
+            background-color: #3d3d3d;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-value.correct {
+            color: #4CAF50;
+        }
+
+        .stat-value.incorrect {
+            color: #F44336;
+        }
+
+        .stat-value.unanswered {
+            color: #FF9800;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        body.dark-mode .stat-label {
+            color: #aaa;
+        }
+
+        .filter-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        body.dark-mode .filter-label {
+            color: #aaa;
+        }
+
+        .filter-select {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        body.dark-mode .filter-select {
+            background-color: #3d3d3d;
+            border-color: #555;
+            color: #e0e0e0;
+        }
+        
+        @media (max-width: 768px) {
+            .exam-result {
+                padding: 1rem 0;
+            }
+            
+            .result-card {
+                padding: 1.5rem;
+            }
+            
+            .exam-name {
+                font-size: 1.2rem;
+            }
+            
+            .score {
+                font-size: 2.5rem;
+            }
+            
+            .score-level {
+                font-size: 1rem;
+            }
+            
+            .score-info {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.75rem;
+            }
+            
+            .info-item {
+                padding: 0.75rem;
+            }
+            
+            .info-label {
+                font-size: 0.8rem;
+            }
+            
+            .info-value {
+                font-size: 1rem;
+            }
+            
+            .result-actions {
+                flex-direction: column;
+            }
+            
+            .result-actions .btn {
+                width: 100%;
+            }
+            
+            .section-card {
+                padding: 1.5rem;
+            }
+            
+            .section-title {
+                font-size: 1.1rem;
+            }
+            
+            .chapter-analysis {
+                grid-template-columns: 1fr;
+            }
+            
+            .question-results {
+                padding: 1.5rem;
+            }
+            
+            .results-title {
+                font-size: 1.1rem;
+            }
+            
+            .tabs {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                padding-bottom: 0.5rem;
+            }
+            
+            .tab-btn {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.85rem;
+                white-space: nowrap;
+            }
+            
+            .stats-summary {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.75rem;
+            }
+            
+            .stat-item {
+                padding: 0.75rem;
+            }
+            
+            .stat-value {
+                font-size: 1.2rem;
+            }
+            
+            .stat-label {
+                font-size: 0.75rem;
+            }
+            
+            .filter-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .filter-group {
+                width: 100%;
+            }
+            
+            .filter-select {
+                width: 100%;
+            }
+            
+            .question-result-item {
+                padding: 1rem;
+            }
+            
+            .question-result-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .question-result-title {
+                font-size: 0.95rem;
+            }
+            
+            .question-meta {
+                margin-top: 0.5rem;
+            }
+            
+            .question-description {
+                padding: 0.75rem;
+                font-size: 0.85rem;
+            }
+            
+            .answer-content {
+                padding: 0.75rem;
+                font-size: 0.85rem;
+            }
+            
+            .explanation-section {
+                padding: 0.75rem;
+            }
+            
+            .explanation-title {
+                font-size: 0.9rem;
+            }
+            
+            .explanation-content {
+                font-size: 0.85rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .result-card {
+                padding: 1rem;
+            }
+            
+            .exam-name {
+                font-size: 1.1rem;
+            }
+            
+            .score {
+                font-size: 2rem;
+            }
+            
+            .score-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-card {
+                padding: 1rem;
+            }
+            
+            .question-results {
+                padding: 1rem;
+            }
+            
+            .stats-summary {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .stat-value {
+                font-size: 1rem;
+            }
+            
+            .question-result-item {
+                padding: 0.75rem;
+            }
+            
+            .question-tag {
+                font-size: 0.7rem;
+                padding: 0.15rem 0.4rem;
+            }
+            
+            .score-badge {
+                font-size: 0.75rem;
+                padding: 0.2rem 0.5rem;
+            }
+            
+            .question-result-status {
+                font-size: 0.7rem;
+                padding: 0.2rem 0.5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .score {
+                font-size: 1.8rem;
+            }
+            
+            .score-level {
+                font-size: 0.9rem;
+            }
+            
+            .info-value {
+                font-size: 0.95rem;
+            }
+            
+            .btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.85rem;
+            }
+            
+            .stat-item {
+                padding: 0.5rem;
+            }
+            
+            .stat-value {
+                font-size: 0.95rem;
+            }
+            
+            .stat-label {
+                font-size: 0.7rem;
+            }
         }
     </style>
 </head>
@@ -245,11 +836,12 @@
         <nav>
             <div class="container">
                 <h1>MySQL 实训 OJ 系统</h1>
-                <ul>
-                    <li><a href="../../index.html">首页</a></li>
-                    <li><a href="../../pages/problems.html">题库</a></li>
-                    <li><a href="../../pages/user.html">用户中心</a></li>
-                    <li><a href="../../pages/about.html">关于</a></li>
+                <button class="menu-toggle" id="menu-toggle" aria-label="菜单">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <ul id="nav-menu">
                 </ul>
                 <div class="theme-toggle">
                     <button id="theme-btn">🌙</button>
@@ -291,15 +883,47 @@
                     </div>
                     
                     <div class="result-actions">
+                        <a href="history.html" class="btn secondary">查看历史记录</a>
                         <a href="list.html" class="btn secondary">返回考试列表</a>
                         <a href="../../pages/problems.html" class="btn primary">继续练习</a>
                     </div>
                 </div>
+
+                <div class="section-card" id="chapter-analysis-section" style="display: none;">
+                    <div class="section-title">📊 章节分析</div>
+                    <div class="chapter-analysis" id="chapter-analysis">
+                    </div>
+                </div>
                 
                 <div class="question-results">
-                    <div class="results-title">题目详情</div>
+                    <div class="tabs">
+                        <button class="tab-btn active" data-tab="all">全部题目</button>
+                        <button class="tab-btn" data-tab="correct">正确 <span id="correct-count">(0)</span></button>
+                        <button class="tab-btn" data-tab="incorrect">错误 <span id="incorrect-count">(0)</span></button>
+                        <button class="tab-btn" data-tab="unanswered">未作答 <span id="unanswered-count">(0)</span></button>
+                    </div>
+
+                    <div class="stats-summary" id="stats-summary">
+                        <div class="stat-item">
+                            <div class="stat-value correct" id="stat-correct">0</div>
+                            <div class="stat-label">正确</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value incorrect" id="stat-incorrect">0</div>
+                            <div class="stat-label">错误</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value unanswered" id="stat-unanswered">0</div>
+                            <div class="stat-label">未作答</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="stat-accuracy">0%</div>
+                            <div class="stat-label">正确率</div>
+                        </div>
+                    </div>
+                    
                     <div id="question-results">
-                        <!-- 题目结果将通过 JavaScript 动态生成 -->
+                        <div class="loading">加载中...</div>
                     </div>
                 </div>
             </div>
@@ -312,112 +936,249 @@
         </div>
     </footer>
     
-    <script src="../../js/core.js"></script>
+    <script type="module" src="../../js/core.js"></script>
     <script type="module">
         import examResult from '../../js/exam-result.js';
         import examManager from '../../js/exam-manager.js';
         import { getScoreLevel, formatDateTime } from '../../js/exam-utils.js';
 
+        let currentResultId = null;
+        let allQuestionDetails = [];
+        let currentFilter = 'all';
+
         document.addEventListener('DOMContentLoaded', async () => {
-            const examName = document.getElementById('exam-name');
-            const score = document.getElementById('score');
-            const scoreLevel = document.getElementById('score-level');
-            const totalScore = document.getElementById('total-score');
-            const accuracy = document.getElementById('accuracy');
-            const duration = document.getElementById('duration');
-            const completeTime = document.getElementById('complete-time');
-            const questionResults = document.getElementById('question-results');
-
-            // 获取URL参数
             const urlParams = new URLSearchParams(window.location.search);
-            const resultId = urlParams.get('id');
+            currentResultId = urlParams.get('id');
 
-            if (!resultId) {
-                alert('考试结果ID不存在');
-                window.location.href = 'list.html';
+            if (!currentResultId) {
+                showError('考试结果ID不存在');
+                setTimeout(() => {
+                    window.location.href = 'manage.html';
+                }, 2000);
                 return;
             }
 
-            // 加载考试结果
-            async function loadResult() {
-                try {
-                    // 生成分析报告
-                    const analysisResult = await examResult.generateAnalysis(resultId);
-                    if (!analysisResult.success) {
-                        alert('加载考试结果失败: ' + analysisResult.error);
-                        window.location.href = 'list.html';
-                        return;
-                    }
-
-                    const analysis = analysisResult.analysis;
-
-                    // 显示基本信息
-                    examName.textContent = analysis.examName;
-                    score.textContent = analysis.score;
-                    totalScore.textContent = analysis.totalScore;
-                    accuracy.textContent = analysis.accuracy + '%';
-                    duration.textContent = analysis.duration;
-                    completeTime.textContent = formatDateTime(analysis.endTime);
-
-                    // 显示等级
-                    const levelInfo = getScoreLevel(analysis.score, analysis.totalScore);
-                    scoreLevel.textContent = levelInfo.text;
-                    score.className = `score ${levelInfo.level}`;
-
-                    // 显示题目详情
-                    await loadQuestionResults(resultId);
-                } catch (error) {
-                    console.error('加载结果失败:', error);
-                    alert('加载失败，请重试');
-                }
-            }
-
-            // 加载题目结果
-            async function loadQuestionResults(resultId) {
-                try {
-                    const result = await examResult.getResultById(resultId);
-                    if (!result) {
-                        alert('考试结果不存在');
-                        return;
-                    }
-
-                    const exam = await examManager.getExamById(result.examId);
-                    if (!exam) {
-                        alert('考试不存在');
-                        return;
-                    }
-
-                    // 这里简化处理，实际应该从会话中获取详细的题目结果
-                    // 由于我们没有存储详细的题目结果，这里只是模拟显示
-                    questionResults.innerHTML = Array.from({ length: result.questionCount }, (_, index) => {
-                        const isCorrect = Math.random() > 0.3; // 模拟70%的正确率
-                        const status = isCorrect ? 'AC' : 'WA';
-                        return `
-                            <div class="question-result-item">
-                                <div class="question-result-header">
-                                    <div class="question-result-title">题目 ${index + 1}</div>
-                                    <div class="question-result-status status ${status}">
-                                        ${status === 'AC' ? '正确' : '错误'}
-                                    </div>
-                                </div>
-                                <div class="question-result-content">
-                                    <p>这是题目 ${index + 1} 的描述...</p>
-                                    <div class="answer-section">
-                                        <div class="answer-label">您的答案：</div>
-                                        <div class="answer-content">-- 答案内容 --</div>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                    }).join('');
-                } catch (error) {
-                    console.error('加载题目结果失败:', error);
-                }
-            }
-
-            // 初始化
+            initTabs();
             await loadResult();
         });
+
+        function initTabs() {
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentFilter = btn.dataset.tab;
+                    renderQuestionResults();
+                });
+            });
+        }
+
+        async function loadResult() {
+            try {
+                const analysisResult = await examResult.generateAnalysis(currentResultId);
+                if (!analysisResult.success) {
+                    showError('加载考试结果失败: ' + analysisResult.error);
+                    return;
+                }
+
+                const analysis = analysisResult.analysis;
+
+                document.getElementById('exam-name').textContent = analysis.examName;
+                document.getElementById('score').textContent = analysis.score;
+                document.getElementById('total-score').textContent = analysis.totalScore;
+                document.getElementById('accuracy').textContent = analysis.accuracy + '%';
+                document.getElementById('duration').textContent = analysis.duration;
+                document.getElementById('complete-time').textContent = formatDateTime(analysis.endTime);
+
+                const levelInfo = getScoreLevel(analysis.score, analysis.totalScore);
+                document.getElementById('score-level').textContent = levelInfo.text;
+                document.getElementById('score').className = `score ${levelInfo.level}`;
+
+                await loadChapterAnalysis();
+                await loadQuestionDetails();
+            } catch (error) {
+                console.error('加载结果失败:', error);
+                showError('加载失败，请重试');
+            }
+        }
+
+        async function loadChapterAnalysis() {
+            try {
+                const result = await examResult.getChapterAnalysis(currentResultId);
+                if (!result.success) {
+                    console.warn('章节分析加载失败:', result.error);
+                    return;
+                }
+
+                const chapterAnalysis = result.chapterAnalysis;
+                if (!chapterAnalysis || chapterAnalysis.length === 0) {
+                    return;
+                }
+
+                const container = document.getElementById('chapter-analysis');
+                const section = document.getElementById('chapter-analysis-section');
+                
+                container.innerHTML = chapterAnalysis.map(chapter => {
+                    const accuracy = parseFloat(chapter.accuracy);
+                    const progressClass = accuracy >= 80 ? 'high' : accuracy >= 60 ? 'medium' : 'low';
+                    
+                    return `
+                        <div class="chapter-item">
+                            <div class="chapter-header">
+                                <span class="chapter-name">${chapter.chapterName}</span>
+                                <span class="chapter-stats">${chapter.correct}/${chapter.total} 正确</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill ${progressClass}" style="width: ${accuracy}%"></div>
+                            </div>
+                            <div class="chapter-detail">
+                                <span>正确率: ${accuracy}%</span>
+                                <span>得分: ${chapter.score}/${chapter.totalScore}</span>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                section.style.display = 'block';
+            } catch (error) {
+                console.error('加载章节分析失败:', error);
+            }
+        }
+
+        async function loadQuestionDetails() {
+            try {
+                const result = await examResult.getQuestionDetails(currentResultId);
+                if (!result.success) {
+                    document.getElementById('question-results').innerHTML = `
+                        <div class="error-message">无法加载题目详情: ${result.error}</div>
+                    `;
+                    return;
+                }
+
+                allQuestionDetails = result.questionDetails;
+                updateStats();
+                renderQuestionResults();
+            } catch (error) {
+                console.error('加载题目详情失败:', error);
+                document.getElementById('question-results').innerHTML = `
+                    <div class="error-message">加载题目详情失败</div>
+                `;
+            }
+        }
+
+        function updateStats() {
+            const correct = allQuestionDetails.filter(q => q.status === 'AC').length;
+            const incorrect = allQuestionDetails.filter(q => q.status === 'WA').length;
+            const unanswered = allQuestionDetails.filter(q => q.status === 'UNANSWERED').length;
+            const total = allQuestionDetails.length;
+            const accuracy = total > 0 ? ((correct / total) * 100).toFixed(1) : 0;
+
+            document.getElementById('correct-count').textContent = `(${correct})`;
+            document.getElementById('incorrect-count').textContent = `(${incorrect})`;
+            document.getElementById('unanswered-count').textContent = `(${unanswered})`;
+
+            document.getElementById('stat-correct').textContent = correct;
+            document.getElementById('stat-incorrect').textContent = incorrect;
+            document.getElementById('stat-unanswered').textContent = unanswered;
+            document.getElementById('stat-accuracy').textContent = accuracy + '%';
+        }
+
+        function renderQuestionResults() {
+            let filtered = allQuestionDetails;
+            
+            switch (currentFilter) {
+                case 'correct':
+                    filtered = allQuestionDetails.filter(q => q.status === 'AC');
+                    break;
+                case 'incorrect':
+                    filtered = allQuestionDetails.filter(q => q.status === 'WA');
+                    break;
+                case 'unanswered':
+                    filtered = allQuestionDetails.filter(q => q.status === 'UNANSWERED');
+                    break;
+            }
+
+            const container = document.getElementById('question-results');
+            
+            if (filtered.length === 0) {
+                container.innerHTML = '<div class="loading">暂无数据</div>';
+                return;
+            }
+
+            container.innerHTML = filtered.map(q => renderQuestionItem(q)).join('');
+        }
+
+        function renderQuestionItem(q) {
+            const statusText = {
+                'AC': '正确',
+                'WA': '错误',
+                'UNANSWERED': '未作答'
+            };
+
+            const difficultyText = {
+                'easy': '简单',
+                'medium': '中等',
+                'hard': '困难'
+            };
+
+            const difficultyClass = q.difficulty ? `difficulty-${q.difficulty}` : '';
+
+            return `
+                <div class="question-result-item">
+                    <div class="question-result-header">
+                        <div class="question-result-title">
+                            <span>第 ${q.index} 题</span>
+                            <div class="question-meta">
+                                ${q.chapterName ? `<span class="question-tag">${q.chapterName}</span>` : ''}
+                                ${q.difficulty ? `<span class="question-tag ${difficultyClass}">${difficultyText[q.difficulty] || q.difficulty}</span>` : ''}
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span class="score-badge ${q.isCorrect ? 'earned' : 'missed'}">
+                                ${q.score}/${q.maxScore} 分
+                            </span>
+                            <span class="question-result-status status ${q.status}">
+                                ${statusText[q.status]}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="question-result-content">
+                        <div class="question-description">${escapeHtml(q.description || '暂无题目描述')}</div>
+                        <div class="answer-section">
+                            <div class="answer-label ${q.status === 'AC' ? 'correct' : q.status === 'WA' ? 'incorrect' : ''}">
+                                您的答案：
+                            </div>
+                            <div class="answer-content">${escapeHtml(q.userAnswer) || '（未作答）'}</div>
+                        </div>
+                        ${q.correctAnswer ? `
+                            <div class="answer-section">
+                                <div class="answer-label correct">正确答案：</div>
+                                <div class="answer-content">${escapeHtml(q.correctAnswer)}</div>
+                            </div>
+                        ` : ''}
+                        ${q.explanation && q.explanation !== '暂无解析' ? `
+                            <div class="explanation-section">
+                                <div class="explanation-title">💡 解析</div>
+                                <div class="explanation-content">${escapeHtml(q.explanation)}</div>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function showError(message) {
+            const container = document.getElementById('question-results');
+            container.innerHTML = `<div class="error-message">${message}</div>`;
+        }
     </script>
 </body>
 </html>

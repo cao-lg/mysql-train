@@ -1,18 +1,26 @@
 // 用户系统
+import storage from './storage.js';
+
 class UserSystem {
     constructor() {
         this.currentUser = null;
+        this.validRoles = ['teacher', 'student'];
+        this.rolePermissions = {
+            teacher: ['view_problems', 'submit_solutions', 'view_submissions', 'manage_problems', 'view_all_submissions', 'manage_users'],
+            student: ['view_problems', 'submit_solutions', 'view_submissions']
+        };
         this.init();
     }
 
-    // 初始化用户系统
     async init() {
-        // 尝试从本地存储获取当前用户
         const savedUser = localStorage.getItem('currentUser');
         if (savedUser) {
             try {
                 this.currentUser = JSON.parse(savedUser);
-                console.log('用户已登录:', this.currentUser.username);
+                if (!this.currentUser.role) {
+                    this.currentUser.role = 'student';
+                }
+                console.log('用户已登录:', this.currentUser.username, '角色:', this.currentUser.role);
             } catch (error) {
                 console.error('解析用户数据失败:', error);
                 localStorage.removeItem('currentUser');
@@ -20,29 +28,29 @@ class UserSystem {
         }
     }
 
-    // 注册用户
-    async register(username, password) {
+    async register(username, password, role = 'student') {
         try {
-            // 检查用户是否已存在
+            if (!this.validRoles.includes(role)) {
+                return { success: false, message: '无效的角色类型' };
+            }
+
             const existingUser = await this.getUser(username);
             if (existingUser) {
                 return { success: false, message: '用户名已存在' };
             }
 
-            // 创建新用户
             const user = {
                 username,
                 password: this.hashPassword(password),
+                role,
                 registeredAt: new Date().toISOString(),
                 solvedCount: 0,
                 submitCount: 0,
                 accuracy: 0
             };
 
-            // 存储用户数据
             await this.storeUser(user);
 
-            // 登录用户
             await this.login(username, password);
 
             return { success: true, message: '注册成功' };
@@ -52,21 +60,22 @@ class UserSystem {
         }
     }
 
-    // 登录用户
     async login(username, password) {
         try {
-            // 获取用户数据
             const user = await this.getUser(username);
             if (!user) {
                 return { success: false, message: '用户名或密码错误' };
             }
 
-            // 验证密码
             if (this.hashPassword(password) !== user.password) {
                 return { success: false, message: '用户名或密码错误' };
             }
 
-            // 保存当前用户到本地存储
+            if (!user.role) {
+                user.role = 'student';
+                await this.storeUser(user);
+            }
+
             this.currentUser = user;
             localStorage.setItem('currentUser', JSON.stringify(user));
 
@@ -77,51 +86,91 @@ class UserSystem {
         }
     }
 
-    // 退出登录
     logout() {
         this.currentUser = null;
         localStorage.removeItem('currentUser');
         console.log('用户已退出登录');
     }
 
-    // 获取当前用户
     getCurrentUser() {
         return this.currentUser;
     }
 
-    // 检查是否已登录
     isLoggedIn() {
         return this.currentUser !== null;
     }
 
-    // 获取用户数据
+    getRole() {
+        return this.currentUser ? this.currentUser.role : null;
+    }
+
+    hasRole(role) {
+        if (!this.currentUser) {
+            return false;
+        }
+        return this.currentUser.role === role;
+    }
+
+    isTeacher() {
+        return this.hasRole('teacher');
+    }
+
+    isStudent() {
+        return this.hasRole('student');
+    }
+
+    requireRole(role) {
+        if (!this.isLoggedIn()) {
+            return { success: false, message: '请先登录' };
+        }
+        if (!this.hasRole(role)) {
+            return { success: false, message: '权限不足，需要 ' + this.getRoleDisplayName(role) + ' 角色' };
+        }
+        return { success: true, message: '验证通过' };
+    }
+
+    checkPermission(permission) {
+        if (!this.currentUser) {
+            return false;
+        }
+        const role = this.currentUser.role;
+        const permissions = this.rolePermissions[role] || [];
+        return permissions.includes(permission);
+    }
+
+    getRoleDisplayName(role) {
+        const roleNames = {
+            teacher: '教师',
+            student: '学生'
+        };
+        return roleNames[role] || role;
+    }
+
+    getCurrentUserPermissions() {
+        if (!this.currentUser) {
+            return [];
+        }
+        return this.rolePermissions[this.currentUser.role] || [];
+    }
+
     async getUser(username) {
         try {
-            // 这里应该从 IndexedDB 获取用户数据
-            // 暂时使用模拟实现
-            const users = JSON.parse(localStorage.getItem('users') || '{}');
-            return users[username] || null;
+            return await storage.getUser(username);
         } catch (error) {
             console.error('获取用户数据失败:', error);
             return null;
         }
     }
 
-    // 存储用户数据
     async storeUser(user) {
         try {
-            // 这里应该存储到 IndexedDB
-            // 暂时使用 localStorage 模拟
-            const users = JSON.parse(localStorage.getItem('users') || '{}');
-            users[user.username] = user;
-            localStorage.setItem('users', JSON.stringify(users));
+            await storage.storeUser(user);
         } catch (error) {
             console.error('存储用户数据失败:', error);
             throw error;
         }
     }
 
-    // 更新用户做题记录
     async updateUserRecord(username, problemId, result) {
         try {
             const user = await this.getUser(username);
@@ -129,21 +178,16 @@ class UserSystem {
                 return;
             }
 
-            // 更新提交次数
             user.submitCount++;
 
-            // 如果答案正确，更新已做题数
             if (result === 'AC') {
                 user.solvedCount++;
             }
 
-            // 更新正确率
             user.accuracy = user.submitCount > 0 ? Math.round((user.solvedCount / user.submitCount) * 100) : 0;
 
-            // 存储更新后的用户数据
             await this.storeUser(user);
 
-            // 如果是当前用户，更新内存中的用户数据
             if (this.currentUser && this.currentUser.username === username) {
                 this.currentUser = user;
                 localStorage.setItem('currentUser', JSON.stringify(user));
@@ -153,14 +197,9 @@ class UserSystem {
         }
     }
 
-    // 存储提交记录
     async storeSubmission(username, problemId, problemTitle, sql, result, executionTime) {
         try {
-            // 这里应该存储到 IndexedDB
-            // 暂时使用 localStorage 模拟
-            const submissions = JSON.parse(localStorage.getItem('submissions') || '[]');
-            submissions.push({
-                id: Date.now(),
+            const submission = {
                 username,
                 problemId,
                 problemTitle,
@@ -168,35 +207,81 @@ class UserSystem {
                 result,
                 executionTime,
                 timestamp: new Date().toISOString()
-            });
-            // 只保留最近 100 条提交记录
-            const recentSubmissions = submissions.slice(-100);
-            localStorage.setItem('submissions', JSON.stringify(recentSubmissions));
+            };
+            await storage.storeSubmission(submission);
         } catch (error) {
             console.error('存储提交记录失败:', error);
         }
     }
 
-    // 获取用户提交记录
     async getUserSubmissions(username, limit = 10) {
         try {
-            // 这里应该从 IndexedDB 获取
-            // 暂时使用 localStorage 模拟
-            const submissions = JSON.parse(localStorage.getItem('submissions') || '[]');
-            const userSubmissions = submissions
-                .filter(sub => sub.username === username)
-                .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
-                .slice(0, limit);
-            return userSubmissions;
+            return await storage.getUserSubmissions(username, limit);
         } catch (error) {
             console.error('获取提交记录失败:', error);
             return [];
         }
     }
 
-    // 密码哈希（简单实现，实际项目中应该使用更安全的哈希算法）
+    async getAllUsers() {
+        try {
+            return await storage.getAllUsers();
+        } catch (error) {
+            console.error('获取所有用户失败:', error);
+            return [];
+        }
+    }
+
+    async deleteUser(username) {
+        try {
+            await storage.delete('users', username);
+        } catch (error) {
+            console.error('删除用户失败:', error);
+            throw error;
+        }
+    }
+
+    async exportUserData(username) {
+        try {
+            return await storage.exportUserData(username);
+        } catch (error) {
+            console.error('导出用户数据失败:', error);
+            return null;
+        }
+    }
+
+    async exportAndDownload(type = 'all') {
+        if (!this.currentUser) {
+            return { success: false, error: '请先登录' };
+        }
+        
+        try {
+            return await storage.exportAndDownload(this.currentUser.username, type);
+        } catch (error) {
+            console.error('导出数据失败:', error);
+            return { success: false, error: error.message };
+        }
+    }
+
+    async getStorageStats() {
+        try {
+            return await storage.getStorageStats();
+        } catch (error) {
+            console.error('获取存储统计失败:', error);
+            return null;
+        }
+    }
+
+    async manualCleanup(options = {}) {
+        try {
+            return await storage.manualCleanup(options);
+        } catch (error) {
+            console.error('手动清理失败:', error);
+            return { success: false, error: error.message };
+        }
+    }
+
     hashPassword(password) {
-        // 简单的哈希实现，实际项目中应该使用 bcrypt 等安全算法
         let hash = 0;
         for (let i = 0; i < password.length; i++) {
             const char = password.charCodeAt(i);
@@ -207,6 +292,5 @@ class UserSystem {
     }
 }
 
-// 导出单例实例
 const userSystem = new UserSystem();
 export default userSystem;

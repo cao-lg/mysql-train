@@ -14,11 +14,12 @@
             background-color: white;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            padding: 1rem;
+            padding: 1rem 1.5rem;
             margin-bottom: 1rem;
-            display: flex;
-            justify-content: space-between;
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
             align-items: center;
+            gap: 1rem;
         }
         
         body.dark-mode .exam-header {
@@ -26,26 +27,102 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
         
+        .exam-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+        
         .exam-title {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: 600;
         }
         
-        .exam-timer {
+        .exam-meta {
+            font-size: 0.85rem;
+            color: #666;
+        }
+        
+        body.dark-mode .exam-meta {
+            color: #aaa;
+        }
+        
+        .exam-timer-container {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 1rem;
+            gap: 0.3rem;
+        }
+        
+        .timer-label {
+            font-size: 0.85rem;
+            color: #666;
+        }
+        
+        body.dark-mode .timer-label {
+            color: #aaa;
         }
         
         .timer {
-            font-size: 1.5rem;
-            font-weight: 600;
+            font-size: 2rem;
+            font-weight: 700;
             color: #f44336;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 2px;
+        }
+        
+        .timer.warning {
+            animation: timerPulse 1s infinite;
+        }
+        
+        @keyframes timerPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .exam-progress {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 0.3rem;
+        }
+        
+        .progress-label {
+            font-size: 0.85rem;
+            color: #666;
+        }
+        
+        body.dark-mode .progress-label {
+            color: #aaa;
+        }
+        
+        .progress-bar-container {
+            width: 200px;
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        body.dark-mode .progress-bar-container {
+            background-color: #444;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background-color: #4CAF50;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        
+        .progress-text {
+            font-size: 0.85rem;
+            font-weight: 500;
         }
         
         .exam-content {
             display: grid;
-            grid-template-columns: 250px 1fr;
+            grid-template-columns: 220px 1fr;
             gap: 1rem;
             min-height: 600px;
         }
@@ -55,7 +132,9 @@
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             padding: 1rem;
-            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
         }
         
         body.dark-mode .question-nav {
@@ -63,9 +142,67 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
         
+        .nav-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        body.dark-mode .nav-header {
+            border-bottom-color: #444;
+        }
+        
         .nav-title {
             font-weight: 600;
-            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+        
+        .nav-stats {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        body.dark-mode .nav-stats {
+            color: #aaa;
+        }
+        
+        .nav-legend {
+            display: flex;
+            gap: 0.8rem;
+            font-size: 0.75rem;
+            flex-wrap: wrap;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+        }
+        
+        .legend-dot.answered {
+            background-color: #4CAF50;
+        }
+        
+        .legend-dot.unanswered {
+            background-color: #e0e0e0;
+            border: 1px solid #ccc;
+        }
+        
+        body.dark-mode .legend-dot.unanswered {
+            background-color: #3d3d3d;
+            border-color: #555;
+        }
+        
+        .legend-dot.current {
+            background-color: #2196F3;
         }
         
         .question-list {
@@ -75,25 +212,28 @@
         }
         
         .question-item {
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             border-radius: 4px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             font-weight: 500;
-            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
         }
         
         .question-item.unanswered {
             background-color: #f5f5f5;
             border: 1px solid #ddd;
+            color: #666;
         }
         
         body.dark-mode .question-item.unanswered {
             background-color: #3d3d3d;
             border-color: #555;
+            color: #aaa;
         }
         
         .question-item.answered {
@@ -112,12 +252,17 @@
             background-color: #e3f2fd;
             border: 2px solid #2196F3;
             color: #1565C0;
+            transform: scale(1.05);
         }
         
         body.dark-mode .question-item.current {
             background-color: #0d47a1;
             border-color: #2196F3;
             color: #90caf9;
+        }
+        
+        .question-item:hover {
+            transform: scale(1.08);
         }
         
         .question-content {
@@ -137,35 +282,47 @@
         .question-header {
             margin-bottom: 1.5rem;
             padding-bottom: 1rem;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid #eee;
         }
         
         body.dark-mode .question-header {
-            border-bottom-color: #555;
+            border-bottom-color: #444;
         }
         
         .question-number {
             font-weight: 600;
             margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        body.dark-mode .question-number {
+            color: #aaa;
         }
         
         .question-title {
-            font-size: 1.1rem;
-            margin-bottom: 1rem;
+            font-size: 1.15rem;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
         }
         
         .question-description {
             margin-bottom: 1.5rem;
-            line-height: 1.6;
+            line-height: 1.7;
+            color: #444;
+        }
+        
+        body.dark-mode .question-description {
+            color: #ccc;
         }
         
         .sql-editor {
             flex: 1;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
         }
         
         .editor-body {
-            height: 300px;
+            height: 280px;
         }
         
         #sql-input {
@@ -175,21 +332,45 @@
         
         .question-actions {
             display: flex;
-            gap: 1rem;
-            justify-content: flex-end;
+            gap: 0.8rem;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+            flex-wrap: wrap;
+        }
+        
+        body.dark-mode .question-actions {
+            border-top-color: #444;
+        }
+        
+        .action-left {
+            display: flex;
+            gap: 0.8rem;
+        }
+        
+        .action-right {
+            display: flex;
+            gap: 0.8rem;
         }
         
         .btn {
-            padding: 0.8rem 1.5rem;
+            padding: 0.7rem 1.2rem;
             border: none;
             border-radius: 4px;
             font-weight: 500;
             cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
         }
         
         .btn.primary {
             background-color: #4CAF50;
             color: white;
+        }
+        
+        .btn.primary:hover {
+            background-color: #45a049;
         }
         
         .btn.secondary {
@@ -204,9 +385,54 @@
             border-color: #555;
         }
         
+        .btn.secondary:hover {
+            background-color: #e8e8e8;
+        }
+        
+        body.dark-mode .btn.secondary:hover {
+            background-color: #444;
+        }
+        
         .btn.danger {
             background-color: #f44336;
             color: white;
+        }
+        
+        .btn.danger:hover {
+            background-color: #da190b;
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .save-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: #666;
+        }
+        
+        body.dark-mode .save-status {
+            color: #aaa;
+        }
+        
+        .save-status.saving {
+            color: #2196F3;
+        }
+        
+        .save-status.saved {
+            color: #4CAF50;
+        }
+        
+        .save-status.error {
+            color: #f44336;
+        }
+        
+        .save-status-icon {
+            font-size: 1rem;
         }
         
         .alert {
@@ -227,7 +453,255 @@
             border-color: #ff9800;
         }
         
+        .exam-notice-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .exam-notice-modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .notice-content {
+            background-color: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 85vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+        
+        .exam-notice-modal.show .notice-content {
+            transform: scale(1);
+        }
+        
+        body.dark-mode .notice-content {
+            background-color: #2d2d2d;
+        }
+        
+        .notice-header {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            text-align: center;
+        }
+        
+        .notice-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        
+        .notice-header p {
+            margin: 0.5rem 0 0;
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+        
+        .notice-body {
+            padding: 1.5rem;
+            overflow-y: auto;
+            flex: 1;
+        }
+        
+        .notice-section {
+            margin-bottom: 1.5rem;
+        }
+        
+        .notice-section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .notice-section h3 {
+            font-size: 1.1rem;
+            color: #4CAF50;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        body.dark-mode .notice-section h3 {
+            color: #81c784;
+        }
+        
+        .notice-section ul {
+            margin: 0;
+            padding-left: 1.5rem;
+        }
+        
+        .notice-section li {
+            margin-bottom: 0.6rem;
+            line-height: 1.6;
+            color: #444;
+        }
+        
+        body.dark-mode .notice-section li {
+            color: #ccc;
+        }
+        
+        .notice-section li strong {
+            color: #f44336;
+        }
+        
+        .notice-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid #eee;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        body.dark-mode .notice-footer {
+            border-top-color: #444;
+        }
+        
+        .notice-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+        
+        .notice-checkbox input {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        
+        .notice-start-btn {
+            padding: 0.9rem 3rem;
+            font-size: 1.1rem;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        
+        .notice-start-btn:hover:not(:disabled) {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+        
+        .notice-start-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        body.dark-mode .notice-start-btn:disabled {
+            background-color: #555;
+        }
+        
+        .time-up-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .time-up-modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .time-up-content {
+            background-color: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+        
+        .time-up-modal.show .time-up-content {
+            transform: scale(1);
+        }
+        
+        body.dark-mode .time-up-content {
+            background-color: #2d2d2d;
+        }
+        
+        .time-up-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+        
+        .time-up-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #f44336;
+        }
+        
+        .time-up-message {
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+        
+        body.dark-mode .time-up-message {
+            color: #aaa;
+        }
+        
+        .time-up-btn {
+            padding: 0.8rem 2rem;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .time-up-btn:hover {
+            background-color: #45a049;
+        }
+        
         @media (max-width: 768px) {
+            .exam-header {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .exam-info, .exam-progress {
+                align-items: center;
+            }
+            
             .exam-content {
                 grid-template-columns: 1fr;
             }
@@ -239,6 +713,243 @@
             .question-list {
                 grid-template-columns: repeat(10, 1fr);
             }
+            
+            .question-actions {
+                flex-direction: column;
+            }
+            
+            .action-left, .action-right {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .exam-take {
+                padding: 0.5rem 0;
+            }
+            
+            .exam-header {
+                padding: 0.75rem 1rem;
+                gap: 0.5rem;
+            }
+            
+            .exam-title {
+                font-size: 1.1rem;
+            }
+            
+            .exam-meta {
+                font-size: 0.75rem;
+            }
+            
+            .timer {
+                font-size: 1.5rem;
+            }
+            
+            .timer-label,
+            .progress-label {
+                font-size: 0.75rem;
+            }
+            
+            .progress-bar-container {
+                width: 150px;
+            }
+            
+            .progress-text {
+                font-size: 0.75rem;
+            }
+            
+            .alert {
+                padding: 0.75rem;
+                font-size: 0.85rem;
+            }
+            
+            .question-nav {
+                padding: 0.75rem;
+            }
+            
+            .nav-title {
+                font-size: 0.9rem;
+            }
+            
+            .nav-stats {
+                font-size: 0.75rem;
+            }
+            
+            .nav-legend {
+                font-size: 0.7rem;
+            }
+            
+            .question-list {
+                grid-template-columns: repeat(5, 1fr);
+            }
+            
+            .question-item {
+                width: 32px;
+                height: 32px;
+                font-size: 0.85rem;
+            }
+            
+            .question-content {
+                padding: 1rem;
+            }
+            
+            .question-header {
+                margin-bottom: 1rem;
+                padding-bottom: 0.75rem;
+            }
+            
+            .question-number {
+                font-size: 0.8rem;
+            }
+            
+            .question-title {
+                font-size: 1rem;
+            }
+            
+            .question-description {
+                font-size: 0.9rem;
+                margin-bottom: 1rem;
+            }
+            
+            .editor-body {
+                height: 200px;
+            }
+            
+            .btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.85rem;
+            }
+            
+            .save-status {
+                font-size: 0.75rem;
+            }
+            
+            .action-left,
+            .action-right {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+            
+            .notice-content {
+                width: 95%;
+                max-height: 90vh;
+            }
+            
+            .notice-header {
+                padding: 1rem;
+            }
+            
+            .notice-header h2 {
+                font-size: 1.2rem;
+            }
+            
+            .notice-header p {
+                font-size: 0.85rem;
+            }
+            
+            .notice-body {
+                padding: 1rem;
+            }
+            
+            .notice-section h3 {
+                font-size: 1rem;
+            }
+            
+            .notice-section li {
+                font-size: 0.85rem;
+            }
+            
+            .notice-footer {
+                padding: 0.75rem 1rem;
+            }
+            
+            .notice-checkbox {
+                font-size: 0.85rem;
+            }
+            
+            .notice-start-btn {
+                padding: 0.75rem 2rem;
+                font-size: 1rem;
+            }
+            
+            .time-up-content {
+                width: 95%;
+                padding: 1.5rem;
+            }
+            
+            .time-up-icon {
+                font-size: 3rem;
+            }
+            
+            .time-up-title {
+                font-size: 1.2rem;
+            }
+            
+            .time-up-message {
+                font-size: 0.9rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .exam-title {
+                font-size: 1rem;
+            }
+            
+            .timer {
+                font-size: 1.3rem;
+            }
+            
+            .progress-bar-container {
+                width: 120px;
+            }
+            
+            .question-list {
+                grid-template-columns: repeat(5, 1fr);
+                gap: 0.4rem;
+            }
+            
+            .question-item {
+                width: 28px;
+                height: 28px;
+                font-size: 0.8rem;
+            }
+            
+            .question-title {
+                font-size: 0.95rem;
+            }
+            
+            .editor-body {
+                height: 180px;
+            }
+            
+            .btn {
+                padding: 0.5rem 0.8rem;
+                font-size: 0.8rem;
+            }
+        }
+        
+        @media (max-width: 768px) and (orientation: landscape) {
+            .exam-header {
+                grid-template-columns: 1fr auto 1fr;
+            }
+            
+            .exam-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .question-nav {
+                max-height: 150px;
+                overflow-y: auto;
+            }
+            
+            .question-list {
+                grid-template-columns: repeat(10, 1fr);
+            }
+            
+            .editor-body {
+                height: 150px;
+            }
         }
     </style>
 </head>
@@ -247,11 +958,12 @@
         <nav>
             <div class="container">
                 <h1>MySQL 实训 OJ 系统</h1>
-                <ul>
-                    <li><a href="../../index.html">首页</a></li>
-                    <li><a href="../../pages/problems.html">题库</a></li>
-                    <li><a href="../../pages/user.html">用户中心</a></li>
-                    <li><a href="../../pages/about.html">关于</a></li>
+                <button class="menu-toggle" id="menu-toggle" aria-label="菜单">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <ul id="nav-menu">
                 </ul>
                 <div class="theme-toggle">
                     <button id="theme-btn">🌙</button>
@@ -264,22 +976,48 @@
         <section class="exam-take">
             <div class="container">
                 <div class="exam-header">
-                    <div class="exam-title" id="exam-title">考试名称</div>
-                    <div class="exam-timer">
-                        <span>剩余时间：</span>
-                        <span class="timer" id="timer">00:00</span>
+                    <div class="exam-info">
+                        <div class="exam-title" id="exam-title">考试名称</div>
+                        <div class="exam-meta" id="exam-meta">题目数量：10 | 总分：100分</div>
+                    </div>
+                    <div class="exam-timer-container">
+                        <span class="timer-label">剩余时间</span>
+                        <span class="timer" id="timer">00:00:00</span>
+                    </div>
+                    <div class="exam-progress">
+                        <span class="progress-label">答题进度</span>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" id="progress-bar" style="width: 0%"></div>
+                        </div>
+                        <span class="progress-text" id="progress-text">0/10</span>
                     </div>
                 </div>
                 
-                <div class="alert warning">
+                <div class="alert warning" id="warning-alert">
                     <strong>注意：</strong>考试过程中请勿刷新页面，否则会导致考试数据丢失！
                 </div>
                 
                 <div class="exam-content">
                     <div class="question-nav">
-                        <div class="nav-title">题目导航</div>
+                        <div class="nav-header">
+                            <div class="nav-title">题目导航</div>
+                            <div class="nav-stats" id="nav-stats">已答 0/10</div>
+                        </div>
+                        <div class="nav-legend">
+                            <div class="legend-item">
+                                <div class="legend-dot answered"></div>
+                                <span>已答</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-dot unanswered"></div>
+                                <span>未答</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-dot current"></div>
+                                <span>当前</span>
+                            </div>
+                        </div>
                         <div class="question-list" id="question-list">
-                            <!-- 题目导航将通过 JavaScript 动态生成 -->
                         </div>
                     </div>
                     
@@ -298,10 +1036,18 @@
                         </div>
                         
                         <div class="question-actions">
-                            <button id="prev-btn" class="btn secondary">上一题</button>
-                            <button id="save-btn" class="btn secondary">保存答案</button>
-                            <button id="next-btn" class="btn secondary">下一题</button>
-                            <button id="submit-btn" class="btn primary">提交考试</button>
+                            <div class="action-left">
+                                <button id="prev-btn" class="btn secondary">◀ 上一题</button>
+                                <button id="next-btn" class="btn secondary">下一题 ▶</button>
+                            </div>
+                            <div class="save-status" id="save-status">
+                                <span class="save-status-icon">💾</span>
+                                <span class="save-status-text">已保存</span>
+                            </div>
+                            <div class="action-right">
+                                <button id="run-btn" class="btn secondary">▶ 运行</button>
+                                <button id="submit-btn" class="btn primary">提交考试</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -309,13 +1055,67 @@
         </section>
     </main>
     
+    <div class="exam-notice-modal" id="exam-notice-modal">
+        <div class="notice-content">
+            <div class="notice-header">
+                <h2>📋 考试须知</h2>
+                <p id="notice-exam-name">考试名称</p>
+            </div>
+            <div class="notice-body">
+                <div class="notice-section">
+                    <h3>⏰ 时间规则</h3>
+                    <ul>
+                        <li>考试时间为 <strong id="notice-duration">60</strong> 分钟，请合理安排答题时间</li>
+                        <li>倒计时结束后系统将<strong>自动提交</strong>您的答案</li>
+                        <li>请勿刷新页面，否则可能导致答题进度丢失</li>
+                    </ul>
+                </div>
+                <div class="notice-section">
+                    <h3>📝 答题规则</h3>
+                    <ul>
+                        <li>本考试共 <strong id="notice-question-count">10</strong> 道题目，每题 10 分</li>
+                        <li>请在 SQL 编辑器中编写正确的 SQL 语句</li>
+                        <li>可以点击"运行"按钮测试您的 SQL 语句</li>
+                        <li>答案会<strong>每30秒自动保存</strong>，也可手动保存</li>
+                        <li>可随时切换题目，切换时自动保存当前答案</li>
+                    </ul>
+                </div>
+                <div class="notice-section">
+                    <h3>⚠️ 注意事项</h3>
+                    <ul>
+                        <li>考试过程中请保持网络连接稳定</li>
+                        <li>禁止使用外部工具或查阅资料</li>
+                        <li>提交后无法修改答案，请确认后再提交</li>
+                        <li>如遇技术问题，请及时联系监考老师</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="notice-footer">
+                <label class="notice-checkbox">
+                    <input type="checkbox" id="agree-checkbox">
+                    <span>我已阅读并同意以上考试规则</span>
+                </label>
+                <button class="notice-start-btn" id="start-exam-btn" disabled>开始考试</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="time-up-modal" id="time-up-modal">
+        <div class="time-up-content">
+            <div class="time-up-icon">⏰</div>
+            <div class="time-up-title">考试时间已到</div>
+            <div class="time-up-message">系统正在自动提交您的答案，请稍候...</div>
+            <button class="time-up-btn" id="view-result-btn" style="display: none;">查看结果</button>
+        </div>
+    </div>
+    
     <footer>
         <div class="container">
             <p>&copy; 2026 MySQL 数据库课程实训 OJ 系统</p>
         </div>
     </footer>
     
-    <script src="../../js/core.js"></script>
+    <script type="module" src="../../js/core.js"></script>
     <script type="module">
         import examManager from '../../js/exam-manager.js';
         import examSession from '../../js/exam-session.js';
@@ -324,42 +1124,69 @@
 
         document.addEventListener('DOMContentLoaded', async () => {
             const examTitle = document.getElementById('exam-title');
+            const examMeta = document.getElementById('exam-meta');
             const timer = document.getElementById('timer');
+            const progressBar = document.getElementById('progress-bar');
+            const progressText = document.getElementById('progress-text');
             const questionList = document.getElementById('question-list');
             const questionNumber = document.getElementById('question-number');
             const questionTitle = document.getElementById('question-title');
             const questionDescription = document.getElementById('question-description');
             const sqlInput = document.getElementById('sql-input');
             const prevBtn = document.getElementById('prev-btn');
-            const saveBtn = document.getElementById('save-btn');
             const nextBtn = document.getElementById('next-btn');
+            const runBtn = document.getElementById('run-btn');
             const submitBtn = document.getElementById('submit-btn');
+            const saveStatus = document.getElementById('save-status');
+            const navStats = document.getElementById('nav-stats');
+            const noticeModal = document.getElementById('exam-notice-modal');
+            const agreeCheckbox = document.getElementById('agree-checkbox');
+            const startExamBtn = document.getElementById('start-exam-btn');
+            const noticeExamName = document.getElementById('notice-exam-name');
+            const noticeDuration = document.getElementById('notice-duration');
+            const noticeQuestionCount = document.getElementById('notice-question-count');
+            const timeUpModal = document.getElementById('time-up-modal');
+            const viewResultBtn = document.getElementById('view-result-btn');
 
             let currentQuestionIndex = 0;
             let examQuestions = [];
             let examId = null;
+            let examInfo = null;
+            let autoSaveInterval = null;
+            let lastSavedAnswer = '';
+            let isExamStarted = false;
+            let sessionId = null;
 
-            // 检查用户是否登录
             if (!userSystem.isLoggedIn()) {
                 alert('请先登录后参加考试');
                 window.location.href = '../../pages/user.html';
                 return;
             }
 
-            // 获取URL参数
             const urlParams = new URLSearchParams(window.location.search);
             examId = urlParams.get('id');
 
             if (!examId) {
                 alert('考试ID不存在');
-                window.location.href = 'list.html';
+                window.location.href = 'manage.html';
                 return;
             }
 
-            // 初始化考试
             async function initExam() {
                 try {
-                    // 生成考试题目
+                    examInfo = await examManager.getExamById(examId);
+                    if (!examInfo) {
+                        alert('考试不存在');
+                        window.location.href = 'list.html';
+                        return;
+                    }
+
+                    examTitle.textContent = examInfo.name;
+                    noticeExamName.textContent = examInfo.name;
+                    noticeDuration.textContent = examInfo.duration;
+                    noticeQuestionCount.textContent = examInfo.questionCount;
+                    examMeta.textContent = `题目数量：${examInfo.questionCount} | 总分：${examInfo.questionCount * 10}分`;
+
                     const questionResult = await examManager.generateExamQuestions(examId);
                     if (!questionResult.success) {
                         alert('生成考试题目失败: ' + questionResult.error);
@@ -368,8 +1195,36 @@
                     }
 
                     examQuestions = questionResult.questions;
+                    progressText.textContent = `0/${examQuestions.length}`;
 
-                    // 开始考试会话
+                    showNoticeModal();
+                } catch (error) {
+                    console.error('初始化考试失败:', error);
+                    alert('初始化失败，请重试');
+                }
+            }
+
+            function showNoticeModal() {
+                noticeModal.classList.add('show');
+            }
+
+            function hideNoticeModal() {
+                noticeModal.classList.remove('show');
+            }
+
+            agreeCheckbox.addEventListener('change', () => {
+                startExamBtn.disabled = !agreeCheckbox.checked;
+            });
+
+            startExamBtn.addEventListener('click', async () => {
+                if (!agreeCheckbox.checked) return;
+                
+                hideNoticeModal();
+                await startExamSession();
+            });
+
+            async function startExamSession() {
+                try {
                     const sessionResult = await examSession.startExam(examId, examQuestions);
                     if (!sessionResult.success) {
                         alert('开始考试失败: ' + sessionResult.error);
@@ -377,43 +1232,44 @@
                         return;
                     }
 
-                    // 加载考试信息
-                    const exam = await examManager.getExamById(examId);
-                    examTitle.textContent = exam.name;
+                    sessionId = examSession.currentSession.id;
+                    isExamStarted = true;
 
-                    // 渲染题目导航
                     renderQuestionNav();
-
-                    // 加载当前题目
                     loadQuestion(0);
-
-                    // 启动计时器
                     startTimer();
+                    startAutoSave();
+                    setupTimeUpHandler();
                 } catch (error) {
-                    console.error('初始化考试失败:', error);
-                    alert('初始化失败，请重试');
+                    console.error('开始考试会话失败:', error);
+                    alert('开始考试失败，请重试');
                 }
             }
 
-            // 渲染题目导航
             function renderQuestionNav() {
+                const session = examSession.getCurrentSession();
+                let answeredCount = 0;
+
                 questionList.innerHTML = examQuestions.map((_, index) => {
-                    const session = examSession.getCurrentSession();
-                    const answered = session && session.answers[index] ? 'answered' : 'unanswered';
-                    const current = index === currentQuestionIndex ? 'current' : '';
+                    const answered = session && session.answers[index] && session.answers[index].trim() !== '';
+                    if (answered) answeredCount++;
+                    const answeredClass = answered ? 'answered' : 'unanswered';
+                    const currentClass = index === currentQuestionIndex ? 'current' : '';
                     return `
-                        <div class="question-item ${answered} ${current}" data-index="${index}">
+                        <div class="question-item ${answeredClass} ${currentClass}" data-index="${index}">
                             ${index + 1}
                         </div>
                     `;
                 }).join('');
 
-                // 绑定导航点击事件
+                navStats.textContent = `已答 ${answeredCount}/${examQuestions.length}`;
+                updateProgress(answeredCount);
+
                 document.querySelectorAll('.question-item').forEach(item => {
-                    item.addEventListener('click', (e) => {
+                    item.addEventListener('click', async (e) => {
                         const index = parseInt(e.target.dataset.index);
                         if (index !== currentQuestionIndex) {
-                            saveAnswer();
+                            await saveCurrentAnswer();
                             currentQuestionIndex = index;
                             loadQuestion(index);
                             renderQuestionNav();
@@ -422,90 +1278,231 @@
                 });
             }
 
-            // 加载题目
+            function updateProgress(answeredCount) {
+                const total = examQuestions.length;
+                const percentage = (answeredCount / total) * 100;
+                progressBar.style.width = `${percentage}%`;
+                progressText.textContent = `${answeredCount}/${total}`;
+            }
+
             function loadQuestion(index) {
                 const question = examQuestions[index];
                 questionNumber.textContent = `题目 ${index + 1}/${examQuestions.length}`;
                 questionTitle.textContent = question.title;
                 questionDescription.textContent = question.description;
 
-                // 加载答案
                 const session = examSession.getCurrentSession();
                 if (session && session.answers[index]) {
                     sqlInput.value = session.answers[index];
+                    lastSavedAnswer = session.answers[index];
                 } else {
                     sqlInput.value = '';
+                    lastSavedAnswer = '';
                 }
 
-                // 更新导航
+                prevBtn.disabled = index === 0;
+                nextBtn.disabled = index === examQuestions.length - 1;
+
                 renderQuestionNav();
+                updateSaveStatus('saved');
             }
 
-            // 保存答案
-            async function saveAnswer() {
+            async function saveCurrentAnswer() {
+                if (!isExamStarted) return;
+                
                 const answer = sqlInput.value.trim();
-                await examSession.saveAnswer(currentQuestionIndex, answer);
+                if (answer === lastSavedAnswer) return;
+
+                updateSaveStatus('saving');
+                
+                try {
+                    const result = await examSession.saveAnswer(currentQuestionIndex, answer);
+                    if (result.success) {
+                        lastSavedAnswer = answer;
+                        updateSaveStatus('saved');
+                        renderQuestionNav();
+                    } else {
+                        updateSaveStatus('error');
+                    }
+                } catch (error) {
+                    console.error('保存答案失败:', error);
+                    updateSaveStatus('error');
+                }
             }
 
-            // 启动计时器
+            function updateSaveStatus(status) {
+                const statusEl = saveStatus;
+                const textEl = statusEl.querySelector('.save-status-text');
+                const iconEl = statusEl.querySelector('.save-status-icon');
+                
+                statusEl.className = 'save-status ' + status;
+                
+                switch (status) {
+                    case 'saving':
+                        iconEl.textContent = '⏳';
+                        textEl.textContent = '保存中...';
+                        break;
+                    case 'saved':
+                        iconEl.textContent = '✅';
+                        textEl.textContent = '已保存';
+                        break;
+                    case 'error':
+                        iconEl.textContent = '❌';
+                        textEl.textContent = '保存失败';
+                        break;
+                    default:
+                        iconEl.textContent = '💾';
+                        textEl.textContent = '已保存';
+                }
+            }
+
             function startTimer() {
-                setInterval(() => {
+                const timerInterval = setInterval(() => {
                     const remainingTime = examSession.getRemainingTime();
                     timer.textContent = formatTime(remainingTime);
+                    
+                    if (remainingTime <= 300 && remainingTime > 0) {
+                        timer.classList.add('warning');
+                    } else {
+                        timer.classList.remove('warning');
+                    }
+                    
+                    if (remainingTime <= 0) {
+                        clearInterval(timerInterval);
+                    }
                 }, 1000);
             }
 
-            // 上一题
+            function startAutoSave() {
+                autoSaveInterval = setInterval(async () => {
+                    if (isExamStarted) {
+                        await saveCurrentAnswer();
+                    }
+                }, 30000);
+            }
+
+            function setupTimeUpHandler() {
+                examSession.onTimeUp(async () => {
+                    await handleTimeUp();
+                });
+            }
+
+            async function handleTimeUp() {
+                isExamStarted = false;
+                
+                if (autoSaveInterval) {
+                    clearInterval(autoSaveInterval);
+                }
+
+                timeUpModal.classList.add('show');
+
+                await saveCurrentAnswer();
+
+                const result = await examSession.endExam();
+                
+                setTimeout(() => {
+                    timeUpModal.querySelector('.time-up-message').textContent = '您的答案已成功提交！';
+                    viewResultBtn.style.display = 'inline-block';
+                }, 1500);
+            }
+
+            viewResultBtn.addEventListener('click', () => {
+                window.location.href = `result.html?id=${sessionId}`;
+            });
+
             prevBtn.addEventListener('click', async () => {
                 if (currentQuestionIndex > 0) {
-                    await saveAnswer();
+                    await saveCurrentAnswer();
                     currentQuestionIndex--;
                     loadQuestion(currentQuestionIndex);
                 }
             });
 
-            // 保存答案
-            saveBtn.addEventListener('click', async () => {
-                await saveAnswer();
-                alert('答案保存成功');
-            });
-
-            // 下一题
             nextBtn.addEventListener('click', async () => {
                 if (currentQuestionIndex < examQuestions.length - 1) {
-                    await saveAnswer();
+                    await saveCurrentAnswer();
                     currentQuestionIndex++;
                     loadQuestion(currentQuestionIndex);
                 }
             });
 
-            // 提交考试
+            runBtn.addEventListener('click', async () => {
+                const answer = sqlInput.value.trim();
+                if (!answer) {
+                    alert('请输入 SQL 语句');
+                    return;
+                }
+
+                runBtn.disabled = true;
+                runBtn.textContent = '运行中...';
+
+                try {
+                    const judgeEngine = await import('../../js/judge-engine.js').then(module => module.default);
+                    const question = examQuestions[currentQuestionIndex];
+                    const result = await judgeEngine.judge(question, answer);
+                    
+                    if (result.result === 'AC') {
+                        alert('✅ 运行成功！结果正确');
+                    } else {
+                        alert(`❌ 运行结果：${result.result}\n${result.message || ''}`);
+                    }
+                } catch (error) {
+                    alert('运行出错：' + error.message);
+                } finally {
+                    runBtn.disabled = false;
+                    runBtn.textContent = '▶ 运行';
+                }
+            });
+
             submitBtn.addEventListener('click', async () => {
-                if (confirm('确定要提交考试吗？提交后将无法修改答案。')) {
-                    await saveAnswer();
+                const session = examSession.getCurrentSession();
+                const answeredCount = Object.values(session.answers).filter(a => a && a.trim() !== '').length;
+                const unansweredCount = examQuestions.length - answeredCount;
+
+                let confirmMsg = '确定要提交考试吗？提交后将无法修改答案。';
+                if (unansweredCount > 0) {
+                    confirmMsg = `您还有 ${unansweredCount} 道题目未作答，确定要提交吗？提交后将无法修改答案。`;
+                }
+
+                if (confirm(confirmMsg)) {
+                    await saveCurrentAnswer();
+                    
+                    isExamStarted = false;
+                    if (autoSaveInterval) {
+                        clearInterval(autoSaveInterval);
+                    }
+
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = '提交中...';
+
                     const result = await examSession.endExam();
                     if (result.success) {
-                        window.location.href = `result.html?id=${examSession.currentSession.id}`;
+                        window.location.href = `result.html?id=${sessionId}`;
                     } else {
                         alert('提交失败: ' + result.error);
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = '提交考试';
+                        isExamStarted = true;
+                        startAutoSave();
                     }
                 }
             });
 
-            // 自动保存
             const debouncedSave = debounce(async () => {
-                await saveAnswer();
+                if (isExamStarted) {
+                    await saveCurrentAnswer();
+                }
             }, 2000);
 
             sqlInput.addEventListener('input', debouncedSave);
 
-            // 防止刷新页面
             window.addEventListener('beforeunload', (e) => {
-                e.preventDefault();
-                e.returnValue = '确定要离开考试页面吗？未保存的答案将会丢失。';
+                if (isExamStarted) {
+                    e.preventDefault();
+                    e.returnValue = '确定要离开考试页面吗？未保存的答案将会丢失。';
+                }
             });
 
-            // 初始化
             await initExam();
         });
     </script>

@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>考试历史 - MySQL 数据库课程实训 OJ 系统</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <style>
+        .exam-history {
+            padding: 2rem 0;
+        }
+        
+        .page-header {
+            margin-bottom: 2rem;
+        }
+        
+        .page-header h2 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-header p {
+            color: #666;
+        }
+        
+        body.dark-mode .page-header p {
+            color: #aaa;
+        }
+        
+        .history-list {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        
+        body.dark-mode .history-list {
+            background-color: #2d2d2d;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+        
+        .history-list-header {
+            padding: 1rem 1.5rem;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        body.dark-mode .history-list-header {
+            background-color: #3d3d3d;
+            border-bottom-color: #555;
+        }
+        
+        .history-list-header h3 {
+            margin: 0;
+            font-size: 1.1rem;
+        }
+        
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .history-table th,
+        .history-table td {
+            padding: 1rem 1.5rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        body.dark-mode .history-table th,
+        body.dark-mode .history-table td {
+            border-bottom-color: #444;
+        }
+        
+        .history-table th {
+            background-color: #fafafa;
+            font-weight: 600;
+            color: #555;
+            font-size: 0.85rem;
+        }
+        
+        body.dark-mode .history-table th {
+            background-color: #333;
+            color: #aaa;
+        }
+        
+        .history-table tr:hover {
+            background-color: #f9f9f9;
+        }
+        
+        body.dark-mode .history-table tr:hover {
+            background-color: #3d3d3d;
+        }
+        
+        .exam-name {
+            font-weight: 500;
+            color: #333;
+        }
+        
+        body.dark-mode .exam-name {
+            color: #e0e0e0;
+        }
+        
+        .score-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .score-badge.excellent {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .score-badge.good {
+            background-color: #e3f2fd;
+            color: #1565c0;
+        }
+        
+        .score-badge.pass {
+            background-color: #fff3e0;
+            color: #ef6c00;
+        }
+        
+        .score-badge.fail {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+        
+        body.dark-mode .score-badge.excellent {
+            background-color: #1b5e20;
+            color: #a5d6a7;
+        }
+        
+        body.dark-mode .score-badge.good {
+            background-color: #0d47a1;
+            color: #90caf9;
+        }
+        
+        body.dark-mode .score-badge.pass {
+            background-color: #e65100;
+            color: #ffcc80;
+        }
+        
+        body.dark-mode .score-badge.fail {
+            background-color: #b71c1c;
+            color: #ef9a9a;
+        }
+        
+        .view-btn {
+            padding: 0.4rem 0.8rem;
+            border: 1px solid #2196F3;
+            border-radius: 6px;
+            background-color: transparent;
+            color: #2196F3;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .view-btn:hover {
+            background-color: #2196F3;
+            color: white;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #666;
+        }
+        
+        body.dark-mode .empty-state {
+            color: #aaa;
+        }
+        
+        .empty-state .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+        
+        .empty-state p {
+            margin-bottom: 1.5rem;
+        }
+        
+        .login-prompt {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+        
+        .login-prompt .icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+        
+        .login-prompt h3 {
+            color: #f44336;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stats-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+        
+        body.dark-mode .stat-card {
+            background-color: #2d2d2d;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+        
+        .stat-card .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-card .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #4CAF50;
+        }
+        
+        .stat-card .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+        
+        body.dark-mode .stat-card .stat-label {
+            color: #aaa;
+        }
+        
+        @media (max-width: 768px) {
+            .history-table {
+                font-size: 0.9rem;
+            }
+            
+            .history-table th,
+            .history-table td {
+                padding: 0.75rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .exam-history {
+                padding: 1rem 0;
+            }
+            
+            .page-header h2 {
+                font-size: 1.5rem;
+            }
+            
+            .page-header p {
+                font-size: 0.9rem;
+            }
+            
+            .stats-summary {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+            
+            .stat-card {
+                padding: 1rem;
+            }
+            
+            .stat-card .stat-value {
+                font-size: 1.5rem;
+            }
+            
+            .stat-card .stat-label {
+                font-size: 0.8rem;
+            }
+            
+            .history-list-header {
+                flex-direction: column;
+                gap: 0.5rem;
+                align-items: flex-start;
+            }
+            
+            .history-table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .history-table th,
+            .history-table td {
+                min-width: 80px;
+            }
+            
+            .view-btn {
+                padding: 0.3rem 0.6rem;
+                font-size: 0.8rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .page-header h2 {
+                font-size: 1.3rem;
+            }
+            
+            .stats-summary {
+                grid-template-columns: 1fr;
+            }
+            
+            .stat-card .stat-icon {
+                font-size: 1.5rem;
+            }
+            
+            .stat-card .stat-value {
+                font-size: 1.3rem;
+            }
+            
+            .history-table th,
+            .history-table td {
+                padding: 0.5rem;
+                font-size: 0.8rem;
+            }
+            
+            .exam-name {
+                font-size: 0.85rem;
+            }
+            
+            .score-badge {
+                font-size: 0.75rem;
+                padding: 0.2rem 0.5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .page-header h2 {
+                font-size: 1.2rem;
+            }
+            
+            .stat-card {
+                padding: 0.75rem;
+            }
+            
+            .stat-card .stat-icon {
+                font-size: 1.3rem;
+            }
+            
+            .stat-card .stat-value {
+                font-size: 1.1rem;
+            }
+            
+            .history-table th,
+            .history-table td {
+                padding: 0.4rem;
+                font-size: 0.75rem;
+            }
+            
+            .view-btn {
+                padding: 0.25rem 0.5rem;
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="container">
+                <h1>MySQL 实训 OJ 系统</h1>
+                <button class="menu-toggle" id="menu-toggle" aria-label="菜单">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <ul id="nav-menu">
+                </ul>
+                <div class="theme-toggle">
+                    <button id="theme-btn">🌙</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="exam-history">
+            <div class="container">
+                <div class="page-header">
+                    <h2>📊 考试历史</h2>
+                    <p>查看您的考试记录和成绩</p>
+                </div>
+                
+                <div class="stats-summary" id="stats-summary">
+                    <div class="stat-card">
+                        <div class="stat-icon">📝</div>
+                        <div class="stat-value" id="total-exams">0</div>
+                        <div class="stat-label">参加考试次数</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🏆</div>
+                        <div class="stat-value" id="avg-score">--</div>
+                        <div class="stat-label">平均分数</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-value" id="pass-rate">--%</div>
+                        <div class="stat-label">及格率</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🎯</div>
+                        <div class="stat-value" id="best-score">--</div>
+                        <div class="stat-label">最高分</div>
+                    </div>
+                </div>
+                
+                <div class="history-list">
+                    <div class="history-list-header">
+                        <h3>考试记录</h3>
+                    </div>
+                    <table class="history-table">
+                        <thead>
+                            <tr>
+                                <th>考试名称</th>
+                                <th>分数</th>
+                                <th>正确率</th>
+                                <th>用时</th>
+                                <th>完成时间</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-table-body">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 MySQL 数据库课程实训 OJ 系统</p>
+        </div>
+    </footer>
+    
+    <script type="module" src="../../js/core.js"></script>
+    <script type="module">
+        import userSystem from '../../js/user-system.js';
+        import examResult from '../../js/exam-result.js';
+        import { formatDateTime } from '../../js/exam-utils.js';
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const historyTableBody = document.getElementById('history-table-body');
+            const statsSummary = document.getElementById('stats-summary');
+            const totalExamsEl = document.getElementById('total-exams');
+            const avgScoreEl = document.getElementById('avg-score');
+            const passRateEl = document.getElementById('pass-rate');
+            const bestScoreEl = document.getElementById('best-score');
+
+            if (!userSystem.isLoggedIn()) {
+                statsSummary.style.display = 'none';
+                historyTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6">
+                            <div class="login-prompt">
+                                <div class="icon">🔒</div>
+                                <h3>请先登录</h3>
+                                <p>登录后才能查看考试历史</p>
+                                <a href="../../pages/user.html" class="btn primary">前往登录</a>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            async function loadHistory() {
+                try {
+                    const username = userSystem.getCurrentUser().username;
+                    const results = await examResult.getUserResults(username);
+                    
+                    if (results.length === 0) {
+                        historyTableBody.innerHTML = `
+                            <tr>
+                                <td colspan="6">
+                                    <div class="empty-state">
+                                        <div class="empty-icon">📋</div>
+                                        <p>暂无考试记录</p>
+                                        <a href="manage.html" class="btn primary">参加考试</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                        return;
+                    }
+
+                    const totalExams = results.length;
+                    const avgScore = results.reduce((sum, r) => sum + r.score, 0) / totalExams;
+                    const passCount = results.filter(r => r.score >= 60).length;
+                    const passRate = (passCount / totalExams) * 100;
+                    const bestScore = Math.max(...results.map(r => r.score));
+
+                    totalExamsEl.textContent = totalExams;
+                    avgScoreEl.textContent = avgScore.toFixed(1);
+                    passRateEl.textContent = passRate.toFixed(1) + '%';
+                    bestScoreEl.textContent = bestScore;
+
+                    historyTableBody.innerHTML = results.map(result => {
+                        const scoreClass = result.score >= 90 ? 'excellent' :
+                                          result.score >= 75 ? 'good' :
+                                          result.score >= 60 ? 'pass' : 'fail';
+                        const accuracy = result.accuracy || 0;
+                        
+                        return `
+                            <tr>
+                                <td>
+                                    <div class="exam-name">${result.examName || '考试'}</div>
+                                </td>
+                                <td>
+                                    <span class="score-badge ${scoreClass}">${result.score}分</span>
+                                </td>
+                                <td>${accuracy}%</td>
+                                <td>${result.duration || '--'}</td>
+                                <td>${formatDateTime(result.endTime)}</td>
+                                <td>
+                                    <a href="result.html?id=${result.id}" class="view-btn">查看详情</a>
+                                </td>
+                            </tr>
+                        `;
+                    }).join('');
+                } catch (error) {
+                    console.error('加载考试历史失败:', error);
+                    historyTableBody.innerHTML = `
+                        <tr>
+                            <td colspan="6">
+                                <div class="empty-state">
+                                    <div class="empty-icon">❌</div>
+                                    <p>加载失败，请刷新页面重试</p>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }
+            }
+
+            await loadHistory();
+        });
+    </script>
+</body>
+</html>

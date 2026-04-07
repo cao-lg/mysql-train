@@ -1,53 +1,74 @@
 // 考试管理模块
+import storage from './storage.js';
+
 class ExamManager {
     constructor() {
         this.exams = [];
+        this.examResults = [];
         this.init();
     }
 
-    // 初始化
     async init() {
         await this.loadExams();
+        await this.loadExamResults();
     }
 
-    // 从本地存储加载考试
     async loadExams() {
         try {
-            const storedExams = localStorage.getItem('exams');
-            if (storedExams) {
-                this.exams = JSON.parse(storedExams);
-            }
+            this.exams = await storage.getAllExams();
         } catch (error) {
             console.error('加载考试失败:', error);
             this.exams = [];
         }
     }
 
-    // 保存考试到本地存储
     async saveExams() {
         try {
-            localStorage.setItem('exams', JSON.stringify(this.exams));
+            for (const exam of this.exams) {
+                await storage.storeExam(exam);
+            }
         } catch (error) {
             console.error('保存考试失败:', error);
         }
     }
 
-    // 创建新考试
+    async loadExamResults() {
+        try {
+            this.examResults = await storage.getAll('examResults');
+        } catch (error) {
+            console.error('加载考试结果失败:', error);
+            this.examResults = [];
+        }
+    }
+
+    async saveExamResults() {
+        try {
+            for (const result of this.examResults) {
+                await storage.storeExamResult(result);
+            }
+        } catch (error) {
+            console.error('保存考试结果失败:', error);
+        }
+    }
+
     async createExam(examData) {
         try {
             const exam = {
                 id: Date.now().toString(),
                 name: examData.name,
-                duration: examData.duration, // 分钟
+                duration: examData.duration,
                 questionCount: examData.questionCount,
                 difficulty: examData.difficulty,
-                chapters: examData.chapters,
+                chapters: examData.chapters || [],
                 createdAt: new Date().toISOString(),
-                createdBy: examData.createdBy
+                createdBy: examData.createdBy,
+                participantCount: 0,
+                avgScore: undefined,
+                totalScore: examData.questionCount * 10
             };
 
             this.exams.push(exam);
-            await this.saveExams();
+            await storage.storeExam(exam);
             return { success: true, exam };
         } catch (error) {
             console.error('创建考试失败:', error);
@@ -55,7 +76,6 @@ class ExamManager {
         }
     }
 
-    // 更新考试
     async updateExam(examId, examData) {
         try {
             const index = this.exams.findIndex(exam => exam.id === examId);
@@ -63,13 +83,19 @@ class ExamManager {
                 return { success: false, error: '考试不存在' };
             }
 
+            const existingExam = this.exams[index];
             this.exams[index] = {
-                ...this.exams[index],
-                ...examData,
-                updatedAt: new Date().toISOString()
+                ...existingExam,
+                name: examData.name,
+                duration: examData.duration,
+                questionCount: examData.questionCount,
+                difficulty: examData.difficulty,
+                chapters: examData.chapters || [],
+                updatedAt: new Date().toISOString(),
+                totalScore: examData.questionCount * 10
             };
 
-            await this.saveExams();
+            await storage.storeExam(this.exams[index]);
             return { success: true, exam: this.exams[index] };
         } catch (error) {
             console.error('更新考试失败:', error);
@@ -77,7 +103,6 @@ class ExamManager {
         }
     }
 
-    // 删除考试
     async deleteExam(examId) {
         try {
             const index = this.exams.findIndex(exam => exam.id === examId);
@@ -86,7 +111,10 @@ class ExamManager {
             }
 
             this.exams.splice(index, 1);
-            await this.saveExams();
+            
+            this.examResults = this.examResults.filter(result => result.examId !== examId);
+            
+            await storage.deleteExam(examId);
             return { success: true };
         } catch (error) {
             console.error('删除考试失败:', error);
@@ -94,22 +122,112 @@ class ExamManager {
         }
     }
 
-    // 获取所有考试
     async getAllExams() {
-        return this.exams;
+        await this.loadExams(); // 重新从存储中加载数据，确保数据最新
+        return this.exams.map(exam => {
+            const stats = this.calculateExamStats(exam.id);
+            return {
+                ...exam,
+                participantCount: stats.participantCount,
+                avgScore: stats.avgScore
+            };
+        });
     }
 
-    // 根据ID获取考试
     async getExamById(examId) {
-        return this.exams.find(exam => exam.id === examId);
+        await this.loadExams(); // 重新从存储中加载数据，确保数据最新
+        const exam = this.exams.find(exam => exam.id === examId);
+        if (exam) {
+            const stats = this.calculateExamStats(examId);
+            return {
+                ...exam,
+                participantCount: stats.participantCount,
+                avgScore: stats.avgScore
+            };
+        }
+        return null;
     }
 
-    // 根据创建者获取考试
     async getExamsByCreator(creator) {
+        await this.loadExams(); // 重新从存储中加载数据，确保数据最新
         return this.exams.filter(exam => exam.createdBy === creator);
     }
 
-    // 随机生成考试题目
+    calculateExamStats(examId) {
+        const examResults = this.examResults.filter(result => result.examId === examId);
+        const participantCount = examResults.length;
+        
+        if (participantCount === 0) {
+            return { participantCount: 0, avgScore: undefined };
+        }
+        
+        const totalScore = examResults.reduce((sum, result) => sum + (result.score || 0), 0);
+        const avgScore = totalScore / participantCount;
+        
+        return { participantCount, avgScore };
+    }
+
+    async getExamStats() {
+        const totalExams = this.exams.length;
+        const totalParticipants = this.examResults.length;
+        
+        if (totalParticipants === 0) {
+            return {
+                totalExams,
+                totalParticipants: 0,
+                avgScore: null,
+                passRate: null
+            };
+        }
+        
+        const totalScore = this.examResults.reduce((sum, result) => sum + (result.score || 0), 0);
+        const avgScore = totalScore / totalParticipants;
+        
+        const passingResults = this.examResults.filter(result => {
+            const exam = this.exams.find(e => e.id === result.examId);
+            if (!exam) return false;
+            const passThreshold = (exam.totalScore || 100) * 0.6;
+            return result.score >= passThreshold;
+        });
+        const passRate = (passingResults.length / totalParticipants) * 100;
+        
+        return {
+            totalExams,
+            totalParticipants,
+            avgScore,
+            passRate
+        };
+    }
+
+    async saveExamResult(examId, username, score, answers) {
+        try {
+            const result = {
+                id: Date.now().toString(),
+                examId,
+                username,
+                score,
+                answers,
+                completedAt: new Date().toISOString()
+            };
+            
+            this.examResults.push(result);
+            await storage.storeExamResult(result);
+            
+            return { success: true, result };
+        } catch (error) {
+            console.error('保存考试结果失败:', error);
+            return { success: false, error: error.message };
+        }
+    }
+
+    async getExamResults(examId) {
+        return this.examResults.filter(result => result.examId === examId);
+    }
+
+    async getUserExamResults(username) {
+        return this.examResults.filter(result => result.username === username);
+    }
+
     async generateExamQuestions(examId) {
         try {
             const exam = await this.getExamById(examId);
@@ -117,28 +235,23 @@ class ExamManager {
                 return { success: false, error: '考试不存在' };
             }
 
-            // 加载题目
             const problemLoader = await import('./problem-loader.js').then(module => module.default);
             const allProblems = await problemLoader.getAllProblems();
 
-            // 筛选符合条件的题目
             let filteredProblems = allProblems;
 
-            // 按章节筛选
             if (exam.chapters && exam.chapters.length > 0) {
                 filteredProblems = filteredProblems.filter(problem => 
                     exam.chapters.includes(problem.chapter)
                 );
             }
 
-            // 按难度筛选
             if (exam.difficulty && exam.difficulty !== 'all') {
                 filteredProblems = filteredProblems.filter(problem => 
                     problem.difficulty === exam.difficulty
                 );
             }
 
-            // 随机选择题目
             const shuffled = filteredProblems.sort(() => 0.5 - Math.random());
             const selected = shuffled.slice(0, exam.questionCount);
 
@@ -148,8 +261,22 @@ class ExamManager {
             return { success: false, error: error.message };
         }
     }
+
+    async getExamLeaderboard(examId, limit = 10) {
+        const results = await this.getExamResults(examId);
+        
+        const sortedResults = results
+            .sort((a, b) => b.score - a.score)
+            .slice(0, limit);
+        
+        return sortedResults.map((result, index) => ({
+            rank: index + 1,
+            username: result.username,
+            score: result.score,
+            completedAt: result.completedAt
+        }));
+    }
 }
 
-// 导出单例实例
 const examManager = new ExamManager();
 export default examManager;

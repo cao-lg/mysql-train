@@ -5,17 +5,81 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>用户中心 - MySQL 数据库课程实训 OJ 系统</title>
     <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .export-section {
+            margin-top: 20px;
+            padding: 20px;
+            background: var(--card-bg, #f8f9fa);
+            border-radius: 8px;
+        }
+        .export-section h3 {
+            margin-bottom: 15px;
+            color: var(--text-color, #333);
+        }
+        .export-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .export-buttons .btn {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .storage-stats {
+            margin-top: 15px;
+            padding: 15px;
+            background: var(--bg-color, #fff);
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        .storage-stats h4 {
+            margin-bottom: 10px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+        }
+        .stat-item {
+            text-align: center;
+            padding: 10px;
+            background: var(--card-bg, #f0f0f0);
+            border-radius: 4px;
+        }
+        .stat-item .value {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--primary-color, #007bff);
+        }
+        .stat-item .label {
+            font-size: 12px;
+            color: var(--text-muted, #666);
+        }
+        .cleanup-section {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color, #ddd);
+        }
+        .cleanup-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
     <header>
         <nav>
             <div class="container">
                 <h1>MySQL 实训 OJ 系统</h1>
-                <ul>
-                    <li><a href="../index.html">首页</a></li>
-                    <li><a href="problems.html">题库</a></li>
-                    <li><a href="user.html">用户中心</a></li>
-                    <li><a href="about.html">关于</a></li>
+                <button class="menu-toggle" id="menu-toggle" aria-label="菜单">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <ul id="nav-menu">
                 </ul>
                 <div class="theme-toggle">
                     <button id="theme-btn">🌙</button>
@@ -58,6 +122,13 @@
                             <label for="register-confirm-password">确认密码：</label>
                             <input type="password" id="register-confirm-password" required>
                         </div>
+                        <div class="form-group">
+                            <label for="register-role">角色：</label>
+                            <select id="register-role" required>
+                                <option value="student">学生</option>
+                                <option value="teacher">教师</option>
+                            </select>
+                        </div>
                         <button type="submit" class="btn primary">注册</button>
                         <p class="auth-switch">已有账号？<a href="#" id="show-login">立即登录</a></p>
                     </form>
@@ -67,6 +138,10 @@
                     <div class="user-header">
                         <h2>用户信息</h2>
                         <button id="logout-btn" class="btn secondary">退出登录</button>
+                    </div>
+                    <div class="user-profile">
+                        <p><strong>用户名：</strong><span id="user-name"></span></p>
+                        <p><strong>角色：</strong><span id="user-role"></span></p>
                     </div>
                     <div class="user-stats">
                         <div class="stat-item">
@@ -82,6 +157,50 @@
                             <p id="submit-count">0</p>
                         </div>
                     </div>
+                    
+                    <div class="export-section">
+                        <h3>数据导出</h3>
+                        <div class="export-buttons">
+                            <button id="export-user-data" class="btn primary">导出用户数据</button>
+                            <button id="export-history" class="btn secondary">导出考试历史</button>
+                            <button id="export-all" class="btn secondary">导出全部数据</button>
+                        </div>
+                        
+                        <div class="storage-stats" id="storage-stats">
+                            <h4>存储统计</h4>
+                            <div class="stats-grid">
+                                <div class="stat-item">
+                                    <div class="value" id="stats-users">0</div>
+                                    <div class="label">用户数</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="value" id="stats-submissions">0</div>
+                                    <div class="label">提交记录</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="value" id="stats-exams">0</div>
+                                    <div class="label">考试数</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="value" id="stats-history">0</div>
+                                    <div class="label">历史记录</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="cleanup-section">
+                            <h4>数据清理</h4>
+                            <p style="font-size: 14px; color: var(--text-muted, #666); margin-bottom: 10px;">
+                                清理过期或不需要的数据以释放存储空间
+                            </p>
+                            <div class="cleanup-buttons">
+                                <button id="cleanup-submissions" class="btn secondary">清理提交记录</button>
+                                <button id="cleanup-history" class="btn secondary">清理考试历史</button>
+                                <button id="cleanup-all" class="btn danger">清理全部数据</button>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div class="submission-history">
                         <h3>提交历史</h3>
                         <table id="submission-table">
@@ -94,7 +213,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- 提交历史将通过 JavaScript 动态生成 -->
                             </tbody>
                         </table>
                     </div>
@@ -109,11 +227,11 @@
         </div>
     </footer>
     
-    <script src="../js/core.js"></script>
+    <script type="module" src="../js/core.js"></script>
     <script type="module">
         import userSystem from '../js/user-system.js';
+        import storage from '../js/storage.js';
 
-        // 用户中心页面逻辑
         document.addEventListener('DOMContentLoaded', async () => {
             const loginSection = document.getElementById('login-section');
             const registerSection = document.getElementById('register-section');
@@ -128,7 +246,6 @@
             const submitCount = document.getElementById('submit-count');
             const submissionTable = document.getElementById('submission-table').querySelector('tbody');
 
-            // 切换到注册页面
             showRegisterBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 loginSection.style.display = 'none';
@@ -136,7 +253,6 @@
                 userInfoSection.style.display = 'none';
             });
 
-            // 切换到登录页面
             showLoginBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 loginSection.style.display = 'block';
@@ -144,7 +260,6 @@
                 userInfoSection.style.display = 'none';
             });
 
-            // 登录表单提交
             loginForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const username = document.getElementById('login-username').value;
@@ -157,26 +272,25 @@
                 }
             });
 
-            // 注册表单提交
             registerForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const username = document.getElementById('register-username').value;
                 const password = document.getElementById('register-password').value;
                 const confirmPassword = document.getElementById('register-confirm-password').value;
+                const role = document.getElementById('register-role').value;
 
                 if (password !== confirmPassword) {
                     alert('两次输入的密码不一致');
                     return;
                 }
 
-                const result = await userSystem.register(username, password);
+                const result = await userSystem.register(username, password, role);
                 alert(result.message);
                 if (result.success) {
                     await loadUserInfo();
                 }
             });
 
-            // 退出登录
             logoutBtn.addEventListener('click', () => {
                 userSystem.logout();
                 loginSection.style.display = 'block';
@@ -184,31 +298,29 @@
                 userInfoSection.style.display = 'none';
             });
 
-            // 加载用户信息
             async function loadUserInfo() {
                 const user = userSystem.getCurrentUser();
                 if (user) {
-                    // 显示用户信息
+                    document.getElementById('user-name').textContent = user.username;
+                    document.getElementById('user-role').textContent = userSystem.getRoleDisplayName(user.role);
+
                     solvedCount.textContent = user.solvedCount;
                     accuracy.textContent = `${user.accuracy}%`;
                     submitCount.textContent = user.submitCount;
 
-                    // 加载提交历史
                     await loadSubmissionHistory(user.username);
+                    await loadStorageStats();
 
-                    // 切换到用户信息页面
                     loginSection.style.display = 'none';
                     registerSection.style.display = 'none';
                     userInfoSection.style.display = 'block';
                 } else {
-                    // 显示登录页面
                     loginSection.style.display = 'block';
                     registerSection.style.display = 'none';
                     userInfoSection.style.display = 'none';
                 }
             }
 
-            // 加载提交历史
             async function loadSubmissionHistory(username) {
                 const submissions = await userSystem.getUserSubmissions(username, 20);
                 
@@ -227,7 +339,76 @@
                 `).join('');
             }
 
-            // 初始化页面
+            async function loadStorageStats() {
+                try {
+                    const stats = await storage.getStorageStats();
+                    if (stats) {
+                        document.getElementById('stats-users').textContent = stats.users;
+                        document.getElementById('stats-submissions').textContent = stats.submissions;
+                        document.getElementById('stats-exams').textContent = stats.exams;
+                        document.getElementById('stats-history').textContent = stats.examHistory;
+                    }
+                } catch (error) {
+                    console.error('加载存储统计失败:', error);
+                }
+            }
+
+            document.getElementById('export-user-data').addEventListener('click', async () => {
+                const result = await userSystem.exportAndDownload('user');
+                if (result.success) {
+                    alert(`用户数据已导出: ${result.filename}`);
+                } else {
+                    alert(`导出失败: ${result.error}`);
+                }
+            });
+
+            document.getElementById('export-history').addEventListener('click', async () => {
+                const result = await userSystem.exportAndDownload('history');
+                if (result.success) {
+                    alert(`考试历史已导出: ${result.filename}`);
+                } else {
+                    alert(`导出失败: ${result.error}`);
+                }
+            });
+
+            document.getElementById('export-all').addEventListener('click', async () => {
+                const result = await userSystem.exportAndDownload('all');
+                if (result.success) {
+                    alert(`全部数据已导出: ${result.filename}`);
+                } else {
+                    alert(`导出失败: ${result.error}`);
+                }
+            });
+
+            document.getElementById('cleanup-submissions').addEventListener('click', async () => {
+                if (confirm('确定要清理所有提交记录吗？此操作不可恢复。')) {
+                    const result = await userSystem.manualCleanup({ clearSubmissions: true });
+                    alert(`已清理 ${result.submissions} 条提交记录`);
+                    await loadStorageStats();
+                }
+            });
+
+            document.getElementById('cleanup-history').addEventListener('click', async () => {
+                if (confirm('确定要清理所有考试历史吗？此操作不可恢复。')) {
+                    const result = await userSystem.manualCleanup({ clearHistory: true, clearSessionData: true });
+                    alert(`已清理 ${result.history} 条历史记录和 ${result.sessionData} 条会话数据`);
+                    await loadStorageStats();
+                }
+            });
+
+            document.getElementById('cleanup-all').addEventListener('click', async () => {
+                if (confirm('确定要清理所有数据吗？此操作不可恢复，将清除提交记录、考试历史和会话数据。')) {
+                    const result = await userSystem.manualCleanup({ 
+                        clearSubmissions: true, 
+                        clearHistory: true, 
+                        clearSessionData: true,
+                        clearExamResults: true
+                    });
+                    alert(`已清理:\n- ${result.submissions} 条提交记录\n- ${result.examResults} 条考试结果\n- ${result.history} 条历史记录\n- ${result.sessionData} 条会话数据`);
+                    await loadStorageStats();
+                }
+            });
+
             await loadUserInfo();
         });
     </script>

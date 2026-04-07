@@ -10,17 +10,92 @@
             padding: 2rem 0;
         }
         
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .page-header h2 {
+            margin: 0;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        }
+        
+        body.dark-mode .stat-card {
+            background-color: #2d2d2d;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+        
+        .stat-card .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-card .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #4CAF50;
+        }
+        
+        .stat-card .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+        
+        body.dark-mode .stat-card .stat-label {
+            color: #aaa;
+        }
+        
         .exam-list {
             background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
             overflow: hidden;
-            margin-bottom: 2rem;
         }
         
         body.dark-mode .exam-list {
             background-color: #2d2d2d;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+        
+        .exam-list-header {
+            padding: 1rem 1.5rem;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        body.dark-mode .exam-list-header {
+            background-color: #3d3d3d;
+            border-bottom-color: #555;
+        }
+        
+        .exam-list-header h3 {
+            margin: 0;
+            font-size: 1.1rem;
         }
         
         .exam-list table {
@@ -30,23 +105,28 @@
         
         .exam-list th,
         .exam-list td {
-            padding: 1rem;
+            padding: 1rem 1.5rem;
             text-align: left;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid #eee;
         }
         
         body.dark-mode .exam-list th,
         body.dark-mode .exam-list td {
-            border-bottom-color: #555;
+            border-bottom-color: #444;
         }
         
         .exam-list th {
-            background-color: #f5f5f5;
+            background-color: #fafafa;
             font-weight: 600;
+            color: #555;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         
         body.dark-mode .exam-list th {
-            background-color: #3d3d3d;
+            background-color: #333;
+            color: #aaa;
         }
         
         .exam-list tr:hover {
@@ -57,18 +137,99 @@
             background-color: #3d3d3d;
         }
         
+        .exam-name {
+            font-weight: 500;
+            color: #333;
+        }
+        
+        body.dark-mode .exam-name {
+            color: #e0e0e0;
+        }
+        
+        .exam-meta {
+            font-size: 0.85rem;
+            color: #888;
+            margin-top: 0.25rem;
+        }
+        
+        .difficulty-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .difficulty-badge.easy {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .difficulty-badge.medium {
+            background-color: #fff3e0;
+            color: #ef6c00;
+        }
+        
+        .difficulty-badge.hard {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+        
+        .difficulty-badge.all {
+            background-color: #e3f2fd;
+            color: #1565c0;
+        }
+        
+        body.dark-mode .difficulty-badge.easy {
+            background-color: #1b5e20;
+            color: #a5d6a7;
+        }
+        
+        body.dark-mode .difficulty-badge.medium {
+            background-color: #e65100;
+            color: #ffcc80;
+        }
+        
+        body.dark-mode .difficulty-badge.hard {
+            background-color: #b71c1c;
+            color: #ef9a9a;
+        }
+        
+        body.dark-mode .difficulty-badge.all {
+            background-color: #0d47a1;
+            color: #90caf9;
+        }
+        
+        .exam-stats {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.85rem;
+            color: #666;
+        }
+        
+        body.dark-mode .exam-stats {
+            color: #aaa;
+        }
+        
+        .exam-stats span {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
         .exam-actions {
             display: flex;
             gap: 0.5rem;
         }
         
         .exam-actions button {
-            padding: 0.3rem 0.6rem;
+            padding: 0.4rem 0.8rem;
             border: 1px solid #ddd;
-            border-radius: 4px;
+            border-radius: 6px;
             background-color: white;
             cursor: pointer;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
+            transition: all 0.2s;
         }
         
         body.dark-mode .exam-actions button {
@@ -79,35 +240,350 @@
         
         .exam-actions button:hover {
             background-color: #f5f5f5;
+            border-color: #ccc;
         }
         
         body.dark-mode .exam-actions button:hover {
             background-color: #555;
+            border-color: #666;
+        }
+        
+        .exam-actions button.edit {
+            color: #1976d2;
+            border-color: #1976d2;
+        }
+        
+        .exam-actions button.edit:hover {
+            background-color: #1976d2;
+            color: white;
         }
         
         .exam-actions button.delete {
-            background-color: #f44336;
-            color: white;
-            border-color: #f44336;
+            color: #d32f2f;
+            border-color: #d32f2f;
         }
         
         .exam-actions button.delete:hover {
             background-color: #d32f2f;
+            color: white;
+        }
+        
+        .exam-actions button.view {
+            color: #388e3c;
+            border-color: #388e3c;
+        }
+        
+        .exam-actions button.view:hover {
+            background-color: #388e3c;
+            color: white;
         }
         
         .create-exam-btn {
-            display: inline-block;
-            margin-bottom: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+        
+        .create-exam-btn:hover {
+            background-color: #43a047;
         }
         
         .empty-state {
             text-align: center;
-            padding: 3rem;
+            padding: 4rem 2rem;
             color: #666;
         }
         
         body.dark-mode .empty-state {
             color: #aaa;
+        }
+        
+        .empty-state .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+        
+        .empty-state p {
+            margin-bottom: 1.5rem;
+        }
+        
+        .permission-denied {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+        
+        .permission-denied .icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+        
+        .permission-denied h3 {
+            color: #d32f2f;
+            margin-bottom: 0.5rem;
+        }
+        
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            transform: scale(0.9);
+            transition: transform 0.3s;
+        }
+        
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+        
+        body.dark-mode .modal-content {
+            background-color: #2d2d2d;
+        }
+        
+        .modal-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .modal-message {
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+        
+        body.dark-mode .modal-message {
+            color: #aaa;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+        
+        .modal-actions button {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .modal-actions button.cancel {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        body.dark-mode .modal-actions button.cancel {
+            background-color: #444;
+            color: #e0e0e0;
+        }
+        
+        .modal-actions button.cancel:hover {
+            background-color: #e0e0e0;
+        }
+        
+        body.dark-mode .modal-actions button.cancel:hover {
+            background-color: #555;
+        }
+        
+        .modal-actions button.confirm {
+            background-color: #d32f2f;
+            color: white;
+        }
+        
+        .modal-actions button.confirm:hover {
+            background-color: #b71c1c;
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 1001;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: transform 0.3s, opacity 0.3s;
+        }
+        
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .toast.success {
+            background-color: #4CAF50;
+        }
+        
+        .toast.error {
+            background-color: #f44336;
+        }
+        
+        @media (max-width: 768px) {
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .create-exam-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+            
+            .stat-card {
+                padding: 1rem;
+            }
+            
+            .stat-card .stat-value {
+                font-size: 1.5rem;
+            }
+            
+            .exam-list table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .exam-list th,
+            .exam-list td {
+                padding: 0.75rem;
+                min-width: 100px;
+            }
+            
+            .exam-actions {
+                flex-direction: column;
+                gap: 0.3rem;
+            }
+            
+            .exam-actions button {
+                width: 100%;
+                padding: 0.5rem;
+            }
+            
+            .modal-content {
+                width: 95%;
+                padding: 1.5rem;
+            }
+            
+            .modal-actions {
+                flex-direction: column;
+            }
+            
+            .modal-actions button {
+                width: 100%;
+            }
+            
+            .toast {
+                left: 1rem;
+                right: 1rem;
+                bottom: 1rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .exam-list-header {
+                flex-direction: column;
+                gap: 0.5rem;
+                align-items: flex-start;
+            }
+            
+            .exam-list th,
+            .exam-list td {
+                font-size: 0.85rem;
+                padding: 0.5rem;
+            }
+            
+            .exam-name {
+                font-size: 0.9rem;
+            }
+            
+            .exam-meta {
+                font-size: 0.75rem;
+            }
+            
+            .difficulty-badge {
+                font-size: 0.75rem;
+                padding: 0.2rem 0.5rem;
+            }
+            
+            .exam-stats {
+                flex-direction: column;
+                gap: 0.25rem;
+                font-size: 0.75rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .exam-manage {
+                padding: 1rem 0;
+            }
+            
+            .page-header h2 {
+                font-size: 1.3rem;
+            }
+            
+            .stat-card .stat-icon {
+                font-size: 1.5rem;
+            }
+            
+            .stat-card .stat-value {
+                font-size: 1.3rem;
+            }
+            
+            .stat-card .stat-label {
+                font-size: 0.8rem;
+            }
         }
     </style>
 </head>
@@ -116,11 +592,12 @@
         <nav>
             <div class="container">
                 <h1>MySQL 实训 OJ 系统</h1>
-                <ul>
-                    <li><a href="../../index.html">首页</a></li>
-                    <li><a href="../../pages/problems.html">题库</a></li>
-                    <li><a href="../../pages/user.html">用户中心</a></li>
-                    <li><a href="../../pages/about.html">关于</a></li>
+                <button class="menu-toggle" id="menu-toggle" aria-label="菜单">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <ul id="nav-menu">
                 </ul>
                 <div class="theme-toggle">
                     <button id="theme-btn">🌙</button>
@@ -132,24 +609,53 @@
     <main>
         <section class="exam-manage">
             <div class="container">
-                <h2>考试管理</h2>
+                <div class="page-header">
+                    <h2>📚 考试管理</h2>
+                    <a href="create.html" class="create-exam-btn" id="create-exam-btn">
+                        <span>➕</span> 创建新考试
+                    </a>
+                </div>
                 
-                <a href="create.html" class="btn primary create-exam-btn">创建新考试</a>
+                <div class="stats-grid" id="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">📝</div>
+                        <div class="stat-value" id="total-exams">0</div>
+                        <div class="stat-label">考试总数</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">👥</div>
+                        <div class="stat-value" id="total-participants">0</div>
+                        <div class="stat-label">参与人次</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📊</div>
+                        <div class="stat-value" id="avg-score">--</div>
+                        <div class="stat-label">平均分数</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-value" id="pass-rate">--%</div>
+                        <div class="stat-label">及格率</div>
+                    </div>
+                </div>
                 
                 <div class="exam-list">
+                    <div class="exam-list-header">
+                        <h3>考试列表</h3>
+                    </div>
                     <table>
                         <thead>
                             <tr>
                                 <th>考试名称</th>
                                 <th>时长</th>
-                                <th>题目数量</th>
+                                <th>题目数</th>
                                 <th>难度</th>
+                                <th>参与/平均分</th>
                                 <th>创建时间</th>
                                 <th>操作</th>
                             </tr>
                         </thead>
                         <tbody id="exam-table-body">
-                            <!-- 考试列表将通过 JavaScript 动态生成 -->
                         </tbody>
                     </table>
                 </div>
@@ -157,33 +663,111 @@
         </section>
     </main>
     
+    <div class="modal-overlay" id="delete-modal">
+        <div class="modal-content">
+            <div class="modal-icon">⚠️</div>
+            <div class="modal-title">确认删除</div>
+            <div class="modal-message" id="delete-message">确定要删除这个考试吗？此操作不可恢复。</div>
+            <div class="modal-actions">
+                <button class="cancel" id="cancel-delete">取消</button>
+                <button class="confirm" id="confirm-delete">确认删除</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="toast" id="toast"></div>
+    
     <footer>
         <div class="container">
             <p>&copy; 2026 MySQL 数据库课程实训 OJ 系统</p>
         </div>
     </footer>
     
-    <script src="../../js/core.js"></script>
+    <script type="module" src="../../js/core.js"></script>
     <script type="module">
         import examManager from '../../js/exam-manager.js';
         import userSystem from '../../js/user-system.js';
 
         document.addEventListener('DOMContentLoaded', async () => {
             const examTableBody = document.getElementById('exam-table-body');
+            const deleteModal = document.getElementById('delete-modal');
+            const cancelDeleteBtn = document.getElementById('cancel-delete');
+            const confirmDeleteBtn = document.getElementById('confirm-delete');
+            const deleteMessage = document.getElementById('delete-message');
+            const toast = document.getElementById('toast');
+            const createExamBtn = document.getElementById('create-exam-btn');
+            
+            let pendingDeleteId = null;
+            let pendingDeleteName = '';
 
-            // 检查用户是否登录
+            function showToast(message, type = 'success') {
+                toast.textContent = message;
+                toast.className = `toast ${type} show`;
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
+            }
+
+            function showDeleteModal(examName) {
+                pendingDeleteName = examName;
+                deleteMessage.textContent = `确定要删除考试「${examName}」吗？此操作不可恢复。`;
+                deleteModal.classList.add('active');
+            }
+
+            function hideDeleteModal() {
+                deleteModal.classList.remove('active');
+                pendingDeleteId = null;
+                pendingDeleteName = '';
+            }
+
             if (!userSystem.isLoggedIn()) {
+                document.getElementById('stats-grid').style.display = 'none';
                 examTableBody.innerHTML = `
                     <tr>
-                        <td colspan="6" class="empty-state">
-                            请先登录后管理考试
+                        <td colspan="7">
+                            <div class="permission-denied">
+                                <div class="icon">🔒</div>
+                                <h3>请先登录</h3>
+                                <p>登录后才能管理考试</p>
+                                <a href="../../pages/user.html" class="btn primary">前往登录</a>
+                            </div>
                         </td>
                     </tr>
                 `;
+                createExamBtn.style.display = 'none';
                 return;
             }
 
-            // 加载考试列表
+            if (!userSystem.isTeacher()) {
+                document.getElementById('stats-grid').style.display = 'none';
+                examTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="7">
+                            <div class="permission-denied">
+                                <div class="icon">🚫</div>
+                                <h3>权限不足</h3>
+                                <p>只有教师才能管理考试</p>
+                                <a href="../../index.html" class="btn primary">返回首页</a>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                createExamBtn.style.display = 'none';
+                return;
+            }
+
+            async function loadStats() {
+                try {
+                    const stats = await examManager.getExamStats();
+                    document.getElementById('total-exams').textContent = stats.totalExams;
+                    document.getElementById('total-participants').textContent = stats.totalParticipants;
+                    document.getElementById('avg-score').textContent = stats.avgScore !== null ? stats.avgScore.toFixed(1) : '--';
+                    document.getElementById('pass-rate').textContent = stats.passRate !== null ? stats.passRate.toFixed(1) + '%' : '--%';
+                } catch (error) {
+                    console.error('加载统计信息失败:', error);
+                }
+            }
+
             async function loadExamList() {
                 try {
                     const exams = await examManager.getAllExams();
@@ -191,71 +775,126 @@
                     if (exams.length === 0) {
                         examTableBody.innerHTML = `
                             <tr>
-                                <td colspan="6" class="empty-state">
-                                    暂无考试，请创建新考试
+                                <td colspan="7">
+                                    <div class="empty-state">
+                                        <div class="empty-icon">📋</div>
+                                        <p>暂无考试，点击上方按钮创建新考试</p>
+                                        <a href="create.html" class="btn primary">创建考试</a>
+                                    </div>
                                 </td>
                             </tr>
                         `;
                         return;
                     }
 
-                    examTableBody.innerHTML = exams.map(exam => `
-                        <tr>
-                            <td>${exam.name}</td>
-                            <td>${exam.duration} 分钟</td>
-                            <td>${exam.questionCount} 题</td>
-                            <td>${exam.difficulty === 'all' ? '全部' : exam.difficulty === 'easy' ? '简单' : exam.difficulty === 'medium' ? '中等' : '困难'}</td>
-                            <td>${new Date(exam.createdAt).toLocaleString()}</td>
-                            <td>
-                                <div class="exam-actions">
-                                    <button class="edit-btn" data-id="${exam.id}">编辑</button>
-                                    <button class="delete-btn" data-id="${exam.id}">删除</button>
-                                </div>
-                            </td>
-                        </tr>
-                    `).join('');
+                    examTableBody.innerHTML = exams.map(exam => {
+                        const difficultyText = exam.difficulty === 'all' ? '全部' : 
+                            exam.difficulty === 'easy' ? '简单' : 
+                            exam.difficulty === 'medium' ? '中等' : '困难';
+                        
+                        const participantCount = exam.participantCount || 0;
+                        const avgScore = exam.avgScore !== undefined ? exam.avgScore.toFixed(1) : '--';
+                        
+                        return `
+                            <tr>
+                                <td>
+                                    <div class="exam-name">${exam.name}</div>
+                                    <div class="exam-meta">ID: ${exam.id.slice(-6)}</div>
+                                </td>
+                                <td>${exam.duration} 分钟</td>
+                                <td>${exam.questionCount} 题</td>
+                                <td>
+                                    <span class="difficulty-badge ${exam.difficulty}">${difficultyText}</span>
+                                </td>
+                                <td>
+                                    <div class="exam-stats">
+                                        <span>👥 ${participantCount}人</span>
+                                        <span>📊 ${avgScore}分</span>
+                                    </div>
+                                </td>
+                                <td>${new Date(exam.createdAt).toLocaleDateString('zh-CN')}</td>
+                                <td>
+                                    <div class="exam-actions">
+                                        <button class="edit" data-id="${exam.id}" data-name="${exam.name}">✏️ 编辑</button>
+                                        <button class="delete" data-id="${exam.id}" data-name="${exam.name}">🗑️ 删除</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                    }).join('');
 
-                    // 绑定事件
                     bindEvents();
                 } catch (error) {
                     console.error('加载考试列表失败:', error);
                     examTableBody.innerHTML = `
                         <tr>
-                            <td colspan="6" class="empty-state">
-                                加载失败，请刷新页面重试
+                            <td colspan="7">
+                                <div class="empty-state">
+                                    <div class="empty-icon">❌</div>
+                                    <p>加载失败，请刷新页面重试</p>
+                                </div>
                             </td>
                         </tr>
                     `;
                 }
             }
 
-            // 绑定事件
             function bindEvents() {
-                // 编辑按钮
-                document.querySelectorAll('.edit-btn').forEach(button => {
-                    button.addEventListener('click', async (e) => {
-                        const examId = e.target.dataset.id;
+                document.querySelectorAll('.edit-btn, .edit').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const examId = e.currentTarget.dataset.id;
                         window.location.href = `create.html?id=${examId}`;
                     });
                 });
 
-                // 删除按钮
-                document.querySelectorAll('.delete-btn').forEach(button => {
-                    button.addEventListener('click', async (e) => {
-                        const examId = e.target.dataset.id;
-                        if (confirm('确定要删除这个考试吗？')) {
-                            const result = await examManager.deleteExam(examId);
-                            if (result.success) {
-                                loadExamList();
-                            } else {
-                                alert('删除失败: ' + result.error);
-                            }
-                        }
+                document.querySelectorAll('.delete-btn, .delete').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        pendingDeleteId = e.currentTarget.dataset.id;
+                        const examName = e.currentTarget.dataset.name;
+                        showDeleteModal(examName);
                     });
                 });
             }
 
-            // 初始化加载
+            cancelDeleteBtn.addEventListener('click', hideDeleteModal);
+
+            confirmDeleteBtn.addEventListener('click', async () => {
+                if (!pendingDeleteId) return;
+                
+                confirmDeleteBtn.disabled = true;
+                confirmDeleteBtn.textContent = '删除中...';
+                
+                try {
+                    const result = await examManager.deleteExam(pendingDeleteId);
+                    if (result.success) {
+                        showToast(`考试「${pendingDeleteName}」已删除`, 'success');
+                        hideDeleteModal();
+                        await loadExamList();
+                        await loadStats();
+                    } else {
+                        showToast('删除失败: ' + result.error, 'error');
+                    }
+                } catch (error) {
+                    showToast('删除失败，请重试', 'error');
+                } finally {
+                    confirmDeleteBtn.disabled = false;
+                    confirmDeleteBtn.textContent = '确认删除';
+                }
+            });
+
+            deleteModal.addEventListener('click', (e) => {
+                if (e.target === deleteModal) {
+                    hideDeleteModal();
+                }
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && deleteModal.classList.contains('active')) {
+                    hideDeleteModal();
+                }
+            });
+
+            await loadStats();
             await loadExamList();
         });
     </script>

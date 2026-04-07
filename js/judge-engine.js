@@ -35,7 +35,7 @@ class JudgeEngine {
             }
             
             // 根据题型进行判题
-            const judgeResult = this.compareResults(problem, userResult, answerResult);
+            const judgeResult = await this.compareResults(problem, userResult, answerResult);
             return judgeResult;
         } catch (error) {
             console.error('判题过程出错:', error);
@@ -47,13 +47,13 @@ class JudgeEngine {
     }
 
     // 比较执行结果
-    compareResults(problem, userResult, answerResult) {
+    async compareResults(problem, userResult, answerResult) {
         // 根据题目类型进行不同的判题逻辑
         const problemType = this.getProblemType(problem);
         
         switch (problemType) {
             case 'database':
-                return this.judgeDatabaseOperation(problem, userResult, answerResult);
+                return await this.judgeDatabaseOperation(problem, userResult, answerResult);
             case 'table':
                 return this.judgeTableOperation(problem, userResult, answerResult);
             case 'select':
@@ -92,16 +92,38 @@ class JudgeEngine {
     }
 
     // 判数据库操作题
-    judgeDatabaseOperation(problem, userResult, answerResult) {
+    async judgeDatabaseOperation(problem, userResult, answerResult) {
         // 检查是否存在指定数据库
         if (problem.judgeRule.includes('检查是否存在名为')) {
             const dbName = problem.judgeRule.match(/检查是否存在名为 (\w+) 的数据库/)[1];
-            // 这里需要查询数据库列表并检查
-            // 暂时返回 AC
-            return {
-                result: 'AC',
-                message: '答案正确'
-            };
+            // 查询数据库列表并检查
+            try {
+                const showDatabasesResult = await this.mysqlEngine.execute('SHOW DATABASES;');
+                if (showDatabasesResult.success && showDatabasesResult.data) {
+                    const databases = showDatabasesResult.data.map(row => Object.values(row)[0]);
+                    if (databases.includes(dbName)) {
+                        return {
+                            result: 'AC',
+                            message: '答案正确'
+                        };
+                    } else {
+                        return {
+                            result: 'WA',
+                            message: `数据库 ${dbName} 不存在`
+                        };
+                    }
+                } else {
+                    return {
+                        result: 'RE',
+                        message: '无法查询数据库列表'
+                    };
+                }
+            } catch (error) {
+                return {
+                    result: 'RE',
+                    message: '检查数据库时出错'
+                };
+            }
         }
         
         return {

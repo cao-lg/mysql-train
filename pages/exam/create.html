@@ -10,10 +10,35 @@
             padding: 2rem 0;
         }
         
+        .page-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .page-header a {
+            color: #666;
+            text-decoration: none;
+            font-size: 1.5rem;
+        }
+        
+        .page-header a:hover {
+            color: #333;
+        }
+        
+        body.dark-mode .page-header a {
+            color: #aaa;
+        }
+        
+        body.dark-mode .page-header a:hover {
+            color: #e0e0e0;
+        }
+        
         .create-form {
             background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
             padding: 2rem;
             max-width: 800px;
             margin: 0 auto;
@@ -21,28 +46,75 @@
         
         body.dark-mode .create-form {
             background-color: #2d2d2d;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+        
+        .form-section {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        body.dark-mode .form-section {
+            border-bottom-color: #444;
+        }
+        
+        .form-section:last-of-type {
+            border-bottom: none;
+            margin-bottom: 1rem;
+        }
+        
+        .form-section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        
+        body.dark-mode .form-section-title {
+            color: #e0e0e0;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
         }
         
         .form-group {
             margin-bottom: 1.5rem;
         }
         
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+        
         .form-group label {
             display: block;
             margin-bottom: 0.5rem;
             font-weight: 500;
+            color: #333;
+        }
+        
+        body.dark-mode .form-group label {
+            color: #e0e0e0;
+        }
+        
+        .form-group label .required {
+            color: #f44336;
+            margin-left: 0.25rem;
         }
         
         .form-group input,
         .form-group select,
         .form-group textarea {
             width: 100%;
-            padding: 0.8rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            padding: 0.8rem 1rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
             font-size: 1rem;
             background-color: white;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
         
         body.dark-mode .form-group input,
@@ -53,22 +125,113 @@
             border-color: #555;
         }
         
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+        
+        .form-group input.error,
+        .form-group select.error,
+        .form-group textarea.error {
+            border-color: #f44336;
+            box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.1);
+        }
+        
+        .form-group input.success,
+        .form-group select.success,
+        .form-group textarea.success {
+            border-color: #4CAF50;
+        }
+        
         .form-group textarea {
             resize: vertical;
             min-height: 100px;
         }
         
-        .chapter-select {
+        .input-hint {
+            font-size: 0.85rem;
+            color: #888;
+            margin-top: 0.5rem;
+        }
+        
+        body.dark-mode .input-hint {
+            color: #aaa;
+        }
+        
+        .error-message {
+            color: #f44336;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
             display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        .error-message::before {
+            content: '⚠️';
+            font-size: 0.9rem;
+        }
+        
+        .success-message {
+            color: #4CAF50;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+        }
+        
+        .chapter-select {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 0.75rem;
             margin-top: 0.5rem;
         }
         
         .chapter-checkbox {
             display: flex;
             align-items: center;
-            gap: 0.3rem;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        body.dark-mode .chapter-checkbox {
+            border-color: #444;
+        }
+        
+        .chapter-checkbox:hover {
+            border-color: #4CAF50;
+            background-color: #f9f9f9;
+        }
+        
+        body.dark-mode .chapter-checkbox:hover {
+            background-color: #3d3d3d;
+        }
+        
+        .chapter-checkbox.selected {
+            border-color: #4CAF50;
+            background-color: #e8f5e9;
+        }
+        
+        body.dark-mode .chapter-checkbox.selected {
+            background-color: #1b5e20;
+            border-color: #4CAF50;
+        }
+        
+        .chapter-checkbox input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        
+        .chapter-checkbox label {
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin: 0;
         }
         
         .form-actions {
@@ -76,14 +239,25 @@
             gap: 1rem;
             justify-content: flex-end;
             margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #eee;
         }
         
-        .form-actions button {
-            padding: 0.8rem 1.5rem;
+        body.dark-mode .form-actions {
+            border-top-color: #444;
+        }
+        
+        .form-actions button,
+        .form-actions a {
+            padding: 0.8rem 2rem;
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
             font-weight: 500;
+            font-size: 1rem;
             cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.2s;
         }
         
         .form-actions button.primary {
@@ -91,32 +265,238 @@
             color: white;
         }
         
-        .form-actions button.secondary {
-            background-color: #f5f5f5;
-            color: #333;
-            border: 1px solid #ddd;
+        .form-actions button.primary:hover {
+            background-color: #43a047;
         }
         
-        body.dark-mode .form-actions button.secondary {
+        .form-actions button.primary:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        
+        body.dark-mode .form-actions button.primary:disabled {
+            background-color: #555;
+        }
+        
+        .form-actions button.secondary,
+        .form-actions a.secondary {
+            background-color: #f5f5f5;
+            color: #333;
+            border: 2px solid #ddd;
+        }
+        
+        body.dark-mode .form-actions button.secondary,
+        body.dark-mode .form-actions a.secondary {
             background-color: #333;
             color: #e0e0e0;
             border-color: #555;
         }
         
-        .form-actions button:hover {
-            opacity: 0.9;
+        .form-actions button.secondary:hover,
+        .form-actions a.secondary:hover {
+            background-color: #e0e0e0;
         }
         
-        .error-message {
+        body.dark-mode .form-actions button.secondary:hover,
+        body.dark-mode .form-actions a.secondary:hover {
+            background-color: #444;
+        }
+        
+        .permission-denied {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+        
+        .permission-denied .icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+        
+        .permission-denied h3 {
+            color: #d32f2f;
+            margin-bottom: 0.5rem;
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 1001;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: transform 0.3s, opacity 0.3s;
+        }
+        
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .toast.success {
+            background-color: #4CAF50;
+        }
+        
+        .toast.error {
+            background-color: #f44336;
+        }
+        
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        
+        .loading-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        body.dark-mode .loading-overlay {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #ddd;
+            border-top-color: #4CAF50;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
+        .char-counter {
+            font-size: 0.8rem;
+            color: #888;
+            text-align: right;
+            margin-top: 0.25rem;
+        }
+        
+        body.dark-mode .char-counter {
+            color: #aaa;
+        }
+        
+        .char-counter.warning {
+            color: #ff9800;
+        }
+        
+        .char-counter.error {
             color: #f44336;
-            margin-top: 0.5rem;
-            font-size: 0.9rem;
         }
         
-        .success-message {
-            color: #4CAF50;
-            margin-top: 0.5rem;
-            font-size: 0.9rem;
+        @media (max-width: 768px) {
+            .create-form {
+                padding: 1.5rem;
+                margin: 0 10px;
+            }
+            
+            .form-section {
+                margin-bottom: 1.5rem;
+                padding-bottom: 1rem;
+            }
+            
+            .form-section-title {
+                font-size: 1rem;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .chapter-select {
+                grid-template-columns: 1fr;
+            }
+            
+            .chapter-checkbox {
+                padding: 0.6rem;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+            
+            .form-actions button,
+            .form-actions a {
+                width: 100%;
+                padding: 0.9rem;
+            }
+            
+            .input-hint {
+                font-size: 0.8rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .page-header {
+                flex-wrap: wrap;
+            }
+            
+            .page-header h2 {
+                font-size: 1.3rem;
+            }
+            
+            .create-form {
+                padding: 1rem;
+            }
+            
+            .form-group input,
+            .form-group select,
+            .form-group textarea {
+                padding: 0.7rem;
+                font-size: 16px;
+            }
+            
+            .form-group label {
+                font-size: 0.9rem;
+            }
+            
+            .char-counter {
+                font-size: 0.75rem;
+            }
+            
+            .error-message {
+                font-size: 0.8rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .exam-create {
+                padding: 1rem 0;
+            }
+            
+            .form-section-title {
+                font-size: 0.95rem;
+            }
+            
+            .chapter-checkbox label {
+                font-size: 0.85rem;
+            }
+            
+            .chapter-checkbox input[type="checkbox"] {
+                width: 16px;
+                height: 16px;
+            }
         }
     </style>
 </head>
@@ -125,11 +505,12 @@
         <nav>
             <div class="container">
                 <h1>MySQL 实训 OJ 系统</h1>
-                <ul>
-                    <li><a href="../../index.html">首页</a></li>
-                    <li><a href="../../pages/problems.html">题库</a></li>
-                    <li><a href="../../pages/user.html">用户中心</a></li>
-                    <li><a href="../../pages/about.html">关于</a></li>
+                <button class="menu-toggle" id="menu-toggle" aria-label="菜单">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <ul id="nav-menu">
                 </ul>
                 <div class="theme-toggle">
                     <button id="theme-btn">🌙</button>
@@ -141,84 +522,107 @@
     <main>
         <section class="exam-create">
             <div class="container">
-                <h2 id="page-title">创建新考试</h2>
+                <div class="page-header">
+                    <a href="manage.html" title="返回">←</a>
+                    <h2 id="page-title">创建新考试</h2>
+                </div>
                 
-                <div class="create-form">
-                    <form id="exam-form">
-                        <div class="form-group">
-                            <label for="exam-name">考试名称</label>
-                            <input type="text" id="exam-name" name="name" placeholder="请输入考试名称" required>
+                <div class="create-form" id="form-container">
+                    <form id="exam-form" novalidate>
+                        <div class="form-section">
+                            <div class="form-section-title">📋 基本信息</div>
+                            <div class="form-group">
+                                <label for="exam-name">考试名称<span class="required">*</span></label>
+                                <input type="text" id="exam-name" name="name" placeholder="请输入考试名称" maxlength="50" autocomplete="off">
+                                <div class="char-counter"><span id="name-counter">0</span>/50</div>
+                                <div class="error-message" id="name-error"></div>
+                            </div>
                         </div>
                         
-                        <div class="form-group">
-                            <label for="exam-duration">考试时长（分钟）</label>
-                            <input type="number" id="exam-duration" name="duration" min="1" placeholder="请输入考试时长" required>
+                        <div class="form-section">
+                            <div class="form-section-title">⚙️ 考试设置</div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="exam-duration">考试时长（分钟）<span class="required">*</span></label>
+                                    <input type="number" id="exam-duration" name="duration" min="1" max="300" placeholder="如：60">
+                                    <div class="input-hint">建议时长：30-180 分钟</div>
+                                    <div class="error-message" id="duration-error"></div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="exam-question-count">题目数量<span class="required">*</span></label>
+                                    <input type="number" id="exam-question-count" name="questionCount" min="1" max="100" placeholder="如：20">
+                                    <div class="input-hint">根据题库容量合理设置</div>
+                                    <div class="error-message" id="questionCount-error"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="exam-difficulty">难度级别<span class="required">*</span></label>
+                                <select id="exam-difficulty" name="difficulty">
+                                    <option value="">请选择难度级别</option>
+                                    <option value="all">全部难度</option>
+                                    <option value="easy">简单</option>
+                                    <option value="medium">中等</option>
+                                    <option value="hard">困难</option>
+                                </select>
+                                <div class="error-message" id="difficulty-error"></div>
+                            </div>
                         </div>
                         
-                        <div class="form-group">
-                            <label for="exam-question-count">题目数量</label>
-                            <input type="number" id="exam-question-count" name="questionCount" min="1" placeholder="请输入题目数量" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="exam-difficulty">难度级别</label>
-                            <select id="exam-difficulty" name="difficulty" required>
-                                <option value="all">全部</option>
-                                <option value="easy">简单</option>
-                                <option value="medium">中等</option>
-                                <option value="hard">困难</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>题目来源章节</label>
-                            <div class="chapter-select">
-                                <div class="chapter-checkbox">
-                                    <input type="checkbox" id="chapter1" name="chapters" value="chapter1">
-                                    <label for="chapter1">第1章：数据库操作</label>
-                                </div>
-                                <div class="chapter-checkbox">
-                                    <input type="checkbox" id="chapter2" name="chapters" value="chapter2">
-                                    <label for="chapter2">第2章：表结构管理</label>
-                                </div>
-                                <div class="chapter-checkbox">
-                                    <input type="checkbox" id="chapter3" name="chapters" value="chapter3">
-                                    <label for="chapter3">第3章：基础 SELECT</label>
-                                </div>
-                                <div class="chapter-checkbox">
-                                    <input type="checkbox" id="chapter4" name="chapters" value="chapter4">
-                                    <label for="chapter4">第4章：WHERE 条件查询</label>
-                                </div>
-                                <div class="chapter-checkbox">
-                                    <input type="checkbox" id="chapter5" name="chapters" value="chapter5">
-                                    <label for="chapter5">第5章：ORDER BY 与 LIMIT</label>
-                                </div>
-                                <div class="chapter-checkbox">
-                                    <input type="checkbox" id="chapter6" name="chapters" value="chapter6">
-                                    <label for="chapter6">第6章：聚合函数与 GROUP BY</label>
-                                </div>
-                                <div class="chapter-checkbox">
-                                    <input type="checkbox" id="chapter7" name="chapters" value="chapter7">
-                                    <label for="chapter7">第7章：多表连接</label>
-                                </div>
-                                <div class="chapter-checkbox">
-                                    <input type="checkbox" id="chapter8" name="chapters" value="chapter8">
-                                    <label for="chapter8">第8章：子查询</label>
-                                </div>
-                                <div class="chapter-checkbox">
-                                    <input type="checkbox" id="chapter9" name="chapters" value="chapter9">
-                                    <label for="chapter9">第9章：增删改</label>
-                                </div>
-                                <div class="chapter-checkbox">
-                                    <input type="checkbox" id="chapter10" name="chapters" value="chapter10">
-                                    <label for="chapter10">第10章：视图</label>
+                        <div class="form-section">
+                            <div class="form-section-title">📚 题目来源</div>
+                            <div class="form-group">
+                                <label>选择章节（可选）</label>
+                                <div class="input-hint">不选择则从所有章节随机抽取题目</div>
+                                <div class="chapter-select" id="chapter-select">
+                                    <div class="chapter-checkbox">
+                                        <input type="checkbox" id="chapter1" name="chapters" value="chapter1">
+                                        <label for="chapter1">第1章：数据库操作</label>
+                                    </div>
+                                    <div class="chapter-checkbox">
+                                        <input type="checkbox" id="chapter2" name="chapters" value="chapter2">
+                                        <label for="chapter2">第2章：表结构管理</label>
+                                    </div>
+                                    <div class="chapter-checkbox">
+                                        <input type="checkbox" id="chapter3" name="chapters" value="chapter3">
+                                        <label for="chapter3">第3章：基础 SELECT</label>
+                                    </div>
+                                    <div class="chapter-checkbox">
+                                        <input type="checkbox" id="chapter4" name="chapters" value="chapter4">
+                                        <label for="chapter4">第4章：WHERE 条件查询</label>
+                                    </div>
+                                    <div class="chapter-checkbox">
+                                        <input type="checkbox" id="chapter5" name="chapters" value="chapter5">
+                                        <label for="chapter5">第5章：ORDER BY 与 LIMIT</label>
+                                    </div>
+                                    <div class="chapter-checkbox">
+                                        <input type="checkbox" id="chapter6" name="chapters" value="chapter6">
+                                        <label for="chapter6">第6章：聚合函数与 GROUP BY</label>
+                                    </div>
+                                    <div class="chapter-checkbox">
+                                        <input type="checkbox" id="chapter7" name="chapters" value="chapter7">
+                                        <label for="chapter7">第7章：多表连接</label>
+                                    </div>
+                                    <div class="chapter-checkbox">
+                                        <input type="checkbox" id="chapter8" name="chapters" value="chapter8">
+                                        <label for="chapter8">第8章：子查询</label>
+                                    </div>
+                                    <div class="chapter-checkbox">
+                                        <input type="checkbox" id="chapter9" name="chapters" value="chapter9">
+                                        <label for="chapter9">第9章：增删改</label>
+                                    </div>
+                                    <div class="chapter-checkbox">
+                                        <input type="checkbox" id="chapter10" name="chapters" value="chapter10">
+                                        <label for="chapter10">第10章：视图</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         
                         <div class="form-actions">
-                            <a href="manage.html" class="btn secondary">取消</a>
-                            <button type="submit" class="btn primary">保存</button>
+                            <a href="manage.html" class="secondary">取消</a>
+                            <button type="submit" class="primary" id="submit-btn">保存考试</button>
                         </div>
                     </form>
                 </div>
@@ -226,13 +630,19 @@
         </section>
     </main>
     
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loading-spinner"></div>
+    </div>
+    
+    <div class="toast" id="toast"></div>
+    
     <footer>
         <div class="container">
             <p>&copy; 2026 MySQL 数据库课程实训 OJ 系统</p>
         </div>
     </footer>
     
-    <script src="../../js/core.js"></script>
+    <script type="module" src="../../js/core.js"></script>
     <script type="module">
         import examManager from '../../js/exam-manager.js';
         import userSystem from '../../js/user-system.js';
@@ -241,66 +651,290 @@
         document.addEventListener('DOMContentLoaded', async () => {
             const examForm = document.getElementById('exam-form');
             const pageTitle = document.getElementById('page-title');
+            const formContainer = document.getElementById('form-container');
+            const submitBtn = document.getElementById('submit-btn');
+            const loadingOverlay = document.getElementById('loading-overlay');
+            const toast = document.getElementById('toast');
+            const nameInput = document.getElementById('exam-name');
+            const durationInput = document.getElementById('exam-duration');
+            const questionCountInput = document.getElementById('exam-question-count');
+            const difficultySelect = document.getElementById('exam-difficulty');
+            const nameCounter = document.getElementById('name-counter');
+            
             let editingExamId = null;
+            let isSubmitting = false;
 
-            // 检查用户是否登录
+            function showToast(message, type = 'success') {
+                toast.textContent = message;
+                toast.className = `toast ${type} show`;
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
+            }
+
+            function showLoading() {
+                loadingOverlay.classList.add('active');
+            }
+
+            function hideLoading() {
+                loadingOverlay.classList.remove('active');
+            }
+
+            function showError(fieldId, message) {
+                const field = document.getElementById(fieldId);
+                const errorEl = document.getElementById(`${fieldId.replace('exam-', '')}-error`);
+                
+                if (field) {
+                    field.classList.add('error');
+                    field.classList.remove('success');
+                }
+                
+                if (errorEl) {
+                    errorEl.textContent = message;
+                }
+            }
+
+            function clearError(fieldId) {
+                const field = document.getElementById(fieldId);
+                const errorEl = document.getElementById(`${fieldId.replace('exam-', '')}-error`);
+                
+                if (field) {
+                    field.classList.remove('error');
+                }
+                
+                if (errorEl) {
+                    errorEl.textContent = '';
+                }
+            }
+
+            function setSuccess(fieldId) {
+                const field = document.getElementById(fieldId);
+                if (field) {
+                    field.classList.remove('error');
+                    field.classList.add('success');
+                }
+            }
+
+            function validateField(fieldId, value) {
+                clearError(fieldId);
+                
+                switch (fieldId) {
+                    case 'exam-name':
+                        if (!value || value.trim() === '') {
+                            showError(fieldId, '请输入考试名称');
+                            return false;
+                        }
+                        if (value.trim().length < 2) {
+                            showError(fieldId, '考试名称至少需要2个字符');
+                            return false;
+                        }
+                        if (value.length > 50) {
+                            showError(fieldId, '考试名称不能超过50个字符');
+                            return false;
+                        }
+                        setSuccess(fieldId);
+                        return true;
+                        
+                    case 'exam-duration':
+                        if (!value || value === '') {
+                            showError(fieldId, '请输入考试时长');
+                            return false;
+                        }
+                        const duration = parseInt(value);
+                        if (isNaN(duration) || duration < 1) {
+                            showError(fieldId, '考试时长必须大于0分钟');
+                            return false;
+                        }
+                        if (duration > 300) {
+                            showError(fieldId, '考试时长不能超过300分钟');
+                            return false;
+                        }
+                        setSuccess(fieldId);
+                        return true;
+                        
+                    case 'exam-question-count':
+                        if (!value || value === '') {
+                            showError(fieldId, '请输入题目数量');
+                            return false;
+                        }
+                        const count = parseInt(value);
+                        if (isNaN(count) || count < 1) {
+                            showError(fieldId, '题目数量必须大于0');
+                            return false;
+                        }
+                        if (count > 100) {
+                            showError(fieldId, '题目数量不能超过100');
+                            return false;
+                        }
+                        setSuccess(fieldId);
+                        return true;
+                        
+                    case 'exam-difficulty':
+                        if (!value || value === '') {
+                            showError(fieldId, '请选择难度级别');
+                            return false;
+                        }
+                        setSuccess(fieldId);
+                        return true;
+                }
+                return true;
+            }
+
+            function validateForm() {
+                const nameValid = validateField('exam-name', nameInput.value);
+                const durationValid = validateField('exam-duration', durationInput.value);
+                const countValid = validateField('exam-question-count', questionCountInput.value);
+                const difficultyValid = validateField('exam-difficulty', difficultySelect.value);
+                
+                return nameValid && durationValid && countValid && difficultyValid;
+            }
+
             if (!userSystem.isLoggedIn()) {
-                alert('请先登录后创建考试');
-                window.location.href = '../../pages/user.html';
+                formContainer.innerHTML = `
+                    <div class="permission-denied">
+                        <div class="icon">🔒</div>
+                        <h3>请先登录</h3>
+                        <p>登录后才能创建考试</p>
+                        <a href="../../pages/user.html" class="btn primary">前往登录</a>
+                    </div>
+                `;
                 return;
             }
 
-            // 获取URL参数
+            if (!userSystem.isTeacher()) {
+                formContainer.innerHTML = `
+                    <div class="permission-denied">
+                        <div class="icon">🚫</div>
+                        <h3>权限不足</h3>
+                        <p>只有教师才能创建考试</p>
+                        <a href="manage.html" class="btn primary">返回管理</a>
+                    </div>
+                `;
+                return;
+            }
+
             const urlParams = new URLSearchParams(window.location.search);
             editingExamId = urlParams.get('id');
 
-            // 如果是编辑模式，加载考试信息
             if (editingExamId) {
                 pageTitle.textContent = '编辑考试';
+                submitBtn.textContent = '更新考试';
+                showLoading();
                 await loadExamData(editingExamId);
+                hideLoading();
             }
 
-            // 加载考试数据
             async function loadExamData(examId) {
                 try {
                     const exam = await examManager.getExamById(examId);
                     if (!exam) {
-                        alert('考试不存在');
+                        showToast('考试不存在', 'error');
                         window.location.href = 'manage.html';
                         return;
                     }
 
-                    // 填充表单
-                    document.getElementById('exam-name').value = exam.name;
-                    document.getElementById('exam-duration').value = exam.duration;
-                    document.getElementById('exam-question-count').value = exam.questionCount;
-                    document.getElementById('exam-difficulty').value = exam.difficulty;
+                    nameInput.value = exam.name;
+                    durationInput.value = exam.duration;
+                    questionCountInput.value = exam.questionCount;
+                    difficultySelect.value = exam.difficulty;
+                    
+                    nameCounter.textContent = exam.name.length;
 
-                    // 选中章节
-                    if (exam.chapters) {
+                    if (exam.chapters && exam.chapters.length > 0) {
                         exam.chapters.forEach(chapter => {
                             const checkbox = document.querySelector(`input[name="chapters"][value="${chapter}"]`);
                             if (checkbox) {
                                 checkbox.checked = true;
+                                checkbox.closest('.chapter-checkbox').classList.add('selected');
                             }
                         });
                     }
+
+                    setSuccess('exam-name');
+                    setSuccess('exam-duration');
+                    setSuccess('exam-question-count');
+                    setSuccess('exam-difficulty');
                 } catch (error) {
                     console.error('加载考试数据失败:', error);
-                    alert('加载失败，请重试');
+                    showToast('加载失败，请重试', 'error');
                 }
             }
 
-            // 表单提交
+            nameInput.addEventListener('input', (e) => {
+                const value = e.target.value;
+                nameCounter.textContent = value.length;
+                
+                const counter = nameCounter.parentElement;
+                if (value.length > 45) {
+                    counter.classList.add('warning');
+                } else {
+                    counter.classList.remove('warning');
+                }
+                if (value.length >= 50) {
+                    counter.classList.add('error');
+                } else {
+                    counter.classList.remove('error');
+                }
+                
+                if (value.length > 0) {
+                    validateField('exam-name', value);
+                }
+            });
+
+            nameInput.addEventListener('blur', () => {
+                validateField('exam-name', nameInput.value);
+            });
+
+            durationInput.addEventListener('input', () => {
+                if (durationInput.value) {
+                    validateField('exam-duration', durationInput.value);
+                }
+            });
+
+            durationInput.addEventListener('blur', () => {
+                validateField('exam-duration', durationInput.value);
+            });
+
+            questionCountInput.addEventListener('input', () => {
+                if (questionCountInput.value) {
+                    validateField('exam-question-count', questionCountInput.value);
+                }
+            });
+
+            questionCountInput.addEventListener('blur', () => {
+                validateField('exam-question-count', questionCountInput.value);
+            });
+
+            difficultySelect.addEventListener('change', () => {
+                validateField('exam-difficulty', difficultySelect.value);
+            });
+
+            document.querySelectorAll('.chapter-checkbox input[type="checkbox"]').forEach(checkbox => {
+                checkbox.addEventListener('change', (e) => {
+                    const wrapper = e.target.closest('.chapter-checkbox');
+                    if (e.target.checked) {
+                        wrapper.classList.add('selected');
+                    } else {
+                        wrapper.classList.remove('selected');
+                    }
+                });
+            });
+
             examForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
+                
+                if (isSubmitting) return;
+                
+                if (!validateForm()) {
+                    showToast('请检查表单中的错误', 'error');
+                    return;
+                }
 
-                // 收集表单数据
                 const formData = new FormData(examForm);
                 const chapters = Array.from(formData.getAll('chapters'));
 
                 const examData = {
-                    name: formData.get('name'),
+                    name: formData.get('name').trim(),
                     duration: parseInt(formData.get('duration')),
                     questionCount: parseInt(formData.get('questionCount')),
                     difficulty: formData.get('difficulty'),
@@ -308,12 +942,16 @@
                     createdBy: userSystem.getCurrentUser().username
                 };
 
-                // 验证表单
                 const validation = validateExamConfig(examData);
                 if (!validation.valid) {
-                    alert(validation.errors.join('\n'));
+                    showToast(validation.errors[0], 'error');
                     return;
                 }
+
+                isSubmitting = true;
+                submitBtn.disabled = true;
+                submitBtn.textContent = editingExamId ? '更新中...' : '保存中...';
+                showLoading();
 
                 try {
                     let result;
@@ -324,14 +962,21 @@
                     }
 
                     if (result.success) {
-                        alert(editingExamId ? '考试更新成功' : '考试创建成功');
-                        window.location.href = 'manage.html';
+                        showToast(editingExamId ? '考试更新成功' : '考试创建成功', 'success');
+                        setTimeout(() => {
+                            window.location.href = 'manage.html';
+                        }, 1000);
                     } else {
-                        alert('操作失败: ' + result.error);
+                        showToast('操作失败: ' + result.error, 'error');
                     }
                 } catch (error) {
                     console.error('保存考试失败:', error);
-                    alert('保存失败，请重试');
+                    showToast('保存失败，请重试', 'error');
+                } finally {
+                    isSubmitting = false;
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = editingExamId ? '更新考试' : '保存考试';
+                    hideLoading();
                 }
             });
         });
