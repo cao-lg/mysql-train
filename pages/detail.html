@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>题目详情 - MySQL 数据库课程实训 OJ 系统</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="container">
+                <h1>MySQL 实训 OJ 系统</h1>
+                <ul>
+                    <li><a href="../index.html">首页</a></li>
+                    <li><a href="problems.html">题库</a></li>
+                    <li><a href="user.html">用户中心</a></li>
+                    <li><a href="about.html">关于</a></li>
+                </ul>
+                <div class="theme-toggle">
+                    <button id="theme-btn">🌙</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="problem-detail">
+            <div class="container">
+                <div class="problem-header">
+                    <h2 id="problem-title">题目名称</h2>
+                    <div class="problem-meta">
+                        <span class="chapter">章节：<span id="problem-chapter">第1章</span></span>
+                        <span class="difficulty">难度：<span id="problem-difficulty">简单</span></span>
+                    </div>
+                </div>
+                
+                <div class="problem-content">
+                    <div class="section">
+                        <h3>题目描述</h3>
+                        <div id="problem-description">题目描述将显示在这里</div>
+                    </div>
+                    
+                    <div class="section">
+                        <h3>表结构</h3>
+                        <div id="problem-tables">表结构将显示在这里</div>
+                    </div>
+                    
+                    <div class="section">
+                        <h3>初始数据</h3>
+                        <div id="problem-data">初始数据将显示在这里</div>
+                    </div>
+                    
+                    <div class="section">
+                        <h3>SQL 要求</h3>
+                        <div id="problem-requirement">SQL 要求将显示在这里</div>
+                    </div>
+                </div>
+                
+                <div class="sql-editor">
+                    <div class="editor-header">
+                        <h3>SQL 编辑器</h3>
+                        <div class="editor-buttons">
+                            <button id="run-btn">运行</button>
+                            <button id="submit-btn">提交判题</button>
+                            <button id="clear-btn">清空</button>
+                            <button id="format-btn">格式化</button>
+                        </div>
+                    </div>
+                    <div class="editor-body">
+                        <textarea id="sql-input" placeholder="请输入 SQL 语句..."></textarea>
+                    </div>
+                    <div class="editor-footer">
+                        <div id="execution-time">执行时间：--</div>
+                        <div id="judge-result"></div>
+                    </div>
+                </div>
+                
+                <div class="result-section">
+                    <h3>执行结果</h3>
+                    <div id="result-container">
+                        <!-- 执行结果将显示在这里 -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 MySQL 数据库课程实训 OJ 系统</p>
+        </div>
+    </footer>
+    
+    <script src="../js/core.js"></script>
+    <script type="module">
+        import problemLoader from '../js/problem-loader.js';
+        import SQLEditor from '../js/editor.js';
+        import judgeEngine from '../js/judge-engine.js';
+        import mysqlEngine from '../js/mysql-wasm-engine.js';
+
+        // 题目详情页面逻辑
+        document.addEventListener('DOMContentLoaded', async () => {
+            const problemTitle = document.getElementById('problem-title');
+            const problemChapter = document.getElementById('problem-chapter');
+            const problemDifficulty = document.getElementById('problem-difficulty');
+            const problemDescription = document.getElementById('problem-description');
+            const problemTables = document.getElementById('problem-tables');
+            const problemData = document.getElementById('problem-data');
+            const problemRequirement = document.getElementById('problem-requirement');
+            const sqlInput = document.getElementById('sql-input');
+            const runBtn = document.getElementById('run-btn');
+            const submitBtn = document.getElementById('submit-btn');
+            const clearBtn = document.getElementById('clear-btn');
+            const formatBtn = document.getElementById('format-btn');
+            const executionTime = document.getElementById('execution-time');
+            const judgeResult = document.getElementById('judge-result');
+            const resultContainer = document.getElementById('result-container');
+
+            // 初始化 SQL 编辑器
+            const editor = new SQLEditor(sqlInput);
+            
+            // 设置 MySQL 引擎到判题引擎
+            judgeEngine.setMySQLEngine(mysqlEngine);
+            
+            let currentProblem = null;
+
+            // 获取 URL 中的题目 ID
+            const urlParams = new URLSearchParams(window.location.search);
+            const problemId = parseInt(urlParams.get('id'));
+
+            if (!problemId) {
+                problemTitle.textContent = '题目不存在';
+                problemDescription.textContent = '请返回题库页面选择题目';
+                return;
+            }
+
+            // 加载题目详情
+            async function loadProblemDetail() {
+                try {
+                    const problem = await problemLoader.getProblemById(problemId);
+                    if (!problem) {
+                        problemTitle.textContent = '题目不存在';
+                        problemDescription.textContent = '请返回题库页面选择题目';
+                        return;
+                    }
+
+                    // 保存当前题目
+                    currentProblem = problem;
+
+                    // 填充题目信息
+                    problemTitle.textContent = problem.title;
+                    problemChapter.textContent = problem.chapter || '第1章';
+                    problemDifficulty.textContent = problem.difficulty === 'easy' ? '简单' : problem.difficulty === 'medium' ? '中等' : '困难';
+                    problemDescription.textContent = problem.description;
+                    problemRequirement.textContent = problem.requirement;
+
+                    // 显示表结构
+                    if (problem.tables && problem.tables.length > 0) {
+                        problemTables.innerHTML = problem.tables.map(table => `
+                            <div class="table-definition">
+                                <h4>${table.name}</h4>
+                                <pre>${table.definition}</pre>
+                            </div>
+                        `).join('');
+                    } else {
+                        problemTables.textContent = '无表结构';
+                    }
+
+                    // 显示初始数据
+                    if (problem.initialData && problem.initialData.length > 0) {
+                        problemData.innerHTML = problem.initialData.map(data => `
+                            <div class="data-insert">
+                                <pre>${data}</pre>
+                            </div>
+                        `).join('');
+                    } else {
+                        problemData.textContent = '无初始数据';
+                    }
+                } catch (error) {
+                    console.error('加载题目详情失败:', error);
+                    problemTitle.textContent = '加载失败';
+                    problemDescription.textContent = '加载题目详情失败，请刷新页面重试';
+                }
+            }
+
+            // 运行 SQL
+            async function runSQL() {
+                const sql = editor.getValue().trim();
+                if (!sql) {
+                    alert('请输入 SQL 语句');
+                    return;
+                }
+
+                try {
+                    const startTime = performance.now();
+                    const result = await mysqlEngine.execute(sql);
+                    const endTime = performance.now();
+                    const time = (endTime - startTime).toFixed(2);
+
+                    executionTime.textContent = `执行时间：${time}ms`;
+
+                    if (result.success) {
+                        // 显示执行结果
+                        if (result.data && result.data.length > 0) {
+                            const columns = result.columns;
+                            const data = result.data;
+
+                            let html = '<table class="result-table">';
+                            html += '<thead><tr>';
+                            columns.forEach(column => {
+                                html += `<th>${column}</th>`;
+                            });
+                            html += '</tr></thead>';
+                            html += '<tbody>';
+                            data.forEach(row => {
+                                html += '<tr>';
+                                columns.forEach(column => {
+                                    html += `<td>${row[column]}</td>`;
+                                });
+                                html += '</tr>';
+                            });
+                            html += '</tbody>';
+                            html += '</table>';
+
+                            resultContainer.innerHTML = html;
+                        } else {
+                            resultContainer.textContent = '执行成功，无返回数据';
+                        }
+                        judgeResult.textContent = '';
+                    } else {
+                        resultContainer.textContent = `错误：${result.error}`;
+                        judgeResult.textContent = '执行失败';
+                        judgeResult.className = 're';
+                    }
+                } catch (error) {
+                    console.error('执行 SQL 失败:', error);
+                    resultContainer.textContent = `错误：${error.message}`;
+                    executionTime.textContent = '执行时间：--';
+                    judgeResult.textContent = '执行失败';
+                    judgeResult.className = 're';
+                }
+            }
+
+            // 提交判题
+            async function submitSQL() {
+                const sql = editor.getValue().trim();
+                if (!sql) {
+                    alert('请输入 SQL 语句');
+                    return;
+                }
+
+                if (!currentProblem) {
+                    alert('题目加载失败，请刷新页面重试');
+                    return;
+                }
+
+                judgeResult.textContent = '评判中...';
+                judgeResult.className = '';
+
+                try {
+                    const result = await judgeEngine.judge(currentProblem, sql);
+                    judgeResult.textContent = result.message;
+                    judgeResult.className = result.result.toLowerCase();
+                } catch (error) {
+                    console.error('判题失败:', error);
+                    judgeResult.textContent = '判题过程出错';
+                    judgeResult.className = 're';
+                }
+            }
+
+            // 清空 SQL 输入
+            function clearSQL() {
+                editor.clear();
+                resultContainer.textContent = '';
+                executionTime.textContent = '执行时间：--';
+                judgeResult.textContent = '';
+                judgeResult.className = '';
+            }
+
+            // 格式化 SQL
+            function formatSQL() {
+                editor.formatSQL();
+            }
+
+            // 事件监听
+            runBtn.addEventListener('click', runSQL);
+            submitBtn.addEventListener('click', submitSQL);
+            clearBtn.addEventListener('click', clearSQL);
+            formatBtn.addEventListener('click', formatSQL);
+
+            // 初始化加载
+            await loadProblemDetail();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>题库 - MySQL 数据库课程实训 OJ 系统</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="container">
+                <h1>MySQL 实训 OJ 系统</h1>
+                <ul>
+                    <li><a href="../index.html">首页</a></li>
+                    <li><a href="problems.html">题库</a></li>
+                    <li><a href="user.html">用户中心</a></li>
+                    <li><a href="about.html">关于</a></li>
+                </ul>
+                <div class="theme-toggle">
+                    <button id="theme-btn">🌙</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="problems">
+            <div class="container">
+                <h2>MySQL 题库</h2>
+                
+                <div class="filters">
+                    <div class="filter-group">
+                        <label for="chapter">章节筛选：</label>
+                        <select id="chapter">
+                            <option value="all">全部章节</option>
+                            <option value="chapter1">第1章：数据库操作</option>
+                            <option value="chapter2">第2章：表结构管理</option>
+                            <option value="chapter3">第3章：基础 SELECT</option>
+                            <option value="chapter4">第4章：WHERE 条件查询</option>
+                            <option value="chapter5">第5章：ORDER BY 与 LIMIT</option>
+                            <option value="chapter6">第6章：聚合函数与 GROUP BY</option>
+                            <option value="chapter7">第7章：多表连接</option>
+                            <option value="chapter8">第8章：子查询</option>
+                            <option value="chapter9">第9章：增删改</option>
+                            <option value="chapter10">第10章：视图</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="search">搜索：</label>
+                        <input type="text" id="search" placeholder="输入题目关键词">
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="difficulty">难度：</label>
+                        <select id="difficulty">
+                            <option value="all">全部难度</option>
+                            <option value="easy">简单</option>
+                            <option value="medium">中等</option>
+                            <option value="hard">困难</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="problem-list">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>题目ID</th>
+                                <th>题目名称</th>
+                                <th>章节</th>
+                                <th>难度</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="problem-table-body">
+                            <!-- 题目列表将通过 JavaScript 动态生成 -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="pagination">
+                    <button id="prev-page" disabled>上一页</button>
+                    <span id="page-info">第 1 页，共 8 页</span>
+                    <button id="next-page">下一页</button>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 MySQL 数据库课程实训 OJ 系统</p>
+        </div>
+    </footer>
+    
+    <script src="../js/core.js"></script>
+    <script type="module">
+        import problemLoader from '../js/problem-loader.js';
+
+        // 题库页面逻辑
+        document.addEventListener('DOMContentLoaded', async () => {
+            const problemTableBody = document.getElementById('problem-table-body');
+            const pageInfo = document.getElementById('page-info');
+            const prevPageBtn = document.getElementById('prev-page');
+            const nextPageBtn = document.getElementById('next-page');
+            const chapterSelect = document.getElementById('chapter');
+            const searchInput = document.getElementById('search');
+            const difficultySelect = document.getElementById('difficulty');
+
+            let currentPage = 1;
+            const pageSize = 10;
+            let filteredProblems = [];
+
+            // 加载题目数据
+            async function loadProblems() {
+                try {
+                    // 加载所有题目
+                    const allProblems = await problemLoader.getAllProblems();
+                    
+                    // 应用筛选条件
+                    filteredProblems = allProblems.filter(problem => {
+                        const chapterMatch = chapterSelect.value === 'all' || problem.chapter === chapterSelect.value;
+                        const searchMatch = searchInput.value === '' || 
+                            problem.title.includes(searchInput.value) || 
+                            problem.description.includes(searchInput.value);
+                        const difficultyMatch = difficultySelect.value === 'all' || problem.difficulty === difficultySelect.value;
+                        return chapterMatch && searchMatch && difficultyMatch;
+                    });
+
+                    // 更新分页信息
+                    const totalPages = Math.ceil(filteredProblems.length / pageSize);
+                    pageInfo.textContent = `第 ${currentPage} 页，共 ${totalPages} 页`;
+
+                    // 更新分页按钮状态
+                    prevPageBtn.disabled = currentPage === 1;
+                    nextPageBtn.disabled = currentPage === totalPages;
+
+                    // 渲染题目列表
+                    renderProblems();
+                } catch (error) {
+                    console.error('加载题目失败:', error);
+                    problemTableBody.innerHTML = '<tr><td colspan="6">加载题目失败，请刷新页面重试</td></tr>';
+                }
+            }
+
+            // 渲染题目列表
+            function renderProblems() {
+                const start = (currentPage - 1) * pageSize;
+                const end = start + pageSize;
+                const pageProblems = filteredProblems.slice(start, end);
+
+                if (pageProblems.length === 0) {
+                    problemTableBody.innerHTML = '<tr><td colspan="6">没有找到符合条件的题目</td></tr>';
+                    return;
+                }
+
+                problemTableBody.innerHTML = pageProblems.map(problem => `
+                    <tr>
+                        <td>${problem.id}</td>
+                        <td>${problem.title}</td>
+                        <td>${problem.chapter || '第1章'}</td>
+                        <td>${problem.difficulty === 'easy' ? '简单' : problem.difficulty === 'medium' ? '中等' : '困难'}</td>
+                        <td>未完成</td>
+                        <td><a href="detail.html?id=${problem.id}" class="btn primary">查看</a></td>
+                    </tr>
+                `).join('');
+            }
+
+            // 分页按钮事件
+            prevPageBtn.addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    loadProblems();
+                }
+            });
+
+            nextPageBtn.addEventListener('click', () => {
+                const totalPages = Math.ceil(filteredProblems.length / pageSize);
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    loadProblems();
+                }
+            });
+
+            // 筛选条件变化事件
+            chapterSelect.addEventListener('change', () => {
+                currentPage = 1;
+                loadProblems();
+            });
+
+            searchInput.addEventListener('input', () => {
+                currentPage = 1;
+                loadProblems();
+            });
+
+            difficultySelect.addEventListener('change', () => {
+                currentPage = 1;
+                loadProblems();
+            });
+
+            // 初始化加载
+            await loadProblems();
+        });
+    </script>
+</body>
+</html>

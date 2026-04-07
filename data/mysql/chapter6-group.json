@@ -1,0 +1,221 @@
+{
+  "chapter": "第6章：聚合函数与 GROUP BY",
+  "problems": [
+    {
+      "id": 51,
+      "title": "COUNT 统计行数",
+      "difficulty": "easy",
+      "description": "统计 students 表中的学生总数。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT, gender VARCHAR(10))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三', 20, '男')",
+        "INSERT INTO students VALUES (2, '李四', 21, '女')",
+        "INSERT INTO students VALUES (3, '王五', 19, '男')"
+      ],
+      "requirement": "使用 COUNT(*) 统计学生总数。",
+      "answer": "SELECT COUNT(*) AS 学生总数 FROM students;",
+      "expectedResult": "返回学生总数",
+      "judgeRule": "检查是否返回了正确的统计结果"
+    },
+    {
+      "id": 52,
+      "title": "SUM 求和",
+      "difficulty": "easy",
+      "description": "计算 orders 表中所有订单的总金额。",
+      "tables": [
+        {
+          "name": "orders",
+          "definition": "CREATE TABLE orders (id INT PRIMARY KEY, amount DECIMAL(10,2))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO orders VALUES (1, 100.00)",
+        "INSERT INTO orders VALUES (2, 200.00)",
+        "INSERT INTO orders VALUES (3, 150.00)"
+      ],
+      "requirement": "使用 SUM(amount) 计算总金额。",
+      "answer": "SELECT SUM(amount) AS 总金额 FROM orders;",
+      "expectedResult": "返回总金额",
+      "judgeRule": "检查是否返回了正确的求和结果"
+    },
+    {
+      "id": 53,
+      "title": "AVG 平均值",
+      "difficulty": "easy",
+      "description": "计算 students 表中学生的平均年龄。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT, gender VARCHAR(10))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三', 20, '男')",
+        "INSERT INTO students VALUES (2, '李四', 22, '女')",
+        "INSERT INTO students VALUES (3, '王五', 18, '男')"
+      ],
+      "requirement": "使用 AVG(age) 计算平均年龄。",
+      "answer": "SELECT AVG(age) AS 平均年龄 FROM students;",
+      "expectedResult": "返回平均年龄",
+      "judgeRule": "检查是否返回了正确的平均值"
+    },
+    {
+      "id": 54,
+      "title": "MAX 最大值",
+      "difficulty": "easy",
+      "description": "查找 students 表中年龄最大的学生的年龄。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT, gender VARCHAR(10))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三', 20, '男')",
+        "INSERT INTO students VALUES (2, '李四', 22, '女')",
+        "INSERT INTO students VALUES (3, '王五', 18, '男')"
+      ],
+      "requirement": "使用 MAX(age) 查找最大年龄。",
+      "answer": "SELECT MAX(age) AS 最大年龄 FROM students;",
+      "expectedResult": "返回最大年龄",
+      "judgeRule": "检查是否返回了正确的最大值"
+    },
+    {
+      "id": 55,
+      "title": "MIN 最小值",
+      "difficulty": "easy",
+      "description": "查找 students 表中年龄最小的学生的年龄。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT, gender VARCHAR(10))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三', 20, '男')",
+        "INSERT INTO students VALUES (2, '李四', 22, '女')",
+        "INSERT INTO students VALUES (3, '王五', 18, '男')"
+      ],
+      "requirement": "使用 MIN(age) 查找最小年龄。",
+      "answer": "SELECT MIN(age) AS 最小年龄 FROM students;",
+      "expectedResult": "返回最小年龄",
+      "judgeRule": "检查是否返回了正确的最小值"
+    },
+    {
+      "id": 56,
+      "title": "GROUP BY 分组统计",
+      "difficulty": "medium",
+      "description": "按性别分组，统计每组的学生人数。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT, gender VARCHAR(10))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三', 20, '男')",
+        "INSERT INTO students VALUES (2, '李四', 21, '女')",
+        "INSERT INTO students VALUES (3, '王五', 19, '男')",
+        "INSERT INTO students VALUES (4, '赵六', 22, '女')"
+      ],
+      "requirement": "使用 GROUP BY gender 分组统计。",
+      "answer": "SELECT gender, COUNT(*) AS 人数 FROM students GROUP BY gender;",
+      "expectedResult": "按性别分组统计人数",
+      "judgeRule": "检查是否正确分组统计"
+    },
+    {
+      "id": 57,
+      "title": "GROUP BY 多字段分组",
+      "difficulty": "medium",
+      "description": "按班级和性别分组，统计每组的学生人数。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), class VARCHAR(20), gender VARCHAR(10))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三', '一班', '男')",
+        "INSERT INTO students VALUES (2, '李四', '一班', '女')",
+        "INSERT INTO students VALUES (3, '王五', '二班', '男')",
+        "INSERT INTO students VALUES (4, '赵六', '二班', '女')"
+      ],
+      "requirement": "使用 GROUP BY class, gender 多字段分组。",
+      "answer": "SELECT class, gender, COUNT(*) AS 人数 FROM students GROUP BY class, gender;",
+      "expectedResult": "按班级和性别分组统计",
+      "judgeRule": "检查是否正确多字段分组"
+    },
+    {
+      "id": 58,
+      "title": "HAVING 筛选分组",
+      "difficulty": "medium",
+      "description": "按性别分组，统计人数大于1的组。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT, gender VARCHAR(10))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三', 20, '男')",
+        "INSERT INTO students VALUES (2, '李四', 21, '女')",
+        "INSERT INTO students VALUES (3, '王五', 19, '男')",
+        "INSERT INTO students VALUES (4, '赵六', 22, '男')"
+      ],
+      "requirement": "使用 HAVING COUNT(*) > 1 筛选分组。",
+      "answer": "SELECT gender, COUNT(*) AS 人数 FROM students GROUP BY gender HAVING COUNT(*) > 1;",
+      "expectedResult": "返回人数大于1的组",
+      "judgeRule": "检查是否正确筛选分组"
+    },
+    {
+      "id": 59,
+      "title": "聚合函数组合使用",
+      "difficulty": "hard",
+      "description": "按性别分组，统计每组的人数、平均年龄、最大年龄和最小年龄。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT, gender VARCHAR(10))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三', 20, '男')",
+        "INSERT INTO students VALUES (2, '李四', 21, '女')",
+        "INSERT INTO students VALUES (3, '王五', 19, '男')",
+        "INSERT INTO students VALUES (4, '赵六', 22, '女')"
+      ],
+      "requirement": "组合使用 COUNT、AVG、MAX、MIN 聚合函数。",
+      "answer": "SELECT gender, COUNT(*) AS 人数, AVG(age) AS 平均年龄, MAX(age) AS 最大年龄, MIN(age) AS 最小年龄 FROM students GROUP BY gender;",
+      "expectedResult": "返回各组的多个统计信息",
+      "judgeRule": "检查是否正确组合使用聚合函数"
+    },
+    {
+      "id": 60,
+      "title": "复杂分组查询",
+      "difficulty": "hard",
+      "description": "查询 orders 表，按用户分组，统计订单数大于1且总金额大于200的用户。",
+      "tables": [
+        {
+          "name": "orders",
+          "definition": "CREATE TABLE orders (id INT PRIMARY KEY, user_id INT, amount DECIMAL(10,2))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO orders VALUES (1, 1, 100.00)",
+        "INSERT INTO orders VALUES (2, 1, 150.00)",
+        "INSERT INTO orders VALUES (3, 2, 200.00)",
+        "INSERT INTO orders VALUES (4, 2, 50.00)",
+        "INSERT INTO orders VALUES (5, 3, 300.00)"
+      ],
+      "requirement": "结合 GROUP BY 和 HAVING，筛选订单数>1且总金额>200的用户。",
+      "answer": "SELECT user_id, COUNT(*) AS 订单数, SUM(amount) AS 总金额 FROM orders GROUP BY user_id HAVING COUNT(*) > 1 AND SUM(amount) > 200;",
+      "expectedResult": "返回符合条件的用户",
+      "judgeRule": "检查是否正确筛选分组"
+    }
+  ]
+}

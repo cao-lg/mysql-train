@@ -1,0 +1,274 @@
+{
+  "chapter": "第7章：多表连接",
+  "problems": [
+    {
+      "id": 61,
+      "title": "内连接查询",
+      "difficulty": "easy",
+      "description": "查询学生及其班级信息，使用内连接。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), class_id INT)"
+        },
+        {
+          "name": "classes",
+          "definition": "CREATE TABLE classes (id INT PRIMARY KEY, name VARCHAR(50))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO classes VALUES (1, '一班')",
+        "INSERT INTO classes VALUES (2, '二班')",
+        "INSERT INTO students VALUES (1, '张三', 1)",
+        "INSERT INTO students VALUES (2, '李四', 2)",
+        "INSERT INTO students VALUES (3, '王五', 1)"
+      ],
+      "requirement": "使用 INNER JOIN 连接 students 和 classes 表。",
+      "answer": "SELECT students.name, classes.name AS 班级 FROM students INNER JOIN classes ON students.class_id = classes.id;",
+      "expectedResult": "返回学生及其班级信息",
+      "judgeRule": "检查是否正确使用内连接"
+    },
+    {
+      "id": 62,
+      "title": "左连接查询",
+      "difficulty": "medium",
+      "description": "查询所有学生及其班级信息，没有班级的学生也要显示。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), class_id INT)"
+        },
+        {
+          "name": "classes",
+          "definition": "CREATE TABLE classes (id INT PRIMARY KEY, name VARCHAR(50))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO classes VALUES (1, '一班')",
+        "INSERT INTO students VALUES (1, '张三', 1)",
+        "INSERT INTO students VALUES (2, '李四', NULL)",
+        "INSERT INTO students VALUES (3, '王五', 1)"
+      ],
+      "requirement": "使用 LEFT JOIN 连接 students 和 classes 表。",
+      "answer": "SELECT students.name, classes.name AS 班级 FROM students LEFT JOIN classes ON students.class_id = classes.id;",
+      "expectedResult": "返回所有学生及其班级信息",
+      "judgeRule": "检查是否正确使用左连接"
+    },
+    {
+      "id": 63,
+      "title": "右连接查询",
+      "difficulty": "medium",
+      "description": "查询所有班级及其学生信息，没有学生的班级也要显示。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), class_id INT)"
+        },
+        {
+          "name": "classes",
+          "definition": "CREATE TABLE classes (id INT PRIMARY KEY, name VARCHAR(50))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO classes VALUES (1, '一班')",
+        "INSERT INTO classes VALUES (2, '二班')",
+        "INSERT INTO students VALUES (1, '张三', 1)",
+        "INSERT INTO students VALUES (2, '李四', 1)"
+      ],
+      "requirement": "使用 RIGHT JOIN 连接 students 和 classes 表。",
+      "answer": "SELECT students.name, classes.name AS 班级 FROM students RIGHT JOIN classes ON students.class_id = classes.id;",
+      "expectedResult": "返回所有班级及其学生信息",
+      "judgeRule": "检查是否正确使用右连接"
+    },
+    {
+      "id": 64,
+      "title": "多表连接",
+      "difficulty": "medium",
+      "description": "查询学生、班级和课程信息，连接三张表。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), class_id INT)"
+        },
+        {
+          "name": "classes",
+          "definition": "CREATE TABLE classes (id INT PRIMARY KEY, name VARCHAR(50))"
+        },
+        {
+          "name": "courses",
+          "definition": "CREATE TABLE courses (id INT PRIMARY KEY, student_id INT, course_name VARCHAR(50))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO classes VALUES (1, '一班')",
+        "INSERT INTO students VALUES (1, '张三', 1)",
+        "INSERT INTO courses VALUES (1, 1, '数学')",
+        "INSERT INTO courses VALUES (2, 1, '英语')"
+      ],
+      "requirement": "连接 students、classes 和 courses 三张表。",
+      "answer": "SELECT students.name AS 学生, classes.name AS 班级, courses.course_name AS 课程 FROM students INNER JOIN classes ON students.class_id = classes.id INNER JOIN courses ON students.id = courses.student_id;",
+      "expectedResult": "返回学生、班级和课程信息",
+      "judgeRule": "检查是否正确连接三张表"
+    },
+    {
+      "id": 65,
+      "title": "自连接查询",
+      "difficulty": "medium",
+      "description": "查询员工及其上级信息，使用自连接。",
+      "tables": [
+        {
+          "name": "employees",
+          "definition": "CREATE TABLE employees (id INT PRIMARY KEY, name VARCHAR(50), manager_id INT)"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO employees VALUES (1, '张三', NULL)",
+        "INSERT INTO employees VALUES (2, '李四', 1)",
+        "INSERT INTO employees VALUES (3, '王五', 1)"
+      ],
+      "requirement": "使用自连接查询员工及其上级。",
+      "answer": "SELECT e.name AS 员工, m.name AS 上级 FROM employees e LEFT JOIN employees m ON e.manager_id = m.id;",
+      "expectedResult": "返回员工及其上级信息",
+      "judgeRule": "检查是否正确使用自连接"
+    },
+    {
+      "id": 66,
+      "title": "连接查询带条件",
+      "difficulty": "medium",
+      "description": "查询一班的所有学生及其班级信息。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), class_id INT)"
+        },
+        {
+          "name": "classes",
+          "definition": "CREATE TABLE classes (id INT PRIMARY KEY, name VARCHAR(50))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO classes VALUES (1, '一班')",
+        "INSERT INTO classes VALUES (2, '二班')",
+        "INSERT INTO students VALUES (1, '张三', 1)",
+        "INSERT INTO students VALUES (2, '李四', 2)",
+        "INSERT INTO students VALUES (3, '王五', 1)"
+      ],
+      "requirement": "连接查询并添加 WHERE 条件。",
+      "answer": "SELECT students.name, classes.name AS 班级 FROM students INNER JOIN classes ON students.class_id = classes.id WHERE classes.name = '一班';",
+      "expectedResult": "返回一班的学生信息",
+      "judgeRule": "检查是否正确使用连接查询带条件"
+    },
+    {
+      "id": 67,
+      "title": "连接查询带聚合",
+      "difficulty": "hard",
+      "description": "查询每个班级的学生人数。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), class_id INT)"
+        },
+        {
+          "name": "classes",
+          "definition": "CREATE TABLE classes (id INT PRIMARY KEY, name VARCHAR(50))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO classes VALUES (1, '一班')",
+        "INSERT INTO classes VALUES (2, '二班')",
+        "INSERT INTO students VALUES (1, '张三', 1)",
+        "INSERT INTO students VALUES (2, '李四', 2)",
+        "INSERT INTO students VALUES (3, '王五', 1)",
+        "INSERT INTO students VALUES (4, '赵六', 2)"
+      ],
+      "requirement": "连接查询并使用 GROUP BY 统计。",
+      "answer": "SELECT classes.name AS 班级, COUNT(students.id) AS 学生人数 FROM classes LEFT JOIN students ON classes.id = students.class_id GROUP BY classes.id, classes.name;",
+      "expectedResult": "返回每个班级的学生人数",
+      "judgeRule": "检查是否正确使用连接查询带聚合"
+    },
+    {
+      "id": 68,
+      "title": "USING 关键字",
+      "difficulty": "medium",
+      "description": "使用 USING 关键字连接两张表。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), class_id INT)"
+        },
+        {
+          "name": "classes",
+          "definition": "CREATE TABLE classes (id INT PRIMARY KEY, name VARCHAR(50))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO classes VALUES (1, '一班')",
+        "INSERT INTO students VALUES (1, '张三', 1)"
+      ],
+      "requirement": "使用 USING(class_id) 连接两张表（需要调整表结构）。",
+      "answer": "SELECT students.name, classes.name AS 班级 FROM students INNER JOIN classes ON students.class_id = classes.id;",
+      "expectedResult": "返回学生及其班级信息",
+      "judgeRule": "检查是否正确连接表"
+    },
+    {
+      "id": 69,
+      "title": "NATURAL JOIN",
+      "difficulty": "hard",
+      "description": "使用自然连接查询学生和班级信息。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), class_id INT)"
+        },
+        {
+          "name": "classes",
+          "definition": "CREATE TABLE classes (id INT PRIMARY KEY, name VARCHAR(50))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO classes VALUES (1, '一班')",
+        "INSERT INTO students VALUES (1, '张三', 1)"
+      ],
+      "requirement": "使用 NATURAL JOIN 连接（需要调整表结构使其有相同列名）。",
+      "answer": "SELECT students.name, classes.name AS 班级 FROM students INNER JOIN classes ON students.class_id = classes.id;",
+      "expectedResult": "返回学生及其班级信息",
+      "judgeRule": "检查是否正确连接表"
+    },
+    {
+      "id": 70,
+      "title": "复杂连接查询",
+      "difficulty": "hard",
+      "description": "查询学生、班级、课程和成绩信息，连接四张表，并筛选成绩大于80的记录。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), class_id INT)"
+        },
+        {
+          "name": "classes",
+          "definition": "CREATE TABLE classes (id INT PRIMARY KEY, name VARCHAR(50))"
+        },
+        {
+          "name": "courses",
+          "definition": "CREATE TABLE courses (id INT PRIMARY KEY, name VARCHAR(50))"
+        },
+        {
+          "name": "scores",
+          "definition": "CREATE TABLE scores (id INT PRIMARY KEY, student_id INT, course_id INT, score INT)"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO classes VALUES (1, '一班')",
+        "INSERT INTO students VALUES (1, '张三', 1)",
+        "INSERT INTO courses VALUES (1, '数学')",
+        "INSERT INTO courses VALUES (2, '英语')",
+        "INSERT INTO scores VALUES (1, 1, 1, 85)",
+        "INSERT INTO scores VALUES (2, 1, 2, 75)"
+      ],
+      "requirement": "连接四张表并筛选成绩>80。",
+      "answer": "SELECT students.name AS 学生, classes.name AS 班级, courses.name AS 课程, scores.score AS 成绩 FROM students INNER JOIN classes ON students.class_id = classes.id INNER JOIN scores ON students.id = scores.student_id INNER JOIN courses ON scores.course_id = courses.id WHERE scores.score > 80;",
+      "expectedResult": "返回成绩大于80的记录",
+      "judgeRule": "检查是否正确连接四张表并筛选"
+    }
+  ]
+}

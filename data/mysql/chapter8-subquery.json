@@ -1,0 +1,259 @@
+{
+  "chapter": "第8章：子查询",
+  "problems": [
+    {
+      "id": 71,
+      "title": "IN 子查询",
+      "difficulty": "easy",
+      "description": "查询选修了数学课程的学生。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50))"
+        },
+        {
+          "name": "courses",
+          "definition": "CREATE TABLE courses (id INT PRIMARY KEY, name VARCHAR(50))"
+        },
+        {
+          "name": "enrollments",
+          "definition": "CREATE TABLE enrollments (student_id INT, course_id INT)"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三')",
+        "INSERT INTO students VALUES (2, '李四')",
+        "INSERT INTO courses VALUES (1, '数学')",
+        "INSERT INTO courses VALUES (2, '英语')",
+        "INSERT INTO enrollments VALUES (1, 1)",
+        "INSERT INTO enrollments VALUES (2, 2)"
+      ],
+      "requirement": "使用 IN 子查询。",
+      "answer": "SELECT * FROM students WHERE id IN (SELECT student_id FROM enrollments WHERE course_id = (SELECT id FROM courses WHERE name = '数学'));",
+      "expectedResult": "返回选修了数学的学生",
+      "judgeRule": "检查是否正确使用 IN 子查询"
+    },
+    {
+      "id": 72,
+      "title": "EXISTS 子查询",
+      "difficulty": "medium",
+      "description": "查询有选课记录的学生。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50))"
+        },
+        {
+          "name": "enrollments",
+          "definition": "CREATE TABLE enrollments (student_id INT, course_id INT)"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三')",
+        "INSERT INTO students VALUES (2, '李四')",
+        "INSERT INTO students VALUES (3, '王五')",
+        "INSERT INTO enrollments VALUES (1, 1)",
+        "INSERT INTO enrollments VALUES (2, 2)"
+      ],
+      "requirement": "使用 EXISTS 子查询。",
+      "answer": "SELECT * FROM students s WHERE EXISTS (SELECT 1 FROM enrollments e WHERE e.student_id = s.id);",
+      "expectedResult": "返回有选课记录的学生",
+      "judgeRule": "检查是否正确使用 EXISTS 子查询"
+    },
+    {
+      "id": 73,
+      "title": "比较运算符子查询",
+      "difficulty": "medium",
+      "description": "查询年龄大于平均年龄的学生。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT)"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三', 20)",
+        "INSERT INTO students VALUES (2, '李四', 22)",
+        "INSERT INTO students VALUES (3, '王五', 18)"
+      ],
+      "requirement": "使用 > 比较运算符和子查询。",
+      "answer": "SELECT * FROM students WHERE age > (SELECT AVG(age) FROM students);",
+      "expectedResult": "返回年龄大于平均年龄的学生",
+      "judgeRule": "检查是否正确使用比较运算符子查询"
+    },
+    {
+      "id": 74,
+      "title": "ALL 子查询",
+      "difficulty": "hard",
+      "description": "查询年龄比所有女生都大的男生。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT, gender VARCHAR(10))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三', 20, '男')",
+        "INSERT INTO students VALUES (2, '李四', 18, '女')",
+        "INSERT INTO students VALUES (3, '王五', 19, '女')",
+        "INSERT INTO students VALUES (4, '赵六', 21, '男')"
+      ],
+      "requirement": "使用 ALL 子查询。",
+      "answer": "SELECT * FROM students WHERE gender = '男' AND age > ALL (SELECT age FROM students WHERE gender = '女');",
+      "expectedResult": "返回年龄比所有女生都大的男生",
+      "judgeRule": "检查是否正确使用 ALL 子查询"
+    },
+    {
+      "id": 75,
+      "title": "ANY 子查询",
+      "difficulty": "hard",
+      "description": "查询年龄比任意一个女生大的男生。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT, gender VARCHAR(10))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三', 19, '男')",
+        "INSERT INTO students VALUES (2, '李四', 18, '女')",
+        "INSERT INTO students VALUES (3, '王五', 20, '女')",
+        "INSERT INTO students VALUES (4, '赵六', 17, '男')"
+      ],
+      "requirement": "使用 ANY 子查询。",
+      "answer": "SELECT * FROM students WHERE gender = '男' AND age > ANY (SELECT age FROM students WHERE gender = '女');",
+      "expectedResult": "返回年龄比任意一个女生大的男生",
+      "judgeRule": "检查是否正确使用 ANY 子查询"
+    },
+    {
+      "id": 76,
+      "title": "FROM 子查询",
+      "difficulty": "medium",
+      "description": "查询每个班级的平均年龄，然后查询平均年龄大于20的班级。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT, class_id INT)"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三', 20, 1)",
+        "INSERT INTO students VALUES (2, '李四', 22, 1)",
+        "INSERT INTO students VALUES (3, '王五', 19, 2)",
+        "INSERT INTO students VALUES (4, '赵六', 21, 2)"
+      ],
+      "requirement": "使用 FROM 子查询（派生表）。",
+      "answer": "SELECT * FROM (SELECT class_id, AVG(age) AS avg_age FROM students GROUP BY class_id) AS class_avg WHERE avg_age > 20;",
+      "expectedResult": "返回平均年龄大于20的班级",
+      "judgeRule": "检查是否正确使用 FROM 子查询"
+    },
+    {
+      "id": 77,
+      "title": "SELECT 子查询",
+      "difficulty": "medium",
+      "description": "查询学生信息，并显示其所在班级名称（使用 SELECT 子查询）。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), class_id INT)"
+        },
+        {
+          "name": "classes",
+          "definition": "CREATE TABLE classes (id INT PRIMARY KEY, name VARCHAR(50))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO classes VALUES (1, '一班')",
+        "INSERT INTO classes VALUES (2, '二班')",
+        "INSERT INTO students VALUES (1, '张三', 1)",
+        "INSERT INTO students VALUES (2, '李四', 2)"
+      ],
+      "requirement": "在 SELECT 子句中使用子查询。",
+      "answer": "SELECT id, name, (SELECT name FROM classes WHERE id = students.class_id) AS class_name FROM students;",
+      "expectedResult": "返回学生信息及班级名称",
+      "judgeRule": "检查是否正确使用 SELECT 子查询"
+    },
+    {
+      "id": 78,
+      "title": "嵌套子查询",
+      "difficulty": "hard",
+      "description": "查询选修了所有课程的学生。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50))"
+        },
+        {
+          "name": "courses",
+          "definition": "CREATE TABLE courses (id INT PRIMARY KEY, name VARCHAR(50))"
+        },
+        {
+          "name": "enrollments",
+          "definition": "CREATE TABLE enrollments (student_id INT, course_id INT)"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三')",
+        "INSERT INTO students VALUES (2, '李四')",
+        "INSERT INTO courses VALUES (1, '数学')",
+        "INSERT INTO courses VALUES (2, '英语')",
+        "INSERT INTO enrollments VALUES (1, 1)",
+        "INSERT INTO enrollments VALUES (1, 2)",
+        "INSERT INTO enrollments VALUES (2, 1)"
+      ],
+      "requirement": "使用嵌套 NOT EXISTS 子查询。",
+      "answer": "SELECT * FROM students s WHERE NOT EXISTS (SELECT * FROM courses c WHERE NOT EXISTS (SELECT * FROM enrollments e WHERE e.student_id = s.id AND e.course_id = c.id));",
+      "expectedResult": "返回选修了所有课程的学生",
+      "judgeRule": "检查是否正确使用嵌套子查询"
+    },
+    {
+      "id": 79,
+      "title": "子查询与 JOIN 结合",
+      "difficulty": "hard",
+      "description": "查询学生及其最高成绩的课程信息。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50))"
+        },
+        {
+          "name": "scores",
+          "definition": "CREATE TABLE scores (student_id INT, course_name VARCHAR(50), score INT)"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三')",
+        "INSERT INTO students VALUES (2, '李四')",
+        "INSERT INTO scores VALUES (1, '数学', 85)",
+        "INSERT INTO scores VALUES (1, '英语', 90)",
+        "INSERT INTO scores VALUES (2, '数学', 80)"
+      ],
+      "requirement": "结合子查询和 JOIN。",
+      "answer": "SELECT s.name, sc.course_name, sc.score FROM students s INNER JOIN scores sc ON s.id = sc.student_id INNER JOIN (SELECT student_id, MAX(score) AS max_score FROM scores GROUP BY student_id) AS max_sc ON s.id = max_sc.student_id AND sc.score = max_sc.max_score;",
+      "expectedResult": "返回学生及其最高成绩的课程",
+      "judgeRule": "检查是否正确结合子查询和 JOIN"
+    },
+    {
+      "id": 80,
+      "title": "复杂子查询",
+      "difficulty": "hard",
+      "description": "查询每个班级中年龄最大的学生。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT, class_id INT)"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三', 20, 1)",
+        "INSERT INTO students VALUES (2, '李四', 22, 1)",
+        "INSERT INTO students VALUES (3, '王五', 19, 2)",
+        "INSERT INTO students VALUES (4, '赵六', 21, 2)"
+      ],
+      "requirement": "使用子查询找出每个班级的最大年龄，然后关联查询。",
+      "answer": "SELECT s.* FROM students s INNER JOIN (SELECT class_id, MAX(age) AS max_age FROM students GROUP BY class_id) AS class_max ON s.class_id = class_max.class_id AND s.age = class_max.max_age;",
+      "expectedResult": "返回每个班级中年龄最大的学生",
+      "judgeRule": "检查是否正确使用复杂子查询"
+    }
+  ]
+}

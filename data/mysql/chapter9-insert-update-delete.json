@@ -1,0 +1,195 @@
+{
+  "chapter": "第9章：增删改",
+  "problems": [
+    {
+      "id": 81,
+      "title": "插入单条记录",
+      "difficulty": "easy",
+      "description": "向 students 表插入一条学生记录。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT)"
+        }
+      ],
+      "initialData": [],
+      "requirement": "使用 INSERT INTO 插入一条记录。",
+      "answer": "INSERT INTO students VALUES (1, '张三', 20);",
+      "expectedResult": "记录插入成功",
+      "judgeRule": "检查记录是否插入成功"
+    },
+    {
+      "id": 82,
+      "title": "插入指定列",
+      "difficulty": "easy",
+      "description": "向 students 表插入一条记录，只指定 id 和 name 列。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT DEFAULT 18)"
+        }
+      ],
+      "initialData": [],
+      "requirement": "使用 INSERT INTO (列名) VALUES (...)。",
+      "answer": "INSERT INTO students (id, name) VALUES (1, '张三');",
+      "expectedResult": "记录插入成功",
+      "judgeRule": "检查记录是否插入成功"
+    },
+    {
+      "id": 83,
+      "title": "批量插入",
+      "difficulty": "easy",
+      "description": "向 students 表批量插入多条记录。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT)"
+        }
+      ],
+      "initialData": [],
+      "requirement": "使用一条 INSERT 语句插入多条记录。",
+      "answer": "INSERT INTO students VALUES (1, '张三', 20), (2, '李四', 21), (3, '王五', 19);",
+      "expectedResult": "多条记录插入成功",
+      "judgeRule": "检查多条记录是否插入成功"
+    },
+    {
+      "id": 84,
+      "title": "更新单条记录",
+      "difficulty": "easy",
+      "description": "将 students 表中 id 为 1 的学生的年龄更新为 21。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT)"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三', 20)"
+      ],
+      "requirement": "使用 UPDATE 更新记录。",
+      "answer": "UPDATE students SET age = 21 WHERE id = 1;",
+      "expectedResult": "记录更新成功",
+      "judgeRule": "检查记录是否更新成功"
+    },
+    {
+      "id": 85,
+      "title": "更新多个字段",
+      "difficulty": "easy",
+      "description": "将 students 表中 id 为 1 的学生的姓名和年龄都更新。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT)"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三', 20)"
+      ],
+      "requirement": "使用 UPDATE 同时更新多个字段。",
+      "answer": "UPDATE students SET name = '张三丰', age = 22 WHERE id = 1;",
+      "expectedResult": "多个字段更新成功",
+      "judgeRule": "检查多个字段是否更新成功"
+    },
+    {
+      "id": 86,
+      "title": "批量更新",
+      "difficulty": "medium",
+      "description": "将 students 表中所有学生的年龄加 1。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT)"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三', 20)",
+        "INSERT INTO students VALUES (2, '李四', 21)"
+      ],
+      "requirement": "使用 UPDATE 批量更新（不加 WHERE 条件）。",
+      "answer": "UPDATE students SET age = age + 1;",
+      "expectedResult": "所有学生的年龄加1",
+      "judgeRule": "检查是否批量更新成功"
+    },
+    {
+      "id": 87,
+      "title": "条件更新",
+      "difficulty": "medium",
+      "description": "将 students 表中年龄大于 20 的学生的年龄减 1。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT)"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三', 20)",
+        "INSERT INTO students VALUES (2, '李四', 22)",
+        "INSERT INTO students VALUES (3, '王五', 19)"
+      ],
+      "requirement": "使用 UPDATE 和 WHERE 条件更新。",
+      "answer": "UPDATE students SET age = age - 1 WHERE age > 20;",
+      "expectedResult": "年龄大于20的学生年龄减1",
+      "judgeRule": "检查是否条件更新成功"
+    },
+    {
+      "id": 88,
+      "title": "删除单条记录",
+      "difficulty": "easy",
+      "description": "删除 students 表中 id 为 1 的学生。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT)"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三', 20)"
+      ],
+      "requirement": "使用 DELETE 删除记录。",
+      "answer": "DELETE FROM students WHERE id = 1;",
+      "expectedResult": "记录删除成功",
+      "judgeRule": "检查记录是否删除成功"
+    },
+    {
+      "id": 89,
+      "title": "条件删除",
+      "difficulty": "medium",
+      "description": "删除 students 表中年龄小于 18 的学生。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT)"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三', 20)",
+        "INSERT INTO students VALUES (2, '李四', 17)",
+        "INSERT INTO students VALUES (3, '王五', 19)"
+      ],
+      "requirement": "使用 DELETE 和 WHERE 条件删除。",
+      "answer": "DELETE FROM students WHERE age < 18;",
+      "expectedResult": "年龄小于18的学生被删除",
+      "judgeRule": "检查是否条件删除成功"
+    },
+    {
+      "id": 90,
+      "title": "清空表",
+      "difficulty": "medium",
+      "description": "清空 students 表中的所有记录。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT)"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三', 20)",
+        "INSERT INTO students VALUES (2, '李四', 21)"
+      ],
+      "requirement": "使用 TRUNCATE 或 DELETE 清空表。",
+      "answer": "TRUNCATE TABLE students;",
+      "expectedResult": "表被清空",
+      "judgeRule": "检查表是否被清空"
+    }
+  ]
+}

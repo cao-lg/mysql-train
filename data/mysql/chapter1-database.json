@@ -1,0 +1,125 @@
+{
+  "chapter": "第1章：数据库操作",
+  "problems": [
+    {
+      "id": 1,
+      "title": "创建名为 student 的数据库",
+      "difficulty": "easy",
+      "description": "创建一个名为 student 的数据库。",
+      "tables": [],
+      "initialData": [],
+      "requirement": "创建名为 student 的数据库。",
+      "answer": "CREATE DATABASE student;",
+      "expectedResult": "数据库创建成功",
+      "judgeRule": "检查是否存在名为 student 的数据库"
+    },
+    {
+      "id": 2,
+      "title": "删除 test 数据库",
+      "difficulty": "easy",
+      "description": "删除名为 test 的数据库。",
+      "tables": [],
+      "initialData": [],
+      "requirement": "删除名为 test 的数据库。",
+      "answer": "DROP DATABASE IF EXISTS test;",
+      "expectedResult": "数据库删除成功",
+      "judgeRule": "检查 test 数据库是否不存在"
+    },
+    {
+      "id": 3,
+      "title": "查看所有数据库",
+      "difficulty": "easy",
+      "description": "查看当前 MySQL 服务器中的所有数据库。",
+      "tables": [],
+      "initialData": [],
+      "requirement": "查看所有数据库。",
+      "answer": "SHOW DATABASES;",
+      "expectedResult": "显示所有数据库列表",
+      "judgeRule": "检查是否返回了数据库列表"
+    },
+    {
+      "id": 4,
+      "title": "使用指定数据库",
+      "difficulty": "easy",
+      "description": "使用名为 student 的数据库。",
+      "tables": [],
+      "initialData": [],
+      "requirement": "使用名为 student 的数据库。",
+      "answer": "USE student;",
+      "expectedResult": "切换到 student 数据库",
+      "judgeRule": "检查当前数据库是否为 student"
+    },
+    {
+      "id": 5,
+      "title": "创建数据库并指定字符集 utf8mb4",
+      "difficulty": "medium",
+      "description": "创建一个名为 test_db 的数据库，并指定字符集为 utf8mb4。",
+      "tables": [],
+      "initialData": [],
+      "requirement": "创建数据库并指定字符集 utf8mb4。",
+      "answer": "CREATE DATABASE test_db CHARACTER SET utf8mb4;",
+      "expectedResult": "数据库创建成功，字符集为 utf8mb4",
+      "judgeRule": "检查是否存在名为 test_db 的数据库，且字符集为 utf8mb4"
+    },
+    {
+      "id": 6,
+      "title": "数据库不存在则创建",
+      "difficulty": "medium",
+      "description": "创建一个名为 demo 的数据库，如果该数据库不存在。",
+      "tables": [],
+      "initialData": [],
+      "requirement": "数据库不存在则创建。",
+      "answer": "CREATE DATABASE IF NOT EXISTS demo;",
+      "expectedResult": "数据库创建成功（如果不存在）",
+      "judgeRule": "检查是否存在名为 demo 的数据库"
+    },
+    {
+      "id": 7,
+      "title": "修改数据库字符集",
+      "difficulty": "medium",
+      "description": "将名为 test_db 的数据库字符集修改为 utf8mb4。",
+      "tables": [],
+      "initialData": [],
+      "requirement": "修改数据库字符集。",
+      "answer": "ALTER DATABASE test_db CHARACTER SET utf8mb4;",
+      "expectedResult": "数据库字符集修改成功",
+      "judgeRule": "检查 test_db 数据库的字符集是否为 utf8mb4"
+    },
+    {
+      "id": 8,
+      "title": "查询当前正在使用的数据库",
+      "difficulty": "easy",
+      "description": "查询当前正在使用的数据库。",
+      "tables": [],
+      "initialData": [],
+      "requirement": "查询当前正在使用的数据库。",
+      "answer": "SELECT DATABASE();",
+      "expectedResult": "显示当前数据库名称",
+      "judgeRule": "检查是否返回了当前数据库名称"
+    },
+    {
+      "id": 9,
+      "title": "查看数据库创建语句",
+      "difficulty": "medium",
+      "description": "查看名为 student 的数据库的创建语句。",
+      "tables": [],
+      "initialData": [],
+      "requirement": "查看数据库创建语句。",
+      "answer": "SHOW CREATE DATABASE student;",
+      "expectedResult": "显示 student 数据库的创建语句",
+      "judgeRule": "检查是否返回了 student 数据库的创建语句"
+    },
+    {
+      "id": 10,
+      "title": "切换数据库并执行查询",
+      "difficulty": "medium",
+      "description": "切换到 student 数据库，并查询当前数据库名称。",
+      "tables": [],
+      "initialData": [],
+      "requirement": "切换数据库并执行查询。",
+      "answer": "USE student; SELECT DATABASE();",
+      "expectedResult": "切换到 student 数据库并显示当前数据库名称",
+      "judgeRule": "检查是否成功切换到 student 数据库并返回了正确的数据库名称"
+    }
+  ]
+}

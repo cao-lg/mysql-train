@@ -1,0 +1,208 @@
+{
+  "chapter": "第10章：视图",
+  "problems": [
+    {
+      "id": 91,
+      "title": "创建简单视图",
+      "difficulty": "easy",
+      "description": "创建一个视图，显示学生的姓名和年龄。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT, gender VARCHAR(10))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三', 20, '男')"
+      ],
+      "requirement": "使用 CREATE VIEW 创建视图。",
+      "answer": "CREATE VIEW student_view AS SELECT name, age FROM students;",
+      "expectedResult": "视图创建成功",
+      "judgeRule": "检查视图是否创建成功"
+    },
+    {
+      "id": 92,
+      "title": "查询视图",
+      "difficulty": "easy",
+      "description": "查询刚才创建的 student_view 视图。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT, gender VARCHAR(10))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三', 20, '男')",
+        "INSERT INTO students VALUES (2, '李四', 21, '女')"
+      ],
+      "requirement": "使用 SELECT 查询视图。",
+      "answer": "SELECT * FROM student_view;",
+      "expectedResult": "返回视图数据",
+      "judgeRule": "检查是否能查询视图"
+    },
+    {
+      "id": 93,
+      "title": "创建带条件的视图",
+      "difficulty": "medium",
+      "description": "创建一个视图，只显示男生的信息。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT, gender VARCHAR(10))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三', 20, '男')",
+        "INSERT INTO students VALUES (2, '李四', 21, '女')"
+      ],
+      "requirement": "创建视图时使用 WHERE 条件。",
+      "answer": "CREATE VIEW male_student_view AS SELECT * FROM students WHERE gender = '男';",
+      "expectedResult": "带条件的视图创建成功",
+      "judgeRule": "检查带条件的视图是否创建成功"
+    },
+    {
+      "id": 94,
+      "title": "创建连接视图",
+      "difficulty": "medium",
+      "description": "创建一个视图，连接学生表和班级表，显示学生姓名和班级名称。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), class_id INT)"
+        },
+        {
+          "name": "classes",
+          "definition": "CREATE TABLE classes (id INT PRIMARY KEY, name VARCHAR(50))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO classes VALUES (1, '一班')",
+        "INSERT INTO students VALUES (1, '张三', 1)"
+      ],
+      "requirement": "创建视图时使用 JOIN 连接多张表。",
+      "answer": "CREATE VIEW student_class_view AS SELECT s.name AS student_name, c.name AS class_name FROM students s INNER JOIN classes c ON s.class_id = c.id;",
+      "expectedResult": "连接视图创建成功",
+      "judgeRule": "检查连接视图是否创建成功"
+    },
+    {
+      "id": 95,
+      "title": "创建聚合视图",
+      "difficulty": "medium",
+      "description": "创建一个视图，显示每个班级的学生人数。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), class_id INT)"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三', 1)",
+        "INSERT INTO students VALUES (2, '李四', 1)",
+        "INSERT INTO students VALUES (3, '王五', 2)"
+      ],
+      "requirement": "创建视图时使用 GROUP BY 和聚合函数。",
+      "answer": "CREATE VIEW class_student_count AS SELECT class_id, COUNT(*) AS student_count FROM students GROUP BY class_id;",
+      "expectedResult": "聚合视图创建成功",
+      "judgeRule": "检查聚合视图是否创建成功"
+    },
+    {
+      "id": 96,
+      "title": "修改视图",
+      "difficulty": "medium",
+      "description": "修改已存在的视图，添加更多字段。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT, gender VARCHAR(10))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三', 20, '男')"
+      ],
+      "requirement": "使用 CREATE OR REPLACE VIEW 修改视图。",
+      "answer": "CREATE OR REPLACE VIEW student_view AS SELECT id, name, age, gender FROM students;",
+      "expectedResult": "视图修改成功",
+      "judgeRule": "检查视图是否修改成功"
+    },
+    {
+      "id": 97,
+      "title": "查看视图定义",
+      "difficulty": "easy",
+      "description": "查看 student_view 视图的定义。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT)"
+        }
+      ],
+      "initialData": [],
+      "requirement": "使用 SHOW CREATE VIEW 查看视图定义。",
+      "answer": "SHOW CREATE VIEW student_view;",
+      "expectedResult": "显示视图定义",
+      "judgeRule": "检查是否能查看视图定义"
+    },
+    {
+      "id": 98,
+      "title": "删除视图",
+      "difficulty": "easy",
+      "description": "删除 student_view 视图。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT)"
+        }
+      ],
+      "initialData": [],
+      "requirement": "使用 DROP VIEW 删除视图。",
+      "answer": "DROP VIEW IF EXISTS student_view;",
+      "expectedResult": "视图删除成功",
+      "judgeRule": "检查视图是否删除成功"
+    },
+    {
+      "id": 99,
+      "title": "更新视图数据",
+      "difficulty": "hard",
+      "description": "通过视图更新基表数据（简单视图）。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT)"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三', 20)"
+      ],
+      "requirement": "通过 UPDATE 视图来更新基表数据。",
+      "answer": "UPDATE student_view SET age = 21 WHERE id = 1;",
+      "expectedResult": "基表数据更新成功",
+      "judgeRule": "检查是否通过视图更新了基表"
+    },
+    {
+      "id": 100,
+      "title": "创建复杂视图",
+      "difficulty": "hard",
+      "description": "创建一个复杂视图，包含连接、聚合和筛选。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), class_id INT, gender VARCHAR(10))"
+        },
+        {
+          "name": "classes",
+          "definition": "CREATE TABLE classes (id INT PRIMARY KEY, name VARCHAR(50))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO classes VALUES (1, '一班')",
+        "INSERT INTO classes VALUES (2, '二班')",
+        "INSERT INTO students VALUES (1, '张三', 1, '男')",
+        "INSERT INTO students VALUES (2, '李四', 1, '女')",
+        "INSERT INTO students VALUES (3, '王五', 2, '男')"
+      ],
+      "requirement": "创建一个包含 JOIN、GROUP BY、聚合函数和 WHERE 的复杂视图。",
+      "answer": "CREATE VIEW class_gender_stats AS SELECT c.name AS class_name, s.gender, COUNT(*) AS count FROM students s INNER JOIN classes c ON s.class_id = c.id GROUP BY c.id, c.name, s.gender;",
+      "expectedResult": "复杂视图创建成功",
+      "judgeRule": "检查复杂视图是否创建成功"
+    }
+  ]
+}

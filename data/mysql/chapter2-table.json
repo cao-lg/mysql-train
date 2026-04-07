@@ -1,0 +1,125 @@
+{
+  "chapter": "第2章：表结构管理",
+  "problems": [
+    {
+      "id": 11,
+      "title": "创建学生表",
+      "difficulty": "easy",
+      "description": "创建一个名为 students 的表，包含 id（主键，自增）、name（姓名）、age（年龄）、gender（性别）字段。",
+      "tables": [],
+      "initialData": [],
+      "requirement": "创建 students 表，字段：id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(50), age INT, gender VARCHAR(10)",
+      "answer": "CREATE TABLE students (id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(50), age INT, gender VARCHAR(10));",
+      "expectedResult": "表创建成功",
+      "judgeRule": "检查 students 表是否存在且结构正确"
+    },
+    {
+      "id": 12,
+      "title": "查看表结构",
+      "difficulty": "easy",
+      "description": "查看 students 表的结构。",
+      "tables": [],
+      "initialData": [],
+      "requirement": "查看 students 表的结构。",
+      "answer": "DESC students;",
+      "expectedResult": "显示表结构",
+      "judgeRule": "检查是否返回了表结构信息"
+    },
+    {
+      "id": 13,
+      "title": "删除表",
+      "difficulty": "easy",
+      "description": "删除名为 test_table 的表。",
+      "tables": [],
+      "initialData": [],
+      "requirement": "删除 test_table 表。",
+      "answer": "DROP TABLE IF EXISTS test_table;",
+      "expectedResult": "表删除成功",
+      "judgeRule": "检查 test_table 表是否不存在"
+    },
+    {
+      "id": 14,
+      "title": "添加字段",
+      "difficulty": "medium",
+      "description": "向 students 表添加一个 email 字段。",
+      "tables": [],
+      "initialData": [],
+      "requirement": "向 students 表添加 email VARCHAR(100) 字段。",
+      "answer": "ALTER TABLE students ADD COLUMN email VARCHAR(100);",
+      "expectedResult": "字段添加成功",
+      "judgeRule": "检查 students 表是否包含 email 字段"
+    },
+    {
+      "id": 15,
+      "title": "修改字段类型",
+      "difficulty": "medium",
+      "description": "将 students 表的 age 字段类型修改为 SMALLINT。",
+      "tables": [],
+      "initialData": [],
+      "requirement": "修改 students 表的 age 字段类型为 SMALLINT。",
+      "answer": "ALTER TABLE students MODIFY COLUMN age SMALLINT;",
+      "expectedResult": "字段类型修改成功",
+      "judgeRule": "检查 students 表的 age 字段类型是否为 SMALLINT"
+    },
+    {
+      "id": 16,
+      "title": "删除字段",
+      "difficulty": "medium",
+      "description": "从 students 表中删除 gender 字段。",
+      "tables": [],
+      "initialData": [],
+      "requirement": "从 students 表中删除 gender 字段。",
+      "answer": "ALTER TABLE students DROP COLUMN gender;",
+      "expectedResult": "字段删除成功",
+      "judgeRule": "检查 students 表是否不包含 gender 字段"
+    },
+    {
+      "id": 17,
+      "title": "重命名表",
+      "difficulty": "medium",
+      "description": "将 students 表重命名为 student_info。",
+      "tables": [],
+      "initialData": [],
+      "requirement": "将 students 表重命名为 student_info。",
+      "answer": "RENAME TABLE students TO student_info;",
+      "expectedResult": "表重命名成功",
+      "judgeRule": "检查 student_info 表是否存在且 students 表不存在"
+    },
+    {
+      "id": 18,
+      "title": "创建带约束的表",
+      "difficulty": "medium",
+      "description": "创建一个 courses 表，包含 id（主键）、name（课程名，非空）、credit（学分，默认值3）。",
+      "tables": [],
+      "initialData": [],
+      "requirement": "创建 courses 表，字段：id INT PRIMARY KEY, name VARCHAR(50) NOT NULL, credit INT DEFAULT 3",
+      "answer": "CREATE TABLE courses (id INT PRIMARY KEY, name VARCHAR(50) NOT NULL, credit INT DEFAULT 3);",
+      "expectedResult": "表创建成功",
+      "judgeRule": "检查 courses 表是否存在且约束正确"
+    },
+    {
+      "id": 19,
+      "title": "查看所有表",
+      "difficulty": "easy",
+      "description": "查看当前数据库中的所有表。",
+      "tables": [],
+      "initialData": [],
+      "requirement": "查看当前数据库中的所有表。",
+      "answer": "SHOW TABLES;",
+      "expectedResult": "显示所有表",
+      "judgeRule": "检查是否返回了表列表"
+    },
+    {
+      "id": 20,
+      "title": "创建带索引的表",
+      "difficulty": "hard",
+      "description": "创建一个 orders 表，包含 id（主键）、user_id（用户ID）、order_date（订单日期），并在 user_id 上创建索引。",
+      "tables": [],
+      "initialData": [],
+      "requirement": "创建 orders 表，字段：id INT PRIMARY KEY, user_id INT, order_date DATE, INDEX idx_user_id (user_id)",
+      "answer": "CREATE TABLE orders (id INT PRIMARY KEY, user_id INT, order_date DATE, INDEX idx_user_id (user_id));",
+      "expectedResult": "表创建成功，索引创建成功",
+      "judgeRule": "检查 orders 表是否存在且索引正确"
+    }
+  ]
+}

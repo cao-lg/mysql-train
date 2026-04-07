@@ -1,0 +1,210 @@
+{
+  "chapter": "第3章：基础 SELECT",
+  "problems": [
+    {
+      "id": 21,
+      "title": "查询所有学生信息",
+      "difficulty": "easy",
+      "description": "查询 students 表中的所有学生信息。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT, gender VARCHAR(10))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三', 20, '男')",
+        "INSERT INTO students VALUES (2, '李四', 21, '女')",
+        "INSERT INTO students VALUES (3, '王五', 19, '男')"
+      ],
+      "requirement": "查询 students 表中的所有列和所有行。",
+      "answer": "SELECT * FROM students;",
+      "expectedResult": "返回所有学生信息",
+      "judgeRule": "检查是否返回了所有学生信息"
+    },
+    {
+      "id": 22,
+      "title": "查询指定列",
+      "difficulty": "easy",
+      "description": "查询 students 表中学生的姓名和年龄。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT, gender VARCHAR(10))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三', 20, '男')",
+        "INSERT INTO students VALUES (2, '李四', 21, '女')"
+      ],
+      "requirement": "只查询 name 和 age 两列。",
+      "answer": "SELECT name, age FROM students;",
+      "expectedResult": "返回姓名和年龄",
+      "judgeRule": "检查是否只返回了姓名和年龄"
+    },
+    {
+      "id": 23,
+      "title": "去重查询",
+      "difficulty": "easy",
+      "description": "查询 students 表中所有不重复的性别。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT, gender VARCHAR(10))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三', 20, '男')",
+        "INSERT INTO students VALUES (2, '李四', 21, '女')",
+        "INSERT INTO students VALUES (3, '王五', 19, '男')"
+      ],
+      "requirement": "使用 DISTINCT 去重。",
+      "answer": "SELECT DISTINCT gender FROM students;",
+      "expectedResult": "返回不重复的性别",
+      "judgeRule": "检查是否返回了去重后的性别"
+    },
+    {
+      "id": 24,
+      "title": "列别名",
+      "difficulty": "easy",
+      "description": "查询 students 表，将 name 列显示为 姓名，age 列显示为 年龄。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT, gender VARCHAR(10))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三', 20, '男')"
+      ],
+      "requirement": "使用 AS 关键字为列取别名。",
+      "answer": "SELECT name AS 姓名, age AS 年龄 FROM students;",
+      "expectedResult": "列名显示为别名",
+      "judgeRule": "检查列名是否为别名"
+    },
+    {
+      "id": 25,
+      "title": "限制返回行数",
+      "difficulty": "easy",
+      "description": "查询 students 表，只返回前2条记录。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT, gender VARCHAR(10))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三', 20, '男')",
+        "INSERT INTO students VALUES (2, '李四', 21, '女')",
+        "INSERT INTO students VALUES (3, '王五', 19, '男')"
+      ],
+      "requirement": "使用 LIMIT 限制返回行数。",
+      "answer": "SELECT * FROM students LIMIT 2;",
+      "expectedResult": "只返回前2条记录",
+      "judgeRule": "检查是否只返回了2条记录"
+    },
+    {
+      "id": 26,
+      "title": "计算列",
+      "difficulty": "medium",
+      "description": "查询 products 表，显示产品名称和价格，并计算含税价格（税率10%）。",
+      "tables": [
+        {
+          "name": "products",
+          "definition": "CREATE TABLE products (id INT PRIMARY KEY, name VARCHAR(50), price DECIMAL(10,2))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO products VALUES (1, '苹果', 10.00)",
+        "INSERT INTO products VALUES (2, '香蕉', 5.00)"
+      ],
+      "requirement": "计算 price * 1.1 作为含税价格。",
+      "answer": "SELECT name, price, price * 1.1 AS 含税价格 FROM products;",
+      "expectedResult": "显示名称、价格和含税价格",
+      "judgeRule": "检查是否计算了含税价格"
+    },
+    {
+      "id": 27,
+      "title": "字符串连接",
+      "difficulty": "medium",
+      "description": "查询 students 表，将姓名和性别连接成一个字符串显示。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT, gender VARCHAR(10))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三', 20, '男')"
+      ],
+      "requirement": "使用 CONCAT 函数连接字符串。",
+      "answer": "SELECT CONCAT(name, ' - ', gender) AS 信息 FROM students;",
+      "expectedResult": "显示连接后的字符串",
+      "judgeRule": "检查是否连接了字符串"
+    },
+    {
+      "id": 28,
+      "title": "排序查询",
+      "difficulty": "medium",
+      "description": "查询 students 表，按年龄从大到小排序。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT, gender VARCHAR(10))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三', 20, '男')",
+        "INSERT INTO students VALUES (2, '李四', 21, '女')",
+        "INSERT INTO students VALUES (3, '王五', 19, '男')"
+      ],
+      "requirement": "使用 ORDER BY 和 DESC 降序排序。",
+      "answer": "SELECT * FROM students ORDER BY age DESC;",
+      "expectedResult": "按年龄从大到小排序",
+      "judgeRule": "检查是否按年龄降序排序"
+    },
+    {
+      "id": 29,
+      "title": "多列排序",
+      "difficulty": "medium",
+      "description": "查询 students 表，先按性别排序，再按年龄升序排序。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT, gender VARCHAR(10))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三', 20, '男')",
+        "INSERT INTO students VALUES (2, '李四', 21, '女')",
+        "INSERT INTO students VALUES (3, '王五', 19, '男')"
+      ],
+      "requirement": "使用 ORDER BY 进行多列排序。",
+      "answer": "SELECT * FROM students ORDER BY gender, age;",
+      "expectedResult": "先按性别排序，再按年龄排序",
+      "judgeRule": "检查是否多列排序"
+    },
+    {
+      "id": 30,
+      "title": "分页查询",
+      "difficulty": "hard",
+      "description": "查询 students 表，每页2条记录，查询第2页的数据。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT, gender VARCHAR(10))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三', 20, '男')",
+        "INSERT INTO students VALUES (2, '李四', 21, '女')",
+        "INSERT INTO students VALUES (3, '王五', 19, '男')",
+        "INSERT INTO students VALUES (4, '赵六', 22, '女')"
+      ],
+      "requirement": "使用 LIMIT 和 OFFSET 实现分页。",
+      "answer": "SELECT * FROM students LIMIT 2 OFFSET 2;",
+      "expectedResult": "返回第2页的2条记录",
+      "judgeRule": "检查是否返回了正确的分页数据"
+    }
+  ]
+}

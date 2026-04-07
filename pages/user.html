@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户中心 - MySQL 数据库课程实训 OJ 系统</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="container">
+                <h1>MySQL 实训 OJ 系统</h1>
+                <ul>
+                    <li><a href="../index.html">首页</a></li>
+                    <li><a href="problems.html">题库</a></li>
+                    <li><a href="user.html">用户中心</a></li>
+                    <li><a href="about.html">关于</a></li>
+                </ul>
+                <div class="theme-toggle">
+                    <button id="theme-btn">🌙</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="user-center">
+            <div class="container">
+                <div id="login-section" class="auth-section">
+                    <h2>用户登录</h2>
+                    <form id="login-form">
+                        <div class="form-group">
+                            <label for="login-username">用户名：</label>
+                            <input type="text" id="login-username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="login-password">密码：</label>
+                            <input type="password" id="login-password" required>
+                        </div>
+                        <button type="submit" class="btn primary">登录</button>
+                        <p class="auth-switch">还没有账号？<a href="#" id="show-register">立即注册</a></p>
+                    </form>
+                </div>
+                
+                <div id="register-section" class="auth-section" style="display: none;">
+                    <h2>用户注册</h2>
+                    <form id="register-form">
+                        <div class="form-group">
+                            <label for="register-username">用户名：</label>
+                            <input type="text" id="register-username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-password">密码：</label>
+                            <input type="password" id="register-password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-confirm-password">确认密码：</label>
+                            <input type="password" id="register-confirm-password" required>
+                        </div>
+                        <button type="submit" class="btn primary">注册</button>
+                        <p class="auth-switch">已有账号？<a href="#" id="show-login">立即登录</a></p>
+                    </form>
+                </div>
+                
+                <div id="user-info" class="user-info" style="display: none;">
+                    <div class="user-header">
+                        <h2>用户信息</h2>
+                        <button id="logout-btn" class="btn secondary">退出登录</button>
+                    </div>
+                    <div class="user-stats">
+                        <div class="stat-item">
+                            <h3>已做题数</h3>
+                            <p id="solved-count">0</p>
+                        </div>
+                        <div class="stat-item">
+                            <h3>正确率</h3>
+                            <p id="accuracy">0%</p>
+                        </div>
+                        <div class="stat-item">
+                            <h3>提交次数</h3>
+                            <p id="submit-count">0</p>
+                        </div>
+                    </div>
+                    <div class="submission-history">
+                        <h3>提交历史</h3>
+                        <table id="submission-table">
+                            <thead>
+                                <tr>
+                                    <th>题目</th>
+                                    <th>提交时间</th>
+                                    <th>结果</th>
+                                    <th>执行时间</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- 提交历史将通过 JavaScript 动态生成 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 MySQL 数据库课程实训 OJ 系统</p>
+        </div>
+    </footer>
+    
+    <script src="../js/core.js"></script>
+    <script type="module">
+        import userSystem from '../js/user-system.js';
+
+        // 用户中心页面逻辑
+        document.addEventListener('DOMContentLoaded', async () => {
+            const loginSection = document.getElementById('login-section');
+            const registerSection = document.getElementById('register-section');
+            const userInfoSection = document.getElementById('user-info');
+            const showRegisterBtn = document.getElementById('show-register');
+            const showLoginBtn = document.getElementById('show-login');
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+            const logoutBtn = document.getElementById('logout-btn');
+            const solvedCount = document.getElementById('solved-count');
+            const accuracy = document.getElementById('accuracy');
+            const submitCount = document.getElementById('submit-count');
+            const submissionTable = document.getElementById('submission-table').querySelector('tbody');
+
+            // 切换到注册页面
+            showRegisterBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                loginSection.style.display = 'none';
+                registerSection.style.display = 'block';
+                userInfoSection.style.display = 'none';
+            });
+
+            // 切换到登录页面
+            showLoginBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                loginSection.style.display = 'block';
+                registerSection.style.display = 'none';
+                userInfoSection.style.display = 'none';
+            });
+
+            // 登录表单提交
+            loginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const username = document.getElementById('login-username').value;
+                const password = document.getElementById('login-password').value;
+
+                const result = await userSystem.login(username, password);
+                alert(result.message);
+                if (result.success) {
+                    await loadUserInfo();
+                }
+            });
+
+            // 注册表单提交
+            registerForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const username = document.getElementById('register-username').value;
+                const password = document.getElementById('register-password').value;
+                const confirmPassword = document.getElementById('register-confirm-password').value;
+
+                if (password !== confirmPassword) {
+                    alert('两次输入的密码不一致');
+                    return;
+                }
+
+                const result = await userSystem.register(username, password);
+                alert(result.message);
+                if (result.success) {
+                    await loadUserInfo();
+                }
+            });
+
+            // 退出登录
+            logoutBtn.addEventListener('click', () => {
+                userSystem.logout();
+                loginSection.style.display = 'block';
+                registerSection.style.display = 'none';
+                userInfoSection.style.display = 'none';
+            });
+
+            // 加载用户信息
+            async function loadUserInfo() {
+                const user = userSystem.getCurrentUser();
+                if (user) {
+                    // 显示用户信息
+                    solvedCount.textContent = user.solvedCount;
+                    accuracy.textContent = `${user.accuracy}%`;
+                    submitCount.textContent = user.submitCount;
+
+                    // 加载提交历史
+                    await loadSubmissionHistory(user.username);
+
+                    // 切换到用户信息页面
+                    loginSection.style.display = 'none';
+                    registerSection.style.display = 'none';
+                    userInfoSection.style.display = 'block';
+                } else {
+                    // 显示登录页面
+                    loginSection.style.display = 'block';
+                    registerSection.style.display = 'none';
+                    userInfoSection.style.display = 'none';
+                }
+            }
+
+            // 加载提交历史
+            async function loadSubmissionHistory(username) {
+                const submissions = await userSystem.getUserSubmissions(username, 20);
+                
+                if (submissions.length === 0) {
+                    submissionTable.innerHTML = '<tr><td colspan="4">暂无提交记录</td></tr>';
+                    return;
+                }
+
+                submissionTable.innerHTML = submissions.map(sub => `
+                    <tr>
+                        <td>${sub.problemTitle}</td>
+                        <td>${new Date(sub.timestamp).toLocaleString()}</td>
+                        <td class="${sub.result.toLowerCase()}">${sub.result}</td>
+                        <td>${sub.executionTime || '--'}ms</td>
+                    </tr>
+                `).join('');
+            }
+
+            // 初始化页面
+            await loadUserInfo();
+        });
+    </script>
+</body>
+</html>

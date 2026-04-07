@@ -1,0 +1,223 @@
+{
+  "chapter": "第5章：ORDER BY 与 LIMIT",
+  "problems": [
+    {
+      "id": 41,
+      "title": "单列升序排序",
+      "difficulty": "easy",
+      "description": "查询 students 表，按年龄从小到大排序。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT, gender VARCHAR(10))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三', 20, '男')",
+        "INSERT INTO students VALUES (2, '李四', 19, '女')",
+        "INSERT INTO students VALUES (3, '王五', 21, '男')"
+      ],
+      "requirement": "使用 ORDER BY age ASC 或 ORDER BY age。",
+      "answer": "SELECT * FROM students ORDER BY age ASC;",
+      "expectedResult": "按年龄从小到大排序",
+      "judgeRule": "检查是否按年龄升序排序"
+    },
+    {
+      "id": 42,
+      "title": "单列降序排序",
+      "difficulty": "easy",
+      "description": "查询 students 表，按年龄从大到小排序。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT, gender VARCHAR(10))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三', 20, '男')",
+        "INSERT INTO students VALUES (2, '李四', 19, '女')",
+        "INSERT INTO students VALUES (3, '王五', 21, '男')"
+      ],
+      "requirement": "使用 ORDER BY age DESC。",
+      "answer": "SELECT * FROM students ORDER BY age DESC;",
+      "expectedResult": "按年龄从大到小排序",
+      "judgeRule": "检查是否按年龄降序排序"
+    },
+    {
+      "id": 43,
+      "title": "多列排序",
+      "difficulty": "easy",
+      "description": "查询 students 表，先按性别排序，再按年龄降序排序。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT, gender VARCHAR(10))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三', 20, '男')",
+        "INSERT INTO students VALUES (2, '李四', 21, '女')",
+        "INSERT INTO students VALUES (3, '王五', 19, '男')"
+      ],
+      "requirement": "使用 ORDER BY gender, age DESC。",
+      "answer": "SELECT * FROM students ORDER BY gender, age DESC;",
+      "expectedResult": "先按性别排序，再按年龄降序",
+      "judgeRule": "检查是否多列排序"
+    },
+    {
+      "id": 44,
+      "title": "限制返回行数",
+      "difficulty": "easy",
+      "description": "查询 students 表，只返回前3条记录。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT, gender VARCHAR(10))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三', 20, '男')",
+        "INSERT INTO students VALUES (2, '李四', 21, '女')",
+        "INSERT INTO students VALUES (3, '王五', 19, '男')",
+        "INSERT INTO students VALUES (4, '赵六', 22, '女')",
+        "INSERT INTO students VALUES (5, '钱七', 18, '男')"
+      ],
+      "requirement": "使用 LIMIT 3。",
+      "answer": "SELECT * FROM students LIMIT 3;",
+      "expectedResult": "只返回前3条记录",
+      "judgeRule": "检查是否只返回了3条记录"
+    },
+    {
+      "id": 45,
+      "title": "分页查询",
+      "difficulty": "medium",
+      "description": "查询 students 表，每页2条记录，查询第2页的数据。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT, gender VARCHAR(10))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三', 20, '男')",
+        "INSERT INTO students VALUES (2, '李四', 21, '女')",
+        "INSERT INTO students VALUES (3, '王五', 19, '男')",
+        "INSERT INTO students VALUES (4, '赵六', 22, '女')"
+      ],
+      "requirement": "使用 LIMIT 2 OFFSET 2。",
+      "answer": "SELECT * FROM students LIMIT 2 OFFSET 2;",
+      "expectedResult": "返回第2页的2条记录",
+      "judgeRule": "检查是否返回了正确的分页数据"
+    },
+    {
+      "id": 46,
+      "title": "查询前三名",
+      "difficulty": "medium",
+      "description": "查询 students 表，按年龄从大到小排序，返回年龄最大的3个学生。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT, gender VARCHAR(10))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三', 20, '男')",
+        "INSERT INTO students VALUES (2, '李四', 22, '女')",
+        "INSERT INTO students VALUES (3, '王五', 19, '男')",
+        "INSERT INTO students VALUES (4, '赵六', 21, '女')",
+        "INSERT INTO students VALUES (5, '钱七', 23, '男')"
+      ],
+      "requirement": "结合 ORDER BY 和 LIMIT。",
+      "answer": "SELECT * FROM students ORDER BY age DESC LIMIT 3;",
+      "expectedResult": "返回年龄最大的3个学生",
+      "judgeRule": "检查是否返回了正确的学生"
+    },
+    {
+      "id": 47,
+      "title": "查询第N名",
+      "difficulty": "medium",
+      "description": "查询 students 表，按年龄从小到大排序，返回第2个学生。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT, gender VARCHAR(10))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三', 18, '男')",
+        "INSERT INTO students VALUES (2, '李四', 19, '女')",
+        "INSERT INTO students VALUES (3, '王五', 20, '男')"
+      ],
+      "requirement": "使用 LIMIT 1 OFFSET 1。",
+      "answer": "SELECT * FROM students ORDER BY age LIMIT 1 OFFSET 1;",
+      "expectedResult": "返回第2个学生",
+      "judgeRule": "检查是否返回了第2个学生"
+    },
+    {
+      "id": 48,
+      "title": "按多个字段排序",
+      "difficulty": "medium",
+      "description": "查询 students 表，先按性别降序排序，再按年龄升序排序，最后按姓名排序。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT, gender VARCHAR(10))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三', 20, '男')",
+        "INSERT INTO students VALUES (2, '李四', 19, '女')",
+        "INSERT INTO students VALUES (3, '王五', 21, '男')",
+        "INSERT INTO students VALUES (4, '赵六', 20, '女')"
+      ],
+      "requirement": "使用 ORDER BY gender DESC, age, name。",
+      "answer": "SELECT * FROM students ORDER BY gender DESC, age, name;",
+      "expectedResult": "按多个字段排序",
+      "judgeRule": "检查是否多字段排序"
+    },
+    {
+      "id": 49,
+      "title": "排序后去重",
+      "difficulty": "hard",
+      "description": "查询 students 表中所有不重复的性别，并按性别排序。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT, gender VARCHAR(10))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三', 20, '男')",
+        "INSERT INTO students VALUES (2, '李四', 19, '女')",
+        "INSERT INTO students VALUES (3, '王五', 21, '男')"
+      ],
+      "requirement": "结合 DISTINCT 和 ORDER BY。",
+      "answer": "SELECT DISTINCT gender FROM students ORDER BY gender;",
+      "expectedResult": "返回去重并排序后的性别",
+      "judgeRule": "检查是否去重并排序"
+    },
+    {
+      "id": 50,
+      "title": "复杂分页查询",
+      "difficulty": "hard",
+      "description": "查询 students 表中性别为'男'的学生，按年龄降序排序，每页2条记录，查询第2页的数据。",
+      "tables": [
+        {
+          "name": "students",
+          "definition": "CREATE TABLE students (id INT PRIMARY KEY, name VARCHAR(50), age INT, gender VARCHAR(10))"
+        }
+      ],
+      "initialData": [
+        "INSERT INTO students VALUES (1, '张三', 20, '男')",
+        "INSERT INTO students VALUES (2, '李四', 21, '女')",
+        "INSERT INTO students VALUES (3, '王五', 22, '男')",
+        "INSERT INTO students VALUES (4, '赵六', 19, '男')",
+        "INSERT INTO students VALUES (5, '钱七', 23, '男')"
+      ],
+      "requirement": "结合 WHERE、ORDER BY 和 LIMIT OFFSET。",
+      "answer": "SELECT * FROM students WHERE gender = '男' ORDER BY age DESC LIMIT 2 OFFSET 2;",
+      "expectedResult": "返回符合条件的第2页数据",
+      "judgeRule": "检查是否返回了正确的数据"
+    }
+  ]
+}
