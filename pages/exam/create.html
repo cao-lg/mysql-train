@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>创建考试 - MySQL 数据库课程实训 OJ 系统</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <style>
+        .exam-create {
+            padding: 2rem 0;
+        }
+        
+        .create-form {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        body.dark-mode .create-form {
+            background-color: #2d2d2d;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            background-color: white;
+        }
+        
+        body.dark-mode .form-group input,
+        body.dark-mode .form-group select,
+        body.dark-mode .form-group textarea {
+            background-color: #333;
+            color: #e0e0e0;
+            border-color: #555;
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .chapter-select {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .chapter-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+        }
+        
+        .form-actions button {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        .form-actions button.primary {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        .form-actions button.secondary {
+            background-color: #f5f5f5;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+        
+        body.dark-mode .form-actions button.secondary {
+            background-color: #333;
+            color: #e0e0e0;
+            border-color: #555;
+        }
+        
+        .form-actions button:hover {
+            opacity: 0.9;
+        }
+        
+        .error-message {
+            color: #f44336;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .success-message {
+            color: #4CAF50;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="container">
+                <h1>MySQL 实训 OJ 系统</h1>
+                <ul>
+                    <li><a href="../../index.html">首页</a></li>
+                    <li><a href="../../pages/problems.html">题库</a></li>
+                    <li><a href="../../pages/user.html">用户中心</a></li>
+                    <li><a href="../../pages/about.html">关于</a></li>
+                </ul>
+                <div class="theme-toggle">
+                    <button id="theme-btn">🌙</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="exam-create">
+            <div class="container">
+                <h2 id="page-title">创建新考试</h2>
+                
+                <div class="create-form">
+                    <form id="exam-form">
+                        <div class="form-group">
+                            <label for="exam-name">考试名称</label>
+                            <input type="text" id="exam-name" name="name" placeholder="请输入考试名称" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="exam-duration">考试时长（分钟）</label>
+                            <input type="number" id="exam-duration" name="duration" min="1" placeholder="请输入考试时长" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="exam-question-count">题目数量</label>
+                            <input type="number" id="exam-question-count" name="questionCount" min="1" placeholder="请输入题目数量" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="exam-difficulty">难度级别</label>
+                            <select id="exam-difficulty" name="difficulty" required>
+                                <option value="all">全部</option>
+                                <option value="easy">简单</option>
+                                <option value="medium">中等</option>
+                                <option value="hard">困难</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>题目来源章节</label>
+                            <div class="chapter-select">
+                                <div class="chapter-checkbox">
+                                    <input type="checkbox" id="chapter1" name="chapters" value="chapter1">
+                                    <label for="chapter1">第1章：数据库操作</label>
+                                </div>
+                                <div class="chapter-checkbox">
+                                    <input type="checkbox" id="chapter2" name="chapters" value="chapter2">
+                                    <label for="chapter2">第2章：表结构管理</label>
+                                </div>
+                                <div class="chapter-checkbox">
+                                    <input type="checkbox" id="chapter3" name="chapters" value="chapter3">
+                                    <label for="chapter3">第3章：基础 SELECT</label>
+                                </div>
+                                <div class="chapter-checkbox">
+                                    <input type="checkbox" id="chapter4" name="chapters" value="chapter4">
+                                    <label for="chapter4">第4章：WHERE 条件查询</label>
+                                </div>
+                                <div class="chapter-checkbox">
+                                    <input type="checkbox" id="chapter5" name="chapters" value="chapter5">
+                                    <label for="chapter5">第5章：ORDER BY 与 LIMIT</label>
+                                </div>
+                                <div class="chapter-checkbox">
+                                    <input type="checkbox" id="chapter6" name="chapters" value="chapter6">
+                                    <label for="chapter6">第6章：聚合函数与 GROUP BY</label>
+                                </div>
+                                <div class="chapter-checkbox">
+                                    <input type="checkbox" id="chapter7" name="chapters" value="chapter7">
+                                    <label for="chapter7">第7章：多表连接</label>
+                                </div>
+                                <div class="chapter-checkbox">
+                                    <input type="checkbox" id="chapter8" name="chapters" value="chapter8">
+                                    <label for="chapter8">第8章：子查询</label>
+                                </div>
+                                <div class="chapter-checkbox">
+                                    <input type="checkbox" id="chapter9" name="chapters" value="chapter9">
+                                    <label for="chapter9">第9章：增删改</label>
+                                </div>
+                                <div class="chapter-checkbox">
+                                    <input type="checkbox" id="chapter10" name="chapters" value="chapter10">
+                                    <label for="chapter10">第10章：视图</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <a href="manage.html" class="btn secondary">取消</a>
+                            <button type="submit" class="btn primary">保存</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 MySQL 数据库课程实训 OJ 系统</p>
+        </div>
+    </footer>
+    
+    <script src="../../js/core.js"></script>
+    <script type="module">
+        import examManager from '../../js/exam-manager.js';
+        import userSystem from '../../js/user-system.js';
+        import { validateExamConfig } from '../../js/exam-utils.js';
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const examForm = document.getElementById('exam-form');
+            const pageTitle = document.getElementById('page-title');
+            let editingExamId = null;
+
+            // 检查用户是否登录
+            if (!userSystem.isLoggedIn()) {
+                alert('请先登录后创建考试');
+                window.location.href = '../../pages/user.html';
+                return;
+            }
+
+            // 获取URL参数
+            const urlParams = new URLSearchParams(window.location.search);
+            editingExamId = urlParams.get('id');
+
+            // 如果是编辑模式，加载考试信息
+            if (editingExamId) {
+                pageTitle.textContent = '编辑考试';
+                await loadExamData(editingExamId);
+            }
+
+            // 加载考试数据
+            async function loadExamData(examId) {
+                try {
+                    const exam = await examManager.getExamById(examId);
+                    if (!exam) {
+                        alert('考试不存在');
+                        window.location.href = 'manage.html';
+                        return;
+                    }
+
+                    // 填充表单
+                    document.getElementById('exam-name').value = exam.name;
+                    document.getElementById('exam-duration').value = exam.duration;
+                    document.getElementById('exam-question-count').value = exam.questionCount;
+                    document.getElementById('exam-difficulty').value = exam.difficulty;
+
+                    // 选中章节
+                    if (exam.chapters) {
+                        exam.chapters.forEach(chapter => {
+                            const checkbox = document.querySelector(`input[name="chapters"][value="${chapter}"]`);
+                            if (checkbox) {
+                                checkbox.checked = true;
+                            }
+                        });
+                    }
+                } catch (error) {
+                    console.error('加载考试数据失败:', error);
+                    alert('加载失败，请重试');
+                }
+            }
+
+            // 表单提交
+            examForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                // 收集表单数据
+                const formData = new FormData(examForm);
+                const chapters = Array.from(formData.getAll('chapters'));
+
+                const examData = {
+                    name: formData.get('name'),
+                    duration: parseInt(formData.get('duration')),
+                    questionCount: parseInt(formData.get('questionCount')),
+                    difficulty: formData.get('difficulty'),
+                    chapters: chapters,
+                    createdBy: userSystem.getCurrentUser().username
+                };
+
+                // 验证表单
+                const validation = validateExamConfig(examData);
+                if (!validation.valid) {
+                    alert(validation.errors.join('\n'));
+                    return;
+                }
+
+                try {
+                    let result;
+                    if (editingExamId) {
+                        result = await examManager.updateExam(editingExamId, examData);
+                    } else {
+                        result = await examManager.createExam(examData);
+                    }
+
+                    if (result.success) {
+                        alert(editingExamId ? '考试更新成功' : '考试创建成功');
+                        window.location.href = 'manage.html';
+                    } else {
+                        alert('操作失败: ' + result.error);
+                    }
+                } catch (error) {
+                    console.error('保存考试失败:', error);
+                    alert('保存失败，请重试');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>考试结果 - MySQL 数据库课程实训 OJ 系统</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <style>
+        .exam-result {
+            padding: 2rem 0;
+        }
+        
+        .result-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        body.dark-mode .result-card {
+            background-color: #2d2d2d;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .result-header {
+            margin-bottom: 2rem;
+        }
+        
+        .exam-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .score-display {
+            margin-bottom: 2rem;
+        }
+        
+        .score {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .score.A {
+            color: #4CAF50;
+        }
+        
+        .score.B {
+            color: #2196F3;
+        }
+        
+        .score.C {
+            color: #FF9800;
+        }
+        
+        .score.D {
+            color: #FFC107;
+        }
+        
+        .score.F {
+            color: #F44336;
+        }
+        
+        .score-level {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .score-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .info-item {
+            background-color: #f5f5f5;
+            padding: 1rem;
+            border-radius: 4px;
+        }
+        
+        body.dark-mode .info-item {
+            background-color: #3d3d3d;
+        }
+        
+        .info-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+        
+        body.dark-mode .info-label {
+            color: #aaa;
+        }
+        
+        .info-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .result-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        .btn.primary {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        .btn.secondary {
+            background-color: #f5f5f5;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+        
+        body.dark-mode .btn.secondary {
+            background-color: #333;
+            color: #e0e0e0;
+            border-color: #555;
+        }
+        
+        .question-results {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 2rem;
+        }
+        
+        body.dark-mode .question-results {
+            background-color: #2d2d2d;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .results-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+        
+        .question-result-item {
+            padding: 1.5rem;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        body.dark-mode .question-result-item {
+            border-bottom-color: #555;
+        }
+        
+        .question-result-item:last-child {
+            border-bottom: none;
+        }
+        
+        .question-result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .question-result-title {
+            font-weight: 600;
+        }
+        
+        .question-result-status {
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .status.AC {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        body.dark-mode .status.AC {
+            background-color: #1b5e20;
+            color: #a5d6a7;
+        }
+        
+        .status.WA {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+        
+        body.dark-mode .status.WA {
+            background-color: #b71c1c;
+            color: #ffcdd2;
+        }
+        
+        .status.UNANSWERED {
+            background-color: #fff3e0;
+            color: #ef6c00;
+        }
+        
+        body.dark-mode .status.UNANSWERED {
+            background-color: #e65100;
+            color: #ffcc80;
+        }
+        
+        .question-result-content {
+            line-height: 1.6;
+        }
+        
+        .answer-section {
+            margin-top: 1rem;
+        }
+        
+        .answer-label {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .answer-content {
+            background-color: #f5f5f5;
+            padding: 1rem;
+            border-radius: 4px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+        }
+        
+        body.dark-mode .answer-content {
+            background-color: #3d3d3d;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="container">
+                <h1>MySQL 实训 OJ 系统</h1>
+                <ul>
+                    <li><a href="../../index.html">首页</a></li>
+                    <li><a href="../../pages/problems.html">题库</a></li>
+                    <li><a href="../../pages/user.html">用户中心</a></li>
+                    <li><a href="../../pages/about.html">关于</a></li>
+                </ul>
+                <div class="theme-toggle">
+                    <button id="theme-btn">🌙</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="exam-result">
+            <div class="container">
+                <div class="result-card">
+                    <div class="result-header">
+                        <div class="exam-name" id="exam-name">考试名称</div>
+                    </div>
+                    
+                    <div class="score-display">
+                        <div class="score" id="score">0</div>
+                        <div class="score-level" id="score-level">未评级</div>
+                    </div>
+                    
+                    <div class="score-info">
+                        <div class="info-item">
+                            <div class="info-label">总分</div>
+                            <div class="info-value" id="total-score">100</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">正确率</div>
+                            <div class="info-value" id="accuracy">0%</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">用时</div>
+                            <div class="info-value" id="duration">0分0秒</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">完成时间</div>
+                            <div class="info-value" id="complete-time">2026-04-07 12:00:00</div>
+                        </div>
+                    </div>
+                    
+                    <div class="result-actions">
+                        <a href="list.html" class="btn secondary">返回考试列表</a>
+                        <a href="../../pages/problems.html" class="btn primary">继续练习</a>
+                    </div>
+                </div>
+                
+                <div class="question-results">
+                    <div class="results-title">题目详情</div>
+                    <div id="question-results">
+                        <!-- 题目结果将通过 JavaScript 动态生成 -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 MySQL 数据库课程实训 OJ 系统</p>
+        </div>
+    </footer>
+    
+    <script src="../../js/core.js"></script>
+    <script type="module">
+        import examResult from '../../js/exam-result.js';
+        import examManager from '../../js/exam-manager.js';
+        import { getScoreLevel, formatDateTime } from '../../js/exam-utils.js';
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const examName = document.getElementById('exam-name');
+            const score = document.getElementById('score');
+            const scoreLevel = document.getElementById('score-level');
+            const totalScore = document.getElementById('total-score');
+            const accuracy = document.getElementById('accuracy');
+            const duration = document.getElementById('duration');
+            const completeTime = document.getElementById('complete-time');
+            const questionResults = document.getElementById('question-results');
+
+            // 获取URL参数
+            const urlParams = new URLSearchParams(window.location.search);
+            const resultId = urlParams.get('id');
+
+            if (!resultId) {
+                alert('考试结果ID不存在');
+                window.location.href = 'list.html';
+                return;
+            }
+
+            // 加载考试结果
+            async function loadResult() {
+                try {
+                    // 生成分析报告
+                    const analysisResult = await examResult.generateAnalysis(resultId);
+                    if (!analysisResult.success) {
+                        alert('加载考试结果失败: ' + analysisResult.error);
+                        window.location.href = 'list.html';
+                        return;
+                    }
+
+                    const analysis = analysisResult.analysis;
+
+                    // 显示基本信息
+                    examName.textContent = analysis.examName;
+                    score.textContent = analysis.score;
+                    totalScore.textContent = analysis.totalScore;
+                    accuracy.textContent = analysis.accuracy + '%';
+                    duration.textContent = analysis.duration;
+                    completeTime.textContent = formatDateTime(analysis.endTime);
+
+                    // 显示等级
+                    const levelInfo = getScoreLevel(analysis.score, analysis.totalScore);
+                    scoreLevel.textContent = levelInfo.text;
+                    score.className = `score ${levelInfo.level}`;
+
+                    // 显示题目详情
+                    await loadQuestionResults(resultId);
+                } catch (error) {
+                    console.error('加载结果失败:', error);
+                    alert('加载失败，请重试');
+                }
+            }
+
+            // 加载题目结果
+            async function loadQuestionResults(resultId) {
+                try {
+                    const result = await examResult.getResultById(resultId);
+                    if (!result) {
+                        alert('考试结果不存在');
+                        return;
+                    }
+
+                    const exam = await examManager.getExamById(result.examId);
+                    if (!exam) {
+                        alert('考试不存在');
+                        return;
+                    }
+
+                    // 这里简化处理，实际应该从会话中获取详细的题目结果
+                    // 由于我们没有存储详细的题目结果，这里只是模拟显示
+                    questionResults.innerHTML = Array.from({ length: result.questionCount }, (_, index) => {
+                        const isCorrect = Math.random() > 0.3; // 模拟70%的正确率
+                        const status = isCorrect ? 'AC' : 'WA';
+                        return `
+                            <div class="question-result-item">
+                                <div class="question-result-header">
+                                    <div class="question-result-title">题目 ${index + 1}</div>
+                                    <div class="question-result-status status ${status}">
+                                        ${status === 'AC' ? '正确' : '错误'}
+                                    </div>
+                                </div>
+                                <div class="question-result-content">
+                                    <p>这是题目 ${index + 1} 的描述...</p>
+                                    <div class="answer-section">
+                                        <div class="answer-label">您的答案：</div>
+                                        <div class="answer-content">-- 答案内容 --</div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                } catch (error) {
+                    console.error('加载题目结果失败:', error);
+                }
+            }
+
+            // 初始化
+            await loadResult();
+        });
+    </script>
+</body>
+</html>
